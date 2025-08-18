@@ -1,3 +1,9 @@
+import {
+  Header,
+  HeaderIcon,
+  HeaderSubtitle,
+  HeaderTitle,
+} from "@/components/header";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Bot,
@@ -5,7 +11,6 @@ import {
   LucideIcon,
   MessageSquare,
   Send,
-  Sparkles,
   User,
   Zap,
 } from "lucide-react-native";
@@ -225,33 +230,11 @@ export default function ChatbotScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header - Sada iste dimenzije kao u rasporedu */}
-      <LinearGradient
-        colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.headerLeft}>
-            <View style={styles.headerIcon}>
-              <Sparkles
-                color="#ffffff"
-                size={24}
-                strokeWidth={2.5}
-              />
-            </View>
-            <View>
-              <Text style={styles.headerTitle}>FSRE AI Asistent</Text>
-              <Text style={styles.headerSubtitle}>Uvijek tu da pomognem</Text>
-            </View>
-          </View>
-          <View style={styles.headerDecoration}>
-            <View style={styles.headerDot1} />
-            <View style={styles.headerDot2} />
-            <View style={styles.headerDot3} />
-          </View>
-        </View>
-      </LinearGradient>
+      <Header>
+        <HeaderIcon />
+        <HeaderTitle>FSRE AI Asistent</HeaderTitle>
+        <HeaderSubtitle>Uvijek tu da pomognem</HeaderSubtitle>
+      </Header>
 
       {/* Messages */}
       <ScrollView
@@ -453,68 +436,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8FAFC",
-  },
-  // Header - Iste dimenzije kao u rasporedu
-  header: {
-    paddingTop: 60,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
-  },
-  headerContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  headerIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontFamily: "Inter-Bold",
-    color: "#ffffff",
-    marginBottom: 2,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    fontFamily: "Inter-Regular",
-    color: "rgba(255, 255, 255, 0.8)",
-  },
-  headerDecoration: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerDot1: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    marginRight: 4,
-  },
-  headerDot2: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    marginRight: 4,
-  },
-  headerDot3: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   messagesContainer: {
     flex: 1,

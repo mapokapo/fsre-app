@@ -1,3 +1,10 @@
+import {
+  Header,
+  HeaderButton,
+  HeaderIcon,
+  HeaderSubtitle,
+  HeaderTitle,
+} from "@/components/header";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   BookOpen,
@@ -183,39 +190,24 @@ export default function ScheduleScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient
-        colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.headerLeft}>
-            <View style={styles.headerIcon}>
-              <Calendar
-                color="#ffffff"
-                size={24}
-                strokeWidth={2.5}
-              />
-            </View>
-            <View>
-              <Text style={styles.headerTitle}>Raspored</Text>
-              <Text style={styles.headerSubtitle}>Predavanja i vježbe</Text>
-            </View>
-          </View>
-          <TouchableOpacity
+      <Header>
+        <HeaderIcon />
+        <HeaderTitle>Raspored</HeaderTitle>
+        <HeaderSubtitle>Predavanja i vježbe</HeaderSubtitle>
+        <HeaderButton onPress={() => setShowFilters(!showFilters)}>
+          <View
             style={[
               styles.filterButton,
               showFilters && styles.filterButtonActive,
-            ]}
-            onPress={() => setShowFilters(!showFilters)}>
+            ]}>
             <Filter
               color="#ffffff"
               size={20}
               strokeWidth={2.5}
             />
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+          </View>
+        </HeaderButton>
+      </Header>
 
       {/* Filters */}
       {showFilters && (

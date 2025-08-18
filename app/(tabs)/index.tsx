@@ -1,3 +1,11 @@
+import {
+  Header,
+  HeaderButton,
+  HeaderIntro,
+  HeaderProfileButton,
+  HeaderSubtitle,
+  HeaderTitle,
+} from "@/components/header";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
@@ -22,7 +30,7 @@ import {
   X,
   Zap,
 } from "lucide-react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   ColorValue,
@@ -250,11 +258,11 @@ const notificationTypes: {
 ];
 
 export default function HomeScreen() {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
 
   // Notification settings state
   const [notificationSettings, setNotificationSettings] = useState({
@@ -265,7 +273,7 @@ export default function HomeScreen() {
     news: false,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -345,54 +353,19 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Static Header - No animation */}
-      <View style={styles.staticHeaderContainer}>
-        <LinearGradient
-          colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.staticHeader}>
-          <Animated.View
-            style={[
-              styles.heroContent,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            <View style={styles.heroTextContainer}>
-              <Text style={styles.heroGreeting}>Dobrodošli na</Text>
-              <View style={styles.logoContainer}>
-                <Text style={styles.logoText}>FSRE</Text>
-              </View>
-              <Text style={styles.heroSubtitle}>
-                Fakultet strojarstva, računarstva i elektrotehnike
-              </Text>
-            </View>
-
-            {/* Profile Section */}
-            <TouchableOpacity
-              style={styles.profileButton}
-              onPress={() => setShowProfileModal(true)}
-              activeOpacity={0.8}>
-              <LinearGradient
-                colors={[
-                  "rgba(255, 255, 255, 0.2)",
-                  "rgba(255, 255, 255, 0.1)",
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.profileButtonGradient}>
-                <User
-                  color="#ffffff"
-                  size={22}
-                  strokeWidth={2.5}
-                />
-              </LinearGradient>
-            </TouchableOpacity>
-          </Animated.View>
-        </LinearGradient>
-      </View>
+      <Header
+        isMain
+        fadeAnim={fadeAnim}
+        slideAnim={slideAnim}>
+        <HeaderIntro>Dobrodošli na</HeaderIntro>
+        <HeaderTitle>FSRE</HeaderTitle>
+        <HeaderSubtitle>
+          Fakultet strojarstva, računarstva i elektrotehnike
+        </HeaderSubtitle>
+        <HeaderButton onPress={() => setShowProfileModal(true)}>
+          <HeaderProfileButton />
+        </HeaderButton>
+      </Header>
 
       {/* Profile Modal */}
       <Modal
@@ -657,7 +630,7 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}>
         {/* Spacer for static header */}
-        <View style={styles.headerSpacer} />
+        <View style={styles.spacer} />
 
         {/* Stats Cards - Now scrollable with proper spacing */}
         <View style={styles.statsSection}>
@@ -922,72 +895,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F8FAFC",
   },
-  // Static header - no animation, stays in place
-  staticHeaderContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-  },
-  staticHeader: {
-    paddingTop: 60,
-    paddingBottom: 25,
-    paddingHorizontal: 26,
-    borderBottomLeftRadius: 35,
-    borderBottomRightRadius: 35,
-  },
-  headerSpacer: {
-    height: 180, // Visina headera
+  spacer: {
+    height: 180,
   },
   scrollContent: {
     paddingBottom: 130,
-  },
-  heroContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  heroTextContainer: {
-    flex: 1,
-  },
-  heroGreeting: {
-    fontSize: 17,
-    color: "rgba(255, 255, 255, 0.8)",
-    fontFamily: "Inter-Medium",
-    marginBottom: 12,
-  },
-  logoContainer: {
-    marginBottom: 12,
-  },
-  logoText: {
-    fontSize: 48,
-    fontFamily: "Inter-ExtraBold",
-    color: "#ffffff",
-    letterSpacing: 2,
-    textShadowColor: "rgba(0, 0, 0, 0.3)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  heroSubtitle: {
-    fontSize: 15,
-    color: "rgba(255, 255, 255, 0.7)",
-    fontFamily: "Inter-Regular",
-    lineHeight: 22,
-    maxWidth: "90%",
-  },
-  // Profile Button Styles
-  profileButton: {
-    marginLeft: 16,
-  },
-  profileButtonGradient: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-    elevation: 6,
   },
   // Modal Styles
   modalOverlay: {
