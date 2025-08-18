@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: bun.lock
+  checksum: ed4f9e90f7fe70aabdd76c9e564e791e03feaf65c58dc5a86f77830139f558bf
+version: "1.0"
