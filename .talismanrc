@@ -1,4 +1,14 @@
 fileignoreconfig:
 - filename: bun.lock
-  checksum: ed4f9e90f7fe70aabdd76c9e564e791e03feaf65c58dc5a86f77830139f558bf
+  checksum: 146a7d83137265e623ddbb77fdc5e2881a3bc126eb6493626ce27191ed730958
+- filename: app/login.tsx
+  checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
+- filename: app/(tabs)/schedule.tsx
+  checksum: 76719580bc74bf2b8449e1586c50d45eecfbe60a19852a08fabec47e501eb115
+- filename: app/(tabs)/chatbot.tsx
+  checksum: 4fcc23aabb4f088843a8fda37af153367dcea28719b96a574221101feecbf6f3
+- filename: app/dashboard.tsx
+  checksum: 0fe06cf1fb7529eed42c4f329d372360052a5d57f8dc6a36823113b4bf4e1da4
+- filename: app/(tabs)/index.tsx
+  checksum: ba2e6f3901a611cee0425b4aa7aa1f1d3d6d95b23ce4fc24602d3e4015c611bd
 version: "1.0"
