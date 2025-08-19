@@ -27,6 +27,5 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.7)",
     fontFamily: "Inter-Regular",
     lineHeight: 22,
-    maxWidth: "90%",
   },
 });

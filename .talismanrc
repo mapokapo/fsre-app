@@ -1,14 +1,18 @@
 fileignoreconfig:
-- filename: bun.lock
-  checksum: 146a7d83137265e623ddbb77fdc5e2881a3bc126eb6493626ce27191ed730958
-- filename: app/login.tsx
-  checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
+- filename: app/(tabs)/chatbot.tsx
+  checksum: 8fcea544ff41c90fe5178112eb4a799a41603066c8444b5de4b11a245c841300
+- filename: app/(tabs)/index.tsx
+  checksum: ca7c14130f3de9642a2a0ed2e5a940866ea34ddd9e4ad5d2f161dcb0c49349ea
 - filename: app/(tabs)/schedule.tsx
   checksum: 76719580bc74bf2b8449e1586c50d45eecfbe60a19852a08fabec47e501eb115
-- filename: app/(tabs)/chatbot.tsx
-  checksum: 4fcc23aabb4f088843a8fda37af153367dcea28719b96a574221101feecbf6f3
 - filename: app/dashboard.tsx
   checksum: 0fe06cf1fb7529eed42c4f329d372360052a5d57f8dc6a36823113b4bf4e1da4
-- filename: app/(tabs)/index.tsx
-  checksum: ba2e6f3901a611cee0425b4aa7aa1f1d3d6d95b23ce4fc24602d3e4015c611bd
+- filename: app/login.tsx
+  checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
+- filename: bun.lock
+  checksum: 5e79383342fe674e42b9d1952fb00290a9556f60a6f24bd4b9ecdc5abd921e00
+- filename: components/NotificationItem.tsx
+  checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
+- filename: components/partials/NotificationSettingsModal.tsx
+  checksum: ef3b87502a25ad9c798e21efde0138f5a8de412c2d7e0e68f7e8c539bcdd1d91
 version: "1.0"

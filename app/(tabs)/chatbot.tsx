@@ -101,7 +101,6 @@ export default function ChatbotScreen() {
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
 
@@ -148,10 +147,6 @@ export default function ChatbotScreen() {
       keyboardHideListener?.remove();
     };
   }, [fadeAnim, slideAnim]);
-
-  useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({ animated: true });
-  }, [messages]);
 
   const handleSend = () => {
     if (inputText.trim() === "") return;
@@ -238,12 +233,10 @@ export default function ChatbotScreen() {
 
       {/* Messages */}
       <ScrollView
-        ref={scrollViewRef}
         style={styles.messagesContainer}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
-          styles.messagesContent,
-          { paddingBottom: keyboardHeight > 0 ? 200 : 130 },
+          { paddingBottom: keyboardHeight > 0 ? 200 : 22 },
         ]}>
         {messages.map(message => (
           <Animated.View
@@ -326,8 +319,15 @@ export default function ChatbotScreen() {
             )}
           </Animated.View>
         ))}
+      </ScrollView>
 
-        {/* Quick Questions */}
+      {/* Input - Fixed positioning with keyboard handling */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={[
+          styles.inputContainer,
+          { bottom: keyboardHeight > 0 ? keyboardHeight + 10 : 15 },
+        ]}>
         {messages.length === 1 && (
           <Animated.View
             style={[
@@ -338,7 +338,9 @@ export default function ChatbotScreen() {
               },
             ]}>
             <Text style={styles.quickQuestionsTitle}>Brza pitanja:</Text>
-            <View style={styles.quickQuestionsGrid}>
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.quickQuestionsList}>
               {quickQuestions.map((question, index) => (
                 <TouchableOpacity
                   key={index}
@@ -380,18 +382,9 @@ export default function ChatbotScreen() {
                   </LinearGradient>
                 </TouchableOpacity>
               ))}
-            </View>
+            </ScrollView>
           </Animated.View>
         )}
-      </ScrollView>
-
-      {/* Input - Fixed positioning with keyboard handling */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={[
-          styles.inputContainer,
-          { bottom: keyboardHeight > 0 ? keyboardHeight + 10 : 105 },
-        ]}>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.textInput}
@@ -436,17 +429,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8FAFC",
+    marginBottom: 30,
   },
   messagesContainer: {
     flex: 1,
-  },
-  messagesContent: {
-    padding: 22,
+    paddingTop: 16,
   },
   messageContainer: {
     flexDirection: "row",
-    marginBottom: 22,
+    marginBottom: 16,
     alignItems: "flex-end",
+    width: "100%",
   },
   userMessage: {
     justifyContent: "flex-end",
@@ -529,20 +522,25 @@ const styles = StyleSheet.create({
   quickQuestionsContainer: {
     marginTop: 28,
   },
+  quickQuestionsList: {
+    paddingVertical: 10,
+    justifyContent: "center",
+    gap: 12,
+    minWidth: "100%",
+  },
   quickQuestionsTitle: {
     fontSize: 20,
     fontFamily: "Inter-Bold",
     color: "#1A1A1A",
     marginBottom: 18,
   },
-  quickQuestionsGrid: {
-    gap: 14,
-  },
   quickQuestionButton: {
     borderRadius: 20,
     overflow: "hidden",
     boxShadow: "0px 4px 12px rgba(10, 73, 119, 0.1)",
     elevation: 6,
+    flex: 1,
+    minWidth: 120,
   },
   quickQuestionGradient: {
     padding: 20,
@@ -573,9 +571,9 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   inputContainer: {
-    position: "absolute",
-    left: 22,
-    right: 22,
+    marginHorizontal: 16,
+    gap: 16,
+    backgroundColor: "transparent",
   },
   inputWrapper: {
     backgroundColor: "#ffffff",
@@ -589,11 +587,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 15,
     fontFamily: "Inter-Regular",
     color: "#1A1A1A",
-    maxHeight: 110,
-    paddingVertical: 10,
+    height: 40,
+    lineHeight: 30,
   },
   sendButton: {
     marginLeft: 14,

@@ -56,43 +56,41 @@ export default function Header({
   });
 
   return (
-    <View style={isMain && styles.headerMainContainer}>
-      <LinearGradient
-        colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}>
-        <Animated.View
-          style={[
-            styles.headerContent,
-            fadeAnim && slideAnim
-              ? {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: slideAnim }],
-                }
-              : {},
-          ]}>
-          <View style={styles.headerLeft}>
-            {headerIcon}
-            <View>
-              {headerIntro}
-              {headerTitle}
-              {headerSubtitle}
-            </View>
+    <LinearGradient
+      colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.header}>
+      <Animated.View
+        style={[
+          styles.headerContent,
+          fadeAnim && slideAnim
+            ? {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+              }
+            : {},
+        ]}>
+        <View style={styles.headerLeft}>
+          {headerIcon}
+          <View>
+            {headerIntro}
+            {headerTitle}
+            {headerSubtitle}
           </View>
+        </View>
 
-          {defaultChildren}
+        {defaultChildren}
 
-          {headerButton ?? (
-            <View style={styles.headerDecoration}>
-              <View style={styles.headerDot1} />
-              <View style={styles.headerDot2} />
-              <View style={styles.headerDot3} />
-            </View>
-          )}
-        </Animated.View>
-      </LinearGradient>
-    </View>
+        {headerButton ?? (
+          <View style={styles.headerDecoration}>
+            <View style={styles.headerDot1} />
+            <View style={styles.headerDot2} />
+            <View style={styles.headerDot3} />
+          </View>
+        )}
+      </Animated.View>
+    </LinearGradient>
   );
 }
 
@@ -109,7 +107,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
   },
   headerContent: {
     flexDirection: "row",
@@ -119,6 +116,7 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: "row",
     alignItems: "center",
+    maxWidth: "70%",
   },
   headerDecoration: {
     flexDirection: "row",
