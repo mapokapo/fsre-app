@@ -8,9 +8,8 @@ import {
   Key,
   Shield,
 } from "lucide-react-native";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  Animated,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
@@ -21,6 +20,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 
 const { height } = Dimensions.get("window");
 
@@ -28,67 +33,59 @@ export default function LoginScreen() {
   const [accessCode, setAccessCode] = useState("");
   const [showCode, setShowCode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<null | string>(null);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
-  const shakeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
+  const shakeAnim = useSharedValue(0);
 
-  React.useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-    ]).start();
+  const fadeInAnimatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: fadeAnim.value,
+      transform: [{ translateY: slideAnim.value }],
+    }),
+    []
+  );
+
+  const shakeAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: shakeAnim.value }],
+  }));
+
+  const startFadeInAnimation = useCallback(() => {
+    fadeAnim.value = withTiming(1, { duration: 1000 });
+    slideAnim.value = withTiming(0, { duration: 1000 });
   }, [fadeAnim, slideAnim]);
 
-  const shakeError = () => {
-    Animated.sequence([
-      Animated.timing(shakeAnim, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: -10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: 10,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnim, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
+  useEffect(() => {
+    startFadeInAnimation();
+  }, [startFadeInAnimation]);
+
+  const startShakeAnimation = useCallback(() => {
+    shakeAnim.value = withSequence(
+      withTiming(10, { duration: 100 }),
+      withTiming(-10, { duration: 100 }),
+      withTiming(10, { duration: 100 }),
+      withTiming(0, { duration: 100 })
+    );
+  }, [shakeAnim]);
+
+  useEffect(() => {
+    if (error !== null) startShakeAnimation();
+  }, [startShakeAnimation, error]);
 
   const handleLogin = async () => {
     if (!accessCode.trim()) {
       setError("Molimo unesite pristupni kod");
-      shakeError();
       return;
     }
 
     if (accessCode.length < 6) {
       setError("Pristupni kod mora imati najmanje 6 znakova");
-      shakeError();
       return;
     }
 
     setIsLoading(true);
-    setError("");
+    setError(null);
 
     // Simulate API call
     setTimeout(() => {
@@ -102,7 +99,6 @@ export default function LoginScreen() {
         setError(
           "Neispravni pristupni kod. Molimo kontaktirajte administraciju."
         );
-        shakeError();
       }
 
       setIsLoading(false);
@@ -112,7 +108,7 @@ export default function LoginScreen() {
   const handleCodeChange = (text: string) => {
     setAccessCode(text);
     if (error) {
-      setError("");
+      setError(null);
     }
   };
 
@@ -139,14 +135,7 @@ export default function LoginScreen() {
           <View style={[styles.circle, styles.circle3]} />
         </View>
 
-        <Animated.View
-          style={[
-            styles.content,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}>
+        <Animated.View style={[styles.content, fadeInAnimatedStyle]}>
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>
@@ -172,13 +161,7 @@ export default function LoginScreen() {
           </View>
 
           {/* Login Form */}
-          <Animated.View
-            style={[
-              styles.formContainer,
-              {
-                transform: [{ translateX: shakeAnim }],
-              },
-            ]}>
+          <Animated.View style={[styles.formContainer, shakeAnimatedStyle]}>
             <LinearGradient
               colors={[
                 "rgba(255, 255, 255, 0.95)",

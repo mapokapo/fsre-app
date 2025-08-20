@@ -18,9 +18,8 @@ import {
 import NotificationItem from "@/components/NotificationItem";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import ProfileView from "@/components/partials/ProfileView";
-import Notification from "@/lib/types/Notification";
+import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { addDays, addHours } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
@@ -40,9 +39,8 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  Animated,
   ColorValue,
   Dimensions,
   Image,
@@ -54,43 +52,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
-
-const now = new Date();
-
-const notifications: Notification[] = [
-  {
-    id: 1,
-    title: "Prijava za ispitni rok",
-    message: "Prijava za zimski ispitni rok otvorena do 15. siječnja",
-    datetime: addHours(now, 2),
-    urgent: true,
-    iconCode: "timetable",
-    gradientFrom: "#FF6B6B",
-    gradientTo: "#FF8E8E",
-  },
-  {
-    id: 2,
-    title: "AI & Machine Learning radionica",
-    message: "Besplatna radionica za studente u laboratoriju L-3",
-    datetime: addDays(now, 1),
-    urgent: false,
-    iconCode: "tech-news",
-    gradientFrom: "#4ECDC4",
-    gradientTo: "#44A08D",
-  },
-  {
-    id: 3,
-    title: "Novi laboratorijski termini",
-    message: "Dodani su novi termini za laboratorijske vježbe",
-    datetime: addDays(now, 3),
-    urgent: false,
-    iconCode: "student",
-    gradientFrom: "#A8E6CF",
-    gradientTo: "#7FCDCD",
-  },
-];
 
 const news: {
   id: number;
@@ -209,26 +177,33 @@ const stats = [
 ];
 
 export default function HomeScreen() {
+  const { notifications } = useNotificationsStore();
+
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(30);
+
+  const animatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: withTiming(fadeAnim.value, { duration: 1000 }),
+      transform: [
+        { translateY: withTiming(slideAnim.value, { duration: 1000 }) },
+      ],
+    }),
+    []
+  );
+
+  const startAnimation = useCallback(() => {
+    fadeAnim.value = 1;
+    slideAnim.value = 0;
+  }, [fadeAnim, slideAnim]);
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [fadeAnim, slideAnim]);
+    startAnimation();
+  }, [startAnimation]);
 
   const handleLogout = () => {
     setShowProfileModal(false);
@@ -279,8 +254,7 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.container}>
         <Header
           isMain
-          fadeAnim={fadeAnim}
-          slideAnim={slideAnim}>
+          animatedStyle={animatedStyle}>
           <HeaderIntro>Dobrodošli na</HeaderIntro>
           <HeaderTitle>FSRE</HeaderTitle>
           <HeaderSubtitle>
@@ -356,14 +330,7 @@ export default function HomeScreen() {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.statsSection}>
-            <Animated.View
-              style={[
-                styles.statsContainer,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: slideAnim }],
-                },
-              ]}>
+            <Animated.View style={[styles.statsContainer, animatedStyle]}>
               {stats.map((stat, index) => (
                 <View
                   key={index}

@@ -1,17 +1,16 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { ReactNode } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
 
 export type HeaderProps = React.PropsWithChildren & {
   isMain?: boolean;
-  fadeAnim?: Animated.Value;
-  slideAnim?: Animated.Value;
+  animatedStyle?: ViewStyle;
 };
 
 export default function Header({
   isMain = false,
-  fadeAnim,
-  slideAnim,
+  animatedStyle,
   children,
 }: HeaderProps) {
   let headerIcon: ReactNode | null = null;
@@ -61,16 +60,7 @@ export default function Header({
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.header}>
-      <Animated.View
-        style={[
-          styles.headerContent,
-          fadeAnim && slideAnim
-            ? {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              }
-            : {},
-        ]}>
+      <Animated.View style={[styles.headerContent, animatedStyle]}>
         <View style={styles.headerLeft}>
           {headerIcon}
           <View>
