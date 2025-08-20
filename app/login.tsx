@@ -10,9 +10,7 @@ import {
 } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Dimensions,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,8 +24,6 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-
-const { height } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const [accessCode, setAccessCode] = useState("");
@@ -44,12 +40,15 @@ export default function LoginScreen() {
       opacity: fadeAnim.value,
       transform: [{ translateY: slideAnim.value }],
     }),
-    []
+    [fadeAnim, slideAnim]
   );
 
-  const shakeAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: shakeAnim.value }],
-  }));
+  const shakeAnimatedStyle = useAnimatedStyle(
+    () => ({
+      transform: [{ translateX: shakeAnim.value }],
+    }),
+    [shakeAnim]
+  );
 
   const startFadeInAnimation = useCallback(() => {
     fadeAnim.value = withTiming(1, { duration: 1000 });
@@ -114,7 +113,7 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior="padding"
       style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -252,7 +251,7 @@ export default function LoginScreen() {
                     </View>
                   ) : (
                     <View style={styles.buttonContent}>
-                      <Text style={styles.loginButtonText}>Prijaviť se</Text>
+                      <Text style={styles.loginButtonText}>Prijavite se</Text>
                       <ArrowRight
                         color="#ffffff"
                         size={20}
@@ -299,7 +298,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    minHeight: height,
   },
   backgroundGradient: {
     position: "absolute",
@@ -335,14 +333,13 @@ const styles = StyleSheet.create({
   circle3: {
     width: 100,
     height: 100,
-    top: height * 0.3,
     left: -50,
   },
   content: {
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 80,
-    paddingBottom: 40,
+    paddingBottom: 64,
     justifyContent: "center",
   },
   header: {

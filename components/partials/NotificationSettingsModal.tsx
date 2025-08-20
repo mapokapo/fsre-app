@@ -1,17 +1,10 @@
 import { notificationTypes } from "@/lib/const/notificationTypes";
 import { useNotificationSettingsStore } from "@/lib/state/notificationSettingsStore";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { X } from "lucide-react-native";
 import React, { useEffect, useRef } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 
 export type NotificationSettingsModalProps = {
   isVisible: boolean;
@@ -52,13 +45,13 @@ export default function NotificationSettingsModal({
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
+      snapPoints={["100%", "50%"]}
+      containerStyle={styles.sheetBackground}
       onDismiss={onClose}>
-      <BottomSheetView>
-        <View style={styles.notificationModal}>
-          <View style={styles.notificationModalHeader}>
-            <Text style={styles.notificationModalTitle}>
-              Postavke obavijesti
-            </Text>
+      <BottomSheetScrollView>
+        <View style={styles.sheetContainer}>
+          <View style={styles.sheetHeader}>
+            <Text style={styles.sheetTitle}>Postavke obavijesti</Text>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={onClose}
@@ -72,10 +65,7 @@ export default function NotificationSettingsModal({
           </View>
 
           {/* Notification Settings Content - Fixed */}
-          <ScrollView
-            style={styles.notificationContent}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.notificationContentContainer}>
+          <View style={styles.notificationContent}>
             <Text style={styles.notificationDescription}>
               Odaberite za koje aktivnosti želite primati obavijesti. Obavijesti
               će vam stići 15 minuta prije početka.
@@ -152,24 +142,24 @@ export default function NotificationSettingsModal({
                 <Text style={styles.saveButtonText}>Spremi postavke</Text>
               </LinearGradient>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
         </View>
-      </BottomSheetView>
+      </BottomSheetScrollView>
     </BottomSheetModal>
   );
 }
 
 const styles = StyleSheet.create({
-  notificationModal: {
-    backgroundColor: "#f00",
+  sheetBackground: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  sheetContainer: {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    maxHeight: "90%",
-    minHeight: "60%",
     boxShadow: "0px -10px 25px rgba(10, 73, 119, 0.25)",
     elevation: 20,
   },
-  notificationModalHeader: {
+  sheetHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -178,7 +168,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F1F5F9",
     backgroundColor: "#ffffff",
   },
-  notificationModalTitle: {
+  sheetTitle: {
     fontSize: 20,
     fontFamily: "Inter-Bold",
     color: "#1A1A1A",
@@ -194,8 +184,6 @@ const styles = StyleSheet.create({
   notificationContent: {
     flex: 1,
     backgroundColor: "#ffffff",
-  },
-  notificationContentContainer: {
     padding: 24,
     paddingTop: 16,
   },

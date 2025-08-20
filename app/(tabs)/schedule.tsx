@@ -191,7 +191,13 @@ export default function ScheduleScreen() {
     <View style={styles.container}>
       {/* Header */}
       <Header>
-        <HeaderIcon />
+        <HeaderIcon>
+          <Calendar
+            color="#ffffff"
+            size={24}
+            strokeWidth={2.5}
+          />
+        </HeaderIcon>
         <HeaderTitle>Raspored</HeaderTitle>
         <HeaderSubtitle>Predavanja i vježbe</HeaderSubtitle>
         <HeaderButton onPress={() => setShowFilters(!showFilters)}>

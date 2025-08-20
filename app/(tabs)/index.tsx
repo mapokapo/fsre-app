@@ -52,11 +52,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
@@ -193,7 +195,7 @@ export default function HomeScreen() {
         { translateY: withTiming(slideAnim.value, { duration: 1000 }) },
       ],
     }),
-    []
+    [fadeAnim, slideAnim]
   );
 
   const startAnimation = useCallback(() => {
@@ -250,303 +252,311 @@ export default function HomeScreen() {
   };
 
   return (
-    <BottomSheetModalProvider>
-      <SafeAreaView style={styles.container}>
-        <Header
-          isMain
-          animatedStyle={animatedStyle}>
-          <HeaderIntro>Dobrodošli na</HeaderIntro>
-          <HeaderTitle>FSRE</HeaderTitle>
-          <HeaderSubtitle>
-            Fakultet strojarstva, računarstva i elektrotehnike
-          </HeaderSubtitle>
-          <HeaderButton onPress={() => setShowProfileModal(true)}>
-            <HeaderProfileButton />
-          </HeaderButton>
-        </Header>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <BottomSheetModalProvider>
+          <SafeAreaView style={styles.container}>
+            <Header
+              isMain
+              animatedStyle={animatedStyle}>
+              <HeaderIntro>Dobrodošli na</HeaderIntro>
+              <HeaderTitle>FSRE</HeaderTitle>
+              <HeaderSubtitle>
+                Fakultet strojarstva, računarstva i elektrotehnike
+              </HeaderSubtitle>
+              <HeaderButton onPress={() => setShowProfileModal(true)}>
+                <HeaderProfileButton />
+              </HeaderButton>
+            </Header>
 
-        {/* Profile Modal */}
-        <Modal
-          isVisible={showProfileModal && !showNotificationSettings}
-          onClose={() => setShowProfileModal(false)}>
-          <ModalHeader>
-            <ModalTitle>Profil</ModalTitle>
-            <ModalCloseButton onClose={() => setShowProfileModal(false)} />
-          </ModalHeader>
-          <ModalContent>
-            <ProfileView />
-          </ModalContent>
-          <ModalFooter>
-            <ModalActionButton
-              onPress={handleNotificationSettings}
-              icon={
-                <Bell
-                  color="#0A4977"
-                  size={20}
-                  strokeWidth={2.5}
+            {/* Profile Modal */}
+            <Modal
+              isVisible={showProfileModal && !showNotificationSettings}
+              onClose={() => setShowProfileModal(false)}>
+              <ModalHeader>
+                <ModalTitle>Profil</ModalTitle>
+                <ModalCloseButton onClose={() => setShowProfileModal(false)} />
+              </ModalHeader>
+              <ModalContent>
+                <ProfileView />
+              </ModalContent>
+              <ModalFooter>
+                <ModalActionButton
+                  onPress={handleNotificationSettings}
+                  icon={
+                    <Bell
+                      color="#0A4977"
+                      size={20}
+                      strokeWidth={2.5}
+                    />
+                  }
+                  text="Postavke obavijesti"
                 />
-              }
-              text="Postavke obavijesti"
-            />
-            <ModalActionButton
-              onPress={handleHelp}
-              icon={
-                <HelpCircle
-                  color="#0A4977"
-                  size={20}
-                  strokeWidth={2.5}
+                <ModalActionButton
+                  onPress={handleHelp}
+                  icon={
+                    <HelpCircle
+                      color="#0A4977"
+                      size={20}
+                      strokeWidth={2.5}
+                    />
+                  }
+                  text="Pomoć"
                 />
-              }
-              text="Pomoć"
-            />
-            <ModalActionButton
-              onPress={handleLogout}
-              style={{
-                borderColor: "#FEE2E2",
-                backgroundColor: "#FEFEFE",
-              }}
-              icon={
-                <LogOut
-                  color="#DC2626"
-                  size={20}
-                  strokeWidth={2.5}
+                <ModalActionButton
+                  onPress={handleLogout}
                   style={{
-                    backgroundColor: "rgba(220, 38, 38, 0.1)",
+                    borderColor: "#FEE2E2",
+                    backgroundColor: "#FEFEFE",
+                  }}
+                  icon={
+                    <LogOut
+                      color="#DC2626"
+                      size={20}
+                      strokeWidth={2.5}
+                      style={{
+                        backgroundColor: "rgba(220, 38, 38, 0.1)",
+                      }}
+                    />
+                  }
+                  text="Odjavi se"
+                  textStyle={{
+                    color: "#DC2626",
                   }}
                 />
-              }
-              text="Odjavi se"
-              textStyle={{
-                color: "#DC2626",
-              }}
+              </ModalFooter>
+            </Modal>
+
+            <NotificationSettingsModal
+              isVisible={showNotificationSettings}
+              onClose={handleBackToProfile}
             />
-          </ModalFooter>
-        </Modal>
 
-        <NotificationSettingsModal
-          isVisible={showNotificationSettings}
-          onClose={handleBackToProfile}
-        />
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.statsSection}>
+                <Animated.View style={[styles.statsContainer, animatedStyle]}>
+                  {stats.map((stat, index) => (
+                    <View
+                      key={index}
+                      style={styles.statCard}>
+                      <View
+                        style={[
+                          styles.statIcon,
+                          { backgroundColor: `${stat.color}20` },
+                        ]}>
+                        <stat.icon
+                          color={stat.color}
+                          size={22}
+                          strokeWidth={2.5}
+                        />
+                      </View>
+                      <Text style={styles.statValue}>{stat.value}</Text>
+                      <Text style={styles.statLabel}>{stat.label}</Text>
+                    </View>
+                  ))}
+                </Animated.View>
+              </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.statsSection}>
-            <Animated.View style={[styles.statsContainer, animatedStyle]}>
-              {stats.map((stat, index) => (
-                <View
-                  key={index}
-                  style={styles.statCard}>
-                  <View
-                    style={[
-                      styles.statIcon,
-                      { backgroundColor: `${stat.color}20` },
-                    ]}>
-                    <stat.icon
-                      color={stat.color}
-                      size={22}
+              {/* Notifications */}
+              <Animated.View
+                style={[
+                  styles.section,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: slideAnim }],
+                  },
+                ]}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Bell
+                      color="#0A4977"
+                      size={24}
                       strokeWidth={2.5}
                     />
+                    <Text style={styles.sectionTitle}>Obavijesti</Text>
                   </View>
-                  <Text style={styles.statValue}>{stat.value}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
+                  <TouchableOpacity
+                    style={styles.seeAllButton}
+                    activeOpacity={0.8}>
+                    <Text style={styles.seeAllText}>Sve</Text>
+                    <ChevronRight
+                      color="#0A4977"
+                      size={18}
+                      strokeWidth={2.5}
+                    />
+                  </TouchableOpacity>
                 </View>
-              ))}
-            </Animated.View>
-          </View>
 
-          {/* Notifications */}
-          <Animated.View
-            style={[
-              styles.section,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionTitleContainer}>
-                <Bell
-                  color="#0A4977"
-                  size={24}
-                  strokeWidth={2.5}
-                />
-                <Text style={styles.sectionTitle}>Obavijesti</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.seeAllButton}
-                activeOpacity={0.8}>
-                <Text style={styles.seeAllText}>Sve</Text>
-                <ChevronRight
-                  color="#0A4977"
-                  size={18}
-                  strokeWidth={2.5}
-                />
-              </TouchableOpacity>
-            </View>
-
-            {notifications.map(notification => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
-          </Animated.View>
-
-          {/* News */}
-          <Animated.View
-            style={[
-              styles.section,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionTitleContainer}>
-                <Newspaper
-                  color="#0A4977"
-                  size={24}
-                  strokeWidth={2.5}
-                />
-                <Text style={styles.sectionTitle}>Novosti</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.seeAllButton}
-                activeOpacity={0.8}>
-                <Text style={styles.seeAllText}>Sve</Text>
-                <ChevronRight
-                  color="#0A4977"
-                  size={18}
-                  strokeWidth={2.5}
-                />
-              </TouchableOpacity>
-            </View>
-
-            {news.map(article => (
-              <TouchableOpacity
-                key={article.id}
-                style={styles.newsCard}
-                activeOpacity={0.8}>
-                <View style={styles.newsImageContainer}>
-                  <Image
-                    source={{ uri: article.image }}
-                    style={styles.newsImage}
+                {notifications.map(notification => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
                   />
-                  <LinearGradient
-                    colors={article.gradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.newsCategoryBadge}>
-                    <Text style={styles.newsCategoryText}>
-                      {article.category}
-                    </Text>
-                  </LinearGradient>
-                </View>
-                <View style={styles.newsContent}>
-                  <Text style={styles.newsTitle}>{article.title}</Text>
-                  <Text style={styles.newsSummary}>{article.summary}</Text>
-                  <Text style={styles.newsTime}>prije {article.time}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </Animated.View>
+                ))}
+              </Animated.View>
 
-          {/* Quick Links - VRAĆENI SU! */}
-          <Animated.View
-            style={[
-              styles.section,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Brzi pristup</Text>
-            </View>
-            <View style={styles.linksGrid}>
-              {quickLinks.map((link, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.linkCard}
-                  activeOpacity={0.8}
-                  onPress={() => handleQuickLinkPress(link)}>
+              {/* News */}
+              <Animated.View
+                style={[
+                  styles.section,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: slideAnim }],
+                  },
+                ]}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Newspaper
+                      color="#0A4977"
+                      size={24}
+                      strokeWidth={2.5}
+                    />
+                    <Text style={styles.sectionTitle}>Novosti</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.seeAllButton}
+                    activeOpacity={0.8}>
+                    <Text style={styles.seeAllText}>Sve</Text>
+                    <ChevronRight
+                      color="#0A4977"
+                      size={18}
+                      strokeWidth={2.5}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {news.map(article => (
+                  <TouchableOpacity
+                    key={article.id}
+                    style={styles.newsCard}
+                    activeOpacity={0.8}>
+                    <View style={styles.newsImageContainer}>
+                      <Image
+                        source={{ uri: article.image }}
+                        style={styles.newsImage}
+                      />
+                      <LinearGradient
+                        colors={article.gradient}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.newsCategoryBadge}>
+                        <Text style={styles.newsCategoryText}>
+                          {article.category}
+                        </Text>
+                      </LinearGradient>
+                    </View>
+                    <View style={styles.newsContent}>
+                      <Text style={styles.newsTitle}>{article.title}</Text>
+                      <Text style={styles.newsSummary}>{article.summary}</Text>
+                      <Text style={styles.newsTime}>prije {article.time}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </Animated.View>
+
+              {/* Quick Links - VRAĆENI SU! */}
+              <Animated.View
+                style={[
+                  styles.section,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: slideAnim }],
+                  },
+                ]}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Brzi pristup</Text>
+                </View>
+                <View style={styles.linksGrid}>
+                  {quickLinks.map((link, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.linkCard}
+                      activeOpacity={0.8}
+                      onPress={() => handleQuickLinkPress(link)}>
+                      <LinearGradient
+                        colors={link.gradient}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={styles.linkIconContainer}>
+                        <link.icon
+                          color="#ffffff"
+                          size={26}
+                          strokeWidth={2.5}
+                        />
+                      </LinearGradient>
+                      <Text style={styles.linkText}>{link.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </Animated.View>
+
+              {/* Contact */}
+              <Animated.View
+                style={[
+                  styles.section,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: slideAnim }],
+                  },
+                ]}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Kontakt</Text>
+                </View>
+                <View style={styles.contactCard}>
                   <LinearGradient
-                    colors={link.gradient}
+                    colors={[
+                      "rgba(10, 73, 119, 0.05)",
+                      "rgba(59, 130, 246, 0.05)",
+                    ]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    style={styles.linkIconContainer}>
-                    <link.icon
-                      color="#ffffff"
-                      size={26}
-                      strokeWidth={2.5}
-                    />
+                    style={styles.contactGradient}>
+                    <TouchableOpacity
+                      style={styles.contactRow}
+                      activeOpacity={0.8}>
+                      <View style={styles.contactIcon}>
+                        <MapPin
+                          color="#0A4977"
+                          size={20}
+                          strokeWidth={2.5}
+                        />
+                      </View>
+                      <Text style={styles.contactText}>
+                        Matice hrvatske bb, 88000 Mostar
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.contactRow}
+                      activeOpacity={0.8}>
+                      <View style={styles.contactIcon}>
+                        <Phone
+                          color="#0A4977"
+                          size={20}
+                          strokeWidth={2.5}
+                        />
+                      </View>
+                      <Text style={styles.contactText}>+387 36 355 025</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.contactRow}
+                      activeOpacity={0.8}>
+                      <View style={styles.contactIcon}>
+                        <Mail
+                          color="#0A4977"
+                          size={20}
+                          strokeWidth={2.5}
+                        />
+                      </View>
+                      <Text style={styles.contactText}>info@fsre.sum.ba</Text>
+                    </TouchableOpacity>
                   </LinearGradient>
-                  <Text style={styles.linkText}>{link.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </Animated.View>
-
-          {/* Contact */}
-          <Animated.View
-            style={[
-              styles.section,
-              styles.lastSection,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            <Text style={styles.sectionTitle}>Kontakt</Text>
-            <View style={styles.contactCard}>
-              <LinearGradient
-                colors={["rgba(10, 73, 119, 0.05)", "rgba(59, 130, 246, 0.05)"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.contactGradient}>
-                <TouchableOpacity
-                  style={styles.contactRow}
-                  activeOpacity={0.8}>
-                  <View style={styles.contactIcon}>
-                    <MapPin
-                      color="#0A4977"
-                      size={20}
-                      strokeWidth={2.5}
-                    />
-                  </View>
-                  <Text style={styles.contactText}>
-                    Matice hrvatske bb, 88000 Mostar
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.contactRow}
-                  activeOpacity={0.8}>
-                  <View style={styles.contactIcon}>
-                    <Phone
-                      color="#0A4977"
-                      size={20}
-                      strokeWidth={2.5}
-                    />
-                  </View>
-                  <Text style={styles.contactText}>+387 36 355 025</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.contactRow}
-                  activeOpacity={0.8}>
-                  <View style={styles.contactIcon}>
-                    <Mail
-                      color="#0A4977"
-                      size={20}
-                      strokeWidth={2.5}
-                    />
-                  </View>
-                  <Text style={styles.contactText}>info@fsre.sum.ba</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </Animated.View>
-        </ScrollView>
-      </SafeAreaView>
-    </BottomSheetModalProvider>
+                </View>
+              </Animated.View>
+            </ScrollView>
+          </SafeAreaView>
+        </BottomSheetModalProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -598,9 +608,6 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 26,
     marginBottom: 40,
-  },
-  lastSection: {
-    marginBottom: 0,
   },
   sectionHeader: {
     flexDirection: "row",

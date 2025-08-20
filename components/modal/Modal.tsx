@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
@@ -42,30 +43,33 @@ export default function Modal({ isVisible, onClose, children }: ModalProps) {
   });
 
   return (
-    <RNModal
-      visible={isVisible}
-      transparent={true}
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <TouchableOpacity
-          style={styles.modalBackdrop}
-          activeOpacity={1}
-          onPress={onClose}
-        />
-        <View style={styles.modal}>
-          <LinearGradient
-            colors={["#ffffff", "#f8fafc"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.modalGradient}>
-            {modalHeader}
-            {modalContent}
-            {modalFooter}
-          </LinearGradient>
+    <SafeAreaView>
+      <RNModal
+        visible={isVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={onClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity
+            style={styles.modalBackdrop}
+            activeOpacity={1}
+            onPress={onClose}
+          />
+          <View style={styles.modal}>
+            <LinearGradient
+              colors={["#ffffff", "#f8fafc"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.modalGradient}>
+              {modalHeader}
+              {modalContent}
+              {defaultChildren}
+              {modalFooter}
+            </LinearGradient>
+          </View>
         </View>
-      </View>
-    </RNModal>
+      </RNModal>
+    </SafeAreaView>
   );
 }
 

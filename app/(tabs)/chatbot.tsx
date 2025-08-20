@@ -4,6 +4,7 @@ import {
   HeaderSubtitle,
   HeaderTitle,
 } from "@/components/header";
+import useKeyboardVisibility from "@/hooks/useKeyboardVisibility";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Bot,
@@ -11,17 +12,14 @@ import {
   LucideIcon,
   MessageSquare,
   Send,
+  Sparkles,
   User,
   Zap,
 } from "lucide-react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  Animated,
   ColorValue,
-  Dimensions,
-  Keyboard,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,15 +27,25 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-const { width } = Dimensions.get("window");
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
   typing?: boolean;
+}
+
+interface QuickQuestion {
+  text: string;
+  icon: LucideIcon;
+  gradient: [ColorValue, ColorValue, ...ColorValue[]];
+  description: string;
 }
 
 const predefinedResponses: { [key: string]: string } = {
@@ -57,12 +65,7 @@ const predefinedResponses: { [key: string]: string } = {
   wifi: 'WiFi mreža "FSRE-Student" je dostupna studentima. Podaci za prijavu se dobivaju u studentskoj službi. 📶',
 };
 
-const quickQuestions: {
-  text: string;
-  icon: LucideIcon;
-  gradient: [ColorValue, ColorValue, ...ColorValue[]];
-  description: string;
-}[] = [
+const quickQuestions: QuickQuestion[] = [
   {
     text: "Gdje mogu vidjeti raspored?",
     icon: MessageSquare,
@@ -92,7 +95,7 @@ const quickQuestions: {
 export default function ChatbotScreen() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
+      id: "initial-message",
       text: "Pozdrav! 👋 Ja sam FSRE AI asistent. Kako vam mogu pomoći danas? Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama ili bilo čemu drugom vezanom za fakultet.",
       isUser: false,
       timestamp: new Date(),
@@ -100,59 +103,35 @@ export default function ChatbotScreen() {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
 
-  useEffect(() => {
-    // Animate quick questions on mount
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-    ]).start();
+  const { isKeyboardVisible } = useKeyboardVisibility();
 
-    // Keyboard listeners
-    const keyboardWillShow = (event: any) => {
-      setKeyboardHeight(event.endCoordinates.height);
-    };
+  const animatedStyle = useAnimatedStyle(
+    () => ({
+      opacity: withTiming(fadeAnim.value, { duration: 800 }),
+      transform: [
+        { translateY: withTiming(slideAnim.value, { duration: 800 }) },
+      ],
+    }),
+    [fadeAnim, slideAnim]
+  );
 
-    const keyboardWillHide = () => {
-      setKeyboardHeight(0);
-    };
-
-    const showListener =
-      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
-    const hideListener =
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
-
-    const keyboardShowListener = Keyboard.addListener(
-      showListener,
-      keyboardWillShow
-    );
-    const keyboardHideListener = Keyboard.addListener(
-      hideListener,
-      keyboardWillHide
-    );
-
-    return () => {
-      keyboardShowListener?.remove();
-      keyboardHideListener?.remove();
-    };
+  const startAnimation = useCallback(() => {
+    fadeAnim.value = 1;
+    slideAnim.value = 0;
   }, [fadeAnim, slideAnim]);
 
+  useEffect(() => {
+    startAnimation();
+  }, [startAnimation]);
+
   const handleSend = () => {
-    if (inputText.trim() === "") return;
+    if (inputText.trim() === "" || isTyping) return;
 
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: `user-${Date.now()}`,
       text: inputText.trim(),
       isUser: true,
       timestamp: new Date(),
@@ -164,7 +143,7 @@ export default function ChatbotScreen() {
 
     // Add typing indicator
     const typingMessage: Message = {
-      id: messages.length + 2,
+      id: `typing-${Date.now()}`,
       text: "",
       isUser: false,
       timestamp: new Date(),
@@ -179,7 +158,7 @@ export default function ChatbotScreen() {
     setTimeout(() => {
       const botResponse = getBotResponse(inputText.toLowerCase());
       const botMessage: Message = {
-        id: messages.length + 3,
+        id: `bot-${Date.now()}`,
         text: botResponse,
         isUser: false,
         timestamp: new Date(),
@@ -226,109 +205,108 @@ export default function ChatbotScreen() {
   return (
     <View style={styles.container}>
       <Header>
-        <HeaderIcon />
+        <HeaderIcon>
+          <Sparkles
+            color="#ffffff"
+            size={24}
+            strokeWidth={2.5}
+          />
+        </HeaderIcon>
         <HeaderTitle>FSRE AI Asistent</HeaderTitle>
         <HeaderSubtitle>Uvijek tu da pomognem</HeaderSubtitle>
       </Header>
 
       {/* Messages */}
-      <ScrollView
-        style={styles.messagesContainer}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          { paddingBottom: keyboardHeight > 0 ? 200 : 22 },
-        ]}>
-        {messages.map(message => (
-          <Animated.View
-            key={message.id}
-            style={[
-              styles.messageContainer,
-              message.isUser ? styles.userMessage : styles.botMessage,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
-            {!message.isUser && (
-              <View style={styles.botAvatar}>
-                <LinearGradient
-                  colors={["#4ECDC4", "#44A08D"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.botAvatarGradient}>
-                  <Bot
-                    color="#ffffff"
-                    size={18}
-                    strokeWidth={2.5}
-                  />
-                </LinearGradient>
-              </View>
-            )}
-
-            <View
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={styles.messagesContainer}
+          showsVerticalScrollIndicator={false}>
+          {messages.map(message => (
+            <Animated.View
+              key={message.id}
               style={[
-                styles.messageBubble,
-                message.isUser ? styles.userBubble : styles.botBubble,
+                styles.messageContainer,
+                animatedStyle,
+                message.isUser ? styles.userMessage : styles.botMessage,
               ]}>
-              {message.typing ? (
-                <View style={styles.typingIndicator}>
-                  <Animated.View
-                    style={[styles.typingDot, { opacity: fadeAnim }]}
-                  />
-                  <Animated.View
-                    style={[styles.typingDot, { opacity: fadeAnim }]}
-                  />
-                  <Animated.View
-                    style={[styles.typingDot, { opacity: fadeAnim }]}
-                  />
+              {!message.isUser && (
+                <View style={styles.botAvatar}>
+                  <LinearGradient
+                    colors={["#4ECDC4", "#44A08D"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.botAvatarGradient}>
+                    <Bot
+                      color="#ffffff"
+                      size={18}
+                      strokeWidth={2.5}
+                    />
+                  </LinearGradient>
                 </View>
-              ) : (
-                <>
-                  <Text
-                    style={[
-                      styles.messageText,
-                      message.isUser ? styles.userText : styles.botText,
-                    ]}>
-                    {message.text}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.messageTime,
-                      message.isUser ? styles.userTime : styles.botTime,
-                    ]}>
-                    {formatTime(message.timestamp)}
-                  </Text>
-                </>
               )}
-            </View>
 
-            {message.isUser && (
-              <View style={styles.userAvatar}>
-                <LinearGradient
-                  colors={["#0A4977", "#1E5A8A"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.userAvatarGradient}>
-                  <User
-                    color="#ffffff"
-                    size={18}
-                    strokeWidth={2.5}
-                  />
-                </LinearGradient>
+              <View
+                style={[
+                  styles.messageBubble,
+                  message.isUser ? styles.userBubble : styles.botBubble,
+                ]}>
+                {message.typing ? (
+                  <View style={styles.typingIndicator}>
+                    <Animated.View
+                      style={[styles.typingDot, { opacity: fadeAnim }]}
+                    />
+                    <Animated.View
+                      style={[styles.typingDot, { opacity: fadeAnim }]}
+                    />
+                    <Animated.View
+                      style={[styles.typingDot, { opacity: fadeAnim }]}
+                    />
+                  </View>
+                ) : (
+                  <>
+                    <Text
+                      style={[
+                        styles.messageText,
+                        message.isUser ? styles.userText : styles.botText,
+                      ]}>
+                      {message.text}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.messageTime,
+                        message.isUser ? styles.userTime : styles.botTime,
+                      ]}>
+                      {formatTime(message.timestamp)}
+                    </Text>
+                  </>
+                )}
               </View>
-            )}
-          </Animated.View>
-        ))}
-      </ScrollView>
+
+              {message.isUser && (
+                <View style={styles.userAvatar}>
+                  <LinearGradient
+                    colors={["#0A4977", "#1E5A8A"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.userAvatarGradient}>
+                    <User
+                      color="#ffffff"
+                      size={18}
+                      strokeWidth={2.5}
+                    />
+                  </LinearGradient>
+                </View>
+              )}
+            </Animated.View>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* Input - Fixed positioning with keyboard handling */}
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={[
-          styles.inputContainer,
-          { bottom: keyboardHeight > 0 ? keyboardHeight + 10 : 15 },
-        ]}>
-        {messages.length === 1 && (
+        behavior="padding"
+        style={styles.inputContainer}>
+        {!isKeyboardVisible && messages.length === 1 && (
           <Animated.View
             style={[
               styles.quickQuestionsContainer,
@@ -385,7 +363,13 @@ export default function ChatbotScreen() {
             </ScrollView>
           </Animated.View>
         )}
-        <View style={styles.inputWrapper}>
+        <View
+          style={[
+            styles.inputWrapper,
+            isKeyboardVisible && {
+              bottom: 16,
+            },
+          ]}>
           <TextInput
             style={styles.textInput}
             placeholder="Unesite vaše pitanje..."
@@ -432,14 +416,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   messagesContainer: {
-    flex: 1,
     paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 22,
   },
   messageContainer: {
     flexDirection: "row",
     marginBottom: 16,
     alignItems: "flex-end",
-    width: "100%",
   },
   userMessage: {
     justifyContent: "flex-end",
@@ -470,7 +454,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   messageBubble: {
-    maxWidth: width * 0.75,
+    maxWidth: "75%",
     borderRadius: 22,
     padding: 18,
   },
@@ -520,13 +504,14 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   quickQuestionsContainer: {
-    marginTop: 28,
+    marginTop: "auto",
   },
   quickQuestionsList: {
     paddingVertical: 10,
     justifyContent: "center",
     gap: 12,
     minWidth: "100%",
+    paddingHorizontal: 16,
   },
   quickQuestionsTitle: {
     fontSize: 20,
@@ -574,6 +559,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     gap: 16,
     backgroundColor: "transparent",
+    bottom: 15,
   },
   inputWrapper: {
     backgroundColor: "#ffffff",

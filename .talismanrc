@@ -1,8 +1,8 @@
 fileignoreconfig:
 - filename: app/(tabs)/chatbot.tsx
-  checksum: 8fcea544ff41c90fe5178112eb4a799a41603066c8444b5de4b11a245c841300
+  checksum: d7b82e8d931394be4f86c2d2ffcaadd57764e3d9d75704f5898218a95d5f44f0
 - filename: app/(tabs)/index.tsx
-  checksum: ca7c14130f3de9642a2a0ed2e5a940866ea34ddd9e4ad5d2f161dcb0c49349ea
+  checksum: f2c66d4ac9ca272647f0a059180c537205a476e210bedd2ab3f859415081bc9b
 - filename: app/(tabs)/schedule.tsx
   checksum: 76719580bc74bf2b8449e1586c50d45eecfbe60a19852a08fabec47e501eb115
 - filename: app/dashboard.tsx
@@ -10,9 +10,11 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: 5e79383342fe674e42b9d1952fb00290a9556f60a6f24bd4b9ecdc5abd921e00
+  checksum: 570369c0983ee7a6c76beef87a694b6f679c1a6abac5846d4781500a2576b0ff
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
   checksum: ef3b87502a25ad9c798e21efde0138f5a8de412c2d7e0e68f7e8c539bcdd1d91
+- filename: hooks/useKeyboardVisibility.ts
+  checksum: 362694fcffb20c924ed85e00097ff9f2969a9afce4f9e81761cc5484bb25ed8c
 version: "1.0"

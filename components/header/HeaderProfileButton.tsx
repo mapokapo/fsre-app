@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-    elevation: 6,
+    elevation: 22,
   },
 });

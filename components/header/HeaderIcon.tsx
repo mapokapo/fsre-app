@@ -1,16 +1,10 @@
-import { Sparkles } from "lucide-react-native";
+import { PropsWithChildren } from "react";
 import { StyleSheet, View } from "react-native";
 
-export default function HeaderIcon() {
-  return (
-    <View style={styles.headerIcon}>
-      <Sparkles
-        color="#ffffff"
-        size={24}
-        strokeWidth={2.5}
-      />
-    </View>
-  );
+export type HeaderIconProps = PropsWithChildren;
+
+export default function HeaderIcon({ children }: HeaderIconProps) {
+  return <View style={styles.headerIcon}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
