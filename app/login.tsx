@@ -189,6 +189,7 @@ export default function LoginScreen() {
                     placeholderTextColor="#94A3B8"
                     value={accessCode}
                     onChangeText={handleCodeChange}
+                    onSubmitEditing={handleLogin}
                     secureTextEntry={!showCode}
                     autoCapitalize="characters"
                     autoCorrect={false}
