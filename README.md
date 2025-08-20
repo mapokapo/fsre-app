@@ -74,3 +74,24 @@ Use the following format for commit messages:
 - test(auth): Add unit tests for authentication module
 - chore: Update dependencies
 - chore(ci): Configure continuous integration
+
+## Project structure
+
+```
+app - contains pages/screens used by Expo Router
+├── +not-found.tsx - the global 404 page
+└── _layout.tsx - the root layout for all pages
+assets - contains static assets such as images and fonts
+components - contains React components
+├── */ - components may be grouped
+├── partials - contains large composed components which take up significant screen space
+├── ui - contains small reusable components
+└── *.tsx - contains various utility components
+hooks - contains custom React hooks
+lib - contains utility functions and constants
+├── const - contains constant values
+├── state - contains Zustand stores
+│   └── *Store.ts - a Zustand store
+├── types - contains TypeScript types
+└── utils.ts - contains utility functions
+```
