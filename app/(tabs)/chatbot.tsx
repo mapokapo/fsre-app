@@ -1,9 +1,3 @@
-import {
-  Header,
-  HeaderIcon,
-  HeaderSubtitle,
-  HeaderTitle,
-} from "@/components/header";
 import useKeyboardVisibility from "@/hooks/useKeyboardVisibility";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -12,7 +6,6 @@ import {
   LucideIcon,
   MessageSquare,
   Send,
-  Sparkles,
   User,
   Zap,
 } from "lucide-react-native";
@@ -204,18 +197,6 @@ export default function ChatbotScreen() {
 
   return (
     <View style={styles.container}>
-      <Header>
-        <HeaderIcon>
-          <Sparkles
-            color="#ffffff"
-            size={24}
-            strokeWidth={2.5}
-          />
-        </HeaderIcon>
-        <HeaderTitle>FSRE AI Asistent</HeaderTitle>
-        <HeaderSubtitle>Uvijek tu da pomognem</HeaderSubtitle>
-      </Header>
-
       {/* Messages */}
       <View style={{ flex: 1 }}>
         <ScrollView

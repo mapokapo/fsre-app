@@ -1,11 +1,4 @@
-import {
-  Header,
-  HeaderButton,
-  HeaderIntro,
-  HeaderProfileButton,
-  HeaderSubtitle,
-  HeaderTitle,
-} from "@/components/header";
+import { HeaderButton, HeaderProfileButton } from "@/components/header";
 import {
   Modal,
   ModalActionButton,
@@ -21,7 +14,7 @@ import ProfileView from "@/components/partials/ProfileView";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import {
   Award,
   Bell,
@@ -185,6 +178,8 @@ export default function HomeScreen() {
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
 
+  const navigation = useNavigation();
+
   const fadeAnim = useSharedValue(0);
   const slideAnim = useSharedValue(30);
 
@@ -206,6 +201,16 @@ export default function HomeScreen() {
   useEffect(() => {
     startAnimation();
   }, [startAnimation]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButton onPress={() => setShowProfileModal(true)}>
+          <HeaderProfileButton />
+        </HeaderButton>
+      ),
+    });
+  });
 
   const handleLogout = () => {
     setShowProfileModal(false);
@@ -256,19 +261,6 @@ export default function HomeScreen() {
       <SafeAreaProvider>
         <BottomSheetModalProvider>
           <SafeAreaView style={styles.container}>
-            <Header
-              isMain
-              animatedStyle={animatedStyle}>
-              <HeaderIntro>Dobrodošli na</HeaderIntro>
-              <HeaderTitle>FSRE</HeaderTitle>
-              <HeaderSubtitle>
-                Fakultet strojarstva, računarstva i elektrotehnike
-              </HeaderSubtitle>
-              <HeaderButton onPress={() => setShowProfileModal(true)}>
-                <HeaderProfileButton />
-              </HeaderButton>
-            </Header>
-
             {/* Profile Modal */}
             <Modal
               isVisible={showProfileModal && !showNotificationSettings}

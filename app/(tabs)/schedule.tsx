@@ -1,11 +1,6 @@
-import {
-  Header,
-  HeaderButton,
-  HeaderIcon,
-  HeaderSubtitle,
-  HeaderTitle,
-} from "@/components/header";
+import { HeaderButton } from "@/components/header";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "expo-router";
 import {
   BookOpen,
   Calendar,
@@ -17,7 +12,7 @@ import {
   Users,
   Zap,
 } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColorValue,
   ScrollView,
@@ -127,6 +122,8 @@ export default function ScheduleScreen() {
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
 
+  const navigation = useNavigation();
+
   const getTypeConfig = (
     type: string
   ): {
@@ -167,6 +164,26 @@ export default function ScheduleScreen() {
     }
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButton onPress={() => setShowFilters(!showFilters)}>
+          <View
+            style={[
+              styles.filterButton,
+              showFilters && styles.filterButtonActive,
+            ]}>
+            <Filter
+              color="#ffffff"
+              size={20}
+              strokeWidth={2.5}
+            />
+          </View>
+        </HeaderButton>
+      ),
+    });
+  });
+
   const filteredSchedule = scheduleData.filter(item => {
     const dayMatch = selectedDay === "Sve" || item.day === selectedDay;
     const yearMatch = selectedYear === 0 || item.year === selectedYear;
@@ -189,32 +206,6 @@ export default function ScheduleScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <Header>
-        <HeaderIcon>
-          <Calendar
-            color="#ffffff"
-            size={24}
-            strokeWidth={2.5}
-          />
-        </HeaderIcon>
-        <HeaderTitle>Raspored</HeaderTitle>
-        <HeaderSubtitle>Predavanja i vježbe</HeaderSubtitle>
-        <HeaderButton onPress={() => setShowFilters(!showFilters)}>
-          <View
-            style={[
-              styles.filterButton,
-              showFilters && styles.filterButtonActive,
-            ]}>
-            <Filter
-              color="#ffffff"
-              size={20}
-              strokeWidth={2.5}
-            />
-          </View>
-        </HeaderButton>
-      </Header>
-
       {/* Filters */}
       {showFilters && (
         <View style={styles.filtersContainer}>
