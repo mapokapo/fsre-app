@@ -1,16 +1,7 @@
 import { HeaderButton, HeaderProfileButton } from "@/components/header";
-import {
-  Modal,
-  ModalActionButton,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-} from "@/components/modal";
 import NotificationItem from "@/components/NotificationItem";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
-import ProfileView from "@/components/partials/ProfileView";
+import ProfileModal from "@/components/partials/ProfileModal";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,8 +13,6 @@ import {
   ChevronRight,
   ExternalLink,
   Globe,
-  HelpCircle,
-  LogOut,
   LucideIcon,
   Mail,
   MapPin,
@@ -35,7 +24,6 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ColorValue,
-  Dimensions,
   Image,
   Linking,
   SafeAreaView,
@@ -52,8 +40,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-const { width } = Dimensions.get("window");
 
 const news: {
   id: number;
@@ -262,62 +248,19 @@ export default function HomeScreen() {
         <BottomSheetModalProvider>
           <SafeAreaView style={styles.container}>
             {/* Profile Modal */}
-            <Modal
+            <ProfileModal
               isVisible={showProfileModal && !showNotificationSettings}
-              onClose={() => setShowProfileModal(false)}>
-              <ModalHeader>
-                <ModalTitle>Profil</ModalTitle>
-                <ModalCloseButton onClose={() => setShowProfileModal(false)} />
-              </ModalHeader>
-              <ModalContent>
-                <ProfileView />
-              </ModalContent>
-              <ModalFooter>
-                <ModalActionButton
-                  onPress={handleNotificationSettings}
-                  icon={
-                    <Bell
-                      color="#0A4977"
-                      size={20}
-                      strokeWidth={2.5}
-                    />
-                  }
-                  text="Postavke obavijesti"
-                />
-                <ModalActionButton
-                  onPress={handleHelp}
-                  icon={
-                    <HelpCircle
-                      color="#0A4977"
-                      size={20}
-                      strokeWidth={2.5}
-                    />
-                  }
-                  text="Pomoć"
-                />
-                <ModalActionButton
-                  onPress={handleLogout}
-                  style={{
-                    borderColor: "#FEE2E2",
-                    backgroundColor: "#FEFEFE",
-                  }}
-                  icon={
-                    <LogOut
-                      color="#DC2626"
-                      size={20}
-                      strokeWidth={2.5}
-                      style={{
-                        backgroundColor: "rgba(220, 38, 38, 0.1)",
-                      }}
-                    />
-                  }
-                  text="Odjavi se"
-                  textStyle={{
-                    color: "#DC2626",
-                  }}
-                />
-              </ModalFooter>
-            </Modal>
+              onClose={() => setShowProfileModal(false)}
+              onItemPress={item => {
+                if (item === "logout") {
+                  handleLogout();
+                } else if (item === "help") {
+                  handleHelp();
+                } else if (item === "notificationSettings") {
+                  handleNotificationSettings();
+                }
+              }}
+            />
 
             <NotificationSettingsModal
               isVisible={showNotificationSettings}
@@ -350,14 +293,7 @@ export default function HomeScreen() {
               </View>
 
               {/* Notifications */}
-              <Animated.View
-                style={[
-                  styles.section,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: slideAnim }],
-                  },
-                ]}>
+              <Animated.View style={[styles.section, animatedStyle]}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.sectionTitleContainer}>
                     <Bell
@@ -388,14 +324,7 @@ export default function HomeScreen() {
               </Animated.View>
 
               {/* News */}
-              <Animated.View
-                style={[
-                  styles.section,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: slideAnim }],
-                  },
-                ]}>
+              <Animated.View style={[styles.section, animatedStyle]}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.sectionTitleContainer}>
                     <Newspaper
@@ -447,14 +376,7 @@ export default function HomeScreen() {
               </Animated.View>
 
               {/* Quick Links - VRAĆENI SU! */}
-              <Animated.View
-                style={[
-                  styles.section,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: slideAnim }],
-                  },
-                ]}>
+              <Animated.View style={[styles.section, animatedStyle]}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>Brzi pristup</Text>
                 </View>
@@ -483,14 +405,7 @@ export default function HomeScreen() {
               </Animated.View>
 
               {/* Contact */}
-              <Animated.View
-                style={[
-                  styles.section,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: slideAnim }],
-                  },
-                ]}>
+              <Animated.View style={[styles.section, animatedStyle]}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>Kontakt</Text>
                 </View>
@@ -690,7 +605,8 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   linkCard: {
-    width: (width - 70) / 2,
+    flex: 1,
+    minWidth: 200,
     backgroundColor: "#ffffff",
     borderRadius: 22,
     padding: 22,

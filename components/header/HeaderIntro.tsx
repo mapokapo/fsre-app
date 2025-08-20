@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "rgba(255, 255, 255, 0.8)",
     fontFamily: "Inter-Medium",
-    marginBottom: 12,
+    marginBottom: "1%",
   },
 });

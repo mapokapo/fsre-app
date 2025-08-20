@@ -1,4 +1,3 @@
-export { default as Header, HeaderProps } from "./Header";
 export { default as HeaderButton, HeaderButtonProps } from "./HeaderButton";
 export { default as HeaderIcon } from "./HeaderIcon";
 export { default as HeaderIntro, HeaderIntroProps } from "./HeaderIntro";

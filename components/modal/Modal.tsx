@@ -1,15 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { PropsWithChildren, ReactNode } from "react";
 import {
-  Dimensions,
   Modal as RNModal,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const { width } = Dimensions.get("window");
 
 export type ModalProps = PropsWithChildren & {
   isVisible: boolean;
@@ -88,7 +85,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   modal: {
-    width: width - 48,
+    width: "100%",
     maxWidth: 400,
     borderRadius: 24,
     overflow: "hidden",

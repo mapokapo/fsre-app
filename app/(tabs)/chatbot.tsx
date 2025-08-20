@@ -1,5 +1,8 @@
+import Dots from "@/components/Dots";
+import useIntroAnimation from "@/hooks/useIntroAnimation";
 import useKeyboardVisibility from "@/hooks/useKeyboardVisibility";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "expo-router";
 import {
   Bot,
   ChevronRight,
@@ -9,7 +12,7 @@ import {
   User,
   Zap,
 } from "lucide-react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColorValue,
   KeyboardAvoidingView,
@@ -20,11 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 interface Message {
   id: string;
@@ -96,29 +95,16 @@ export default function ChatbotScreen() {
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const fadeAnim = useSharedValue(0);
-  const slideAnim = useSharedValue(50);
 
+  const navigation = useNavigation();
   const { isKeyboardVisible } = useKeyboardVisibility();
-
-  const animatedStyle = useAnimatedStyle(
-    () => ({
-      opacity: withTiming(fadeAnim.value, { duration: 800 }),
-      transform: [
-        { translateY: withTiming(slideAnim.value, { duration: 800 }) },
-      ],
-    }),
-    [fadeAnim, slideAnim]
-  );
-
-  const startAnimation = useCallback(() => {
-    fadeAnim.value = 1;
-    slideAnim.value = 0;
-  }, [fadeAnim, slideAnim]);
+  const { introAnimationStyle } = useIntroAnimation();
 
   useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
+    navigation.setOptions({
+      headerRight: () => <Dots isAnimating={isTyping} />,
+    });
+  }, [isTyping, navigation]);
 
   const handleSend = () => {
     if (inputText.trim() === "" || isTyping) return;
@@ -207,7 +193,7 @@ export default function ChatbotScreen() {
               key={message.id}
               style={[
                 styles.messageContainer,
-                animatedStyle,
+                introAnimationStyle,
                 message.isUser ? styles.userMessage : styles.botMessage,
               ]}>
               {!message.isUser && (
@@ -232,17 +218,10 @@ export default function ChatbotScreen() {
                   message.isUser ? styles.userBubble : styles.botBubble,
                 ]}>
                 {message.typing ? (
-                  <View style={styles.typingIndicator}>
-                    <Animated.View
-                      style={[styles.typingDot, { opacity: fadeAnim }]}
-                    />
-                    <Animated.View
-                      style={[styles.typingDot, { opacity: fadeAnim }]}
-                    />
-                    <Animated.View
-                      style={[styles.typingDot, { opacity: fadeAnim }]}
-                    />
-                  </View>
+                  <Dots
+                    color="#4ECDC4"
+                    isAnimating={message.typing}
+                  />
                 ) : (
                   <>
                     <Text
@@ -289,13 +268,7 @@ export default function ChatbotScreen() {
         style={styles.inputContainer}>
         {!isKeyboardVisible && messages.length === 1 && (
           <Animated.View
-            style={[
-              styles.quickQuestionsContainer,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
-            ]}>
+            style={[styles.quickQuestionsContainer, introAnimationStyle]}>
             <Text style={styles.quickQuestionsTitle}>Brza pitanja:</Text>
             <ScrollView
               horizontal
@@ -357,8 +330,8 @@ export default function ChatbotScreen() {
             placeholderTextColor="#94A3B8"
             value={inputText}
             onChangeText={setInputText}
-            multiline
             maxLength={500}
+            onSubmitEditing={handleSend}
           />
           <TouchableOpacity
             style={[
@@ -471,18 +444,6 @@ const styles = StyleSheet.create({
   },
   botTime: {
     color: "#94A3B8",
-  },
-  typingIndicator: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-  },
-  typingDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#94A3B8",
-    marginRight: 5,
   },
   quickQuestionsContainer: {
     marginTop: "auto",

@@ -1,3 +1,4 @@
+import Dots from "@/components/Dots";
 import {
   HeaderIcon,
   HeaderIntro,
@@ -5,7 +6,7 @@ import {
   HeaderTitle,
 } from "@/components/header";
 import HeaderBackground from "@/components/header/HeaderBackground";
-import HeaderDots from "@/components/header/HeaderDots";
+import { PlatformPressable } from "@react-navigation/elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, usePathname } from "expo-router";
 import { Calendar, Home, Sparkles } from "lucide-react-native";
@@ -90,7 +91,7 @@ export default function TabLayout() {
         screenOptions={{
           headerShown: true,
           headerStyle: {
-            height: "100%",
+            height: headerData.isMain ? 200 : 120,
           },
           headerBackground: () => <HeaderBackground />,
           headerTitleContainerStyle: {
@@ -119,11 +120,12 @@ export default function TabLayout() {
                 <HeaderIcon>{headerData.icon}</HeaderIcon>
               </Animated.View>
             ),
-          headerRight: () => <HeaderDots />,
+          headerRight: () => <Dots isAnimating={false} />,
           headerRightContainerStyle: {
-            paddingTop: 24,
-            paddingBottom: 24,
-            paddingRight: 24,
+            top: 24,
+            bottom: 24,
+            right: 24,
+            position: "absolute",
           },
           tabBarStyle: {
             height: 75,
@@ -135,6 +137,9 @@ export default function TabLayout() {
           tabBarShowLabel: false,
           tabBarItemStyle: {
             paddingVertical: 5,
+          },
+          tabBarIconStyle: {
+            marginTop: 5,
           },
         }}>
         <Tabs.Screen
@@ -157,19 +162,26 @@ export default function TabLayout() {
           options={{
             title: "Chatbot",
             tabBarIcon: ({ focused }) => (
+              <Sparkles
+                color="#ffffff"
+                size={28}
+                strokeWidth={2.5}
+                fill={focused ? "#fff" : "transparent"}
+              />
+            ),
+            tabBarButton: ({ children, style, ...props }) => (
               <View style={styles.centerButtonContainer}>
-                <LinearGradient
-                  colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
+                <PlatformPressable
+                  {...props}
                   style={styles.centerButton}>
-                  <Sparkles
-                    color="#ffffff"
-                    size={28}
-                    strokeWidth={2.5}
-                    fill={focused ? "#ffffff" : "transparent"}
-                  />
-                </LinearGradient>
+                  <LinearGradient
+                    colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.centerButtonGradient}>
+                    {children}
+                  </LinearGradient>
+                </PlatformPressable>
               </View>
             ),
           }}
@@ -181,7 +193,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.staticIconContainer}>
                 <Calendar
-                  color={focused ? "#0A4977" : color}
+                  color={focused ? "#0A4977FF" : color}
                   size={24}
                   strokeWidth={focused ? 2.5 : 2}
                 />
@@ -200,18 +212,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   centerButtonContainer: {
-    marginTop: -30,
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 9999,
+    width: "100%",
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
   },
   centerButton: {
+    marginTop: -15,
     width: 70,
     height: 70,
     borderRadius: 35,
     justifyContent: "center",
     alignItems: "center",
-    boxShadow: "0px 8px 15px rgba(10, 73, 119, 0.25)",
+    boxShadow: "0px 8px 30px 30px rgba(45, 150, 224, 0.25)",
     elevation: 12,
+  },
+  centerButtonGradient: {
+    width: "100%",
+    height: "100%",
+    paddingBottom: 4,
+    borderRadius: 35,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
