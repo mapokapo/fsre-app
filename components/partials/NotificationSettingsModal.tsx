@@ -1,5 +1,5 @@
 import { notificationTypes } from "@/lib/const/notificationTypes";
-import { useNotificationsStore } from "@/lib/state/notificationSettingsStore";
+import { useNotificationSettingsStore } from "@/lib/state/notificationSettingsStore";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { X } from "lucide-react-native";
@@ -23,7 +23,7 @@ export default function NotificationSettingsModal({
   onClose,
 }: NotificationSettingsModalProps) {
   const { notificationSettings, setNotificationSettings } =
-    useNotificationsStore();
+    useNotificationSettingsStore();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const toggleNotificationSetting = (

@@ -5,23 +5,25 @@ import { create } from "zustand";
 export interface NotificationSettingsStore {
   notificationSettings: NotificationSettings;
   setNotificationSettings: (
-    newSettingsOrSetterFn: ReactStyleStateSetter<NotificationSettings>
+    newNotificationSettingsOrSetterFn: ReactStyleStateSetter<NotificationSettings>
   ) => void;
 }
 
-export const useNotificationsStore = create<NotificationSettingsStore>(set => ({
-  notificationSettings: {
-    lectures: true,
-    exercises: true,
-    labs: true,
-    exams: true,
-    news: true,
-  },
-  setNotificationSettings: newSettingsOrSetterFn =>
-    set(state => ({
-      notificationSettings:
-        typeof newSettingsOrSetterFn === "function"
-          ? newSettingsOrSetterFn(state.notificationSettings)
-          : newSettingsOrSetterFn,
-    })),
-}));
+export const useNotificationSettingsStore = create<NotificationSettingsStore>(
+  set => ({
+    notificationSettings: {
+      lectures: true,
+      exercises: true,
+      labs: true,
+      exams: true,
+      news: true,
+    },
+    setNotificationSettings: newNotificationSettingsOrSetterFn =>
+      set(state => ({
+        notificationSettings:
+          typeof newNotificationSettingsOrSetterFn === "function"
+            ? newNotificationSettingsOrSetterFn(state.notificationSettings)
+            : newNotificationSettingsOrSetterFn,
+      })),
+  })
+);
