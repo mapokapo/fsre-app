@@ -84,7 +84,7 @@ app - contains pages/screens used by Expo Router
 assets - contains static assets such as images and fonts
 components - contains React components
 ├── */ - components may be grouped
-├── partials - contains large composed components which take up significant screen space
+├── partials - contains composed components which are only used within a single page
 ├── ui - contains small reusable components
 └── *.tsx - contains various utility components
 hooks - contains custom React hooks
