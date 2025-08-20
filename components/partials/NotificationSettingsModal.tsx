@@ -1,4 +1,4 @@
-import { notificationTypes } from "@/lib/const/notificationTypes";
+import { notificationCategories } from "@/lib/const/notificationCategories";
 import { useNotificationSettingsStore } from "@/lib/state/notificationSettingsStore";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,11 +20,11 @@ export default function NotificationSettingsModal({
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const toggleNotificationSetting = (
-    type: keyof typeof notificationSettings
+    category: keyof typeof notificationSettings
   ) => {
     setNotificationSettings(prev => ({
       ...prev,
-      [type]: !prev[type as keyof typeof prev],
+      [category]: !prev[category as keyof typeof prev],
     }));
   };
 
@@ -72,19 +72,19 @@ export default function NotificationSettingsModal({
             </Text>
 
             <View style={styles.notificationList}>
-              {notificationTypes.map(type => (
+              {notificationCategories.map(category => (
                 <View
-                  key={type.id}
+                  key={category.key}
                   style={styles.notificationItem}>
                   <View style={styles.notificationItemContent}>
                     <View style={styles.notificationItemLeft}>
                       <LinearGradient
-                        colors={type.gradient}
+                        colors={[category.gradientFrom, category.gradientTo]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.notificationItemIcon}>
                         {React.cloneElement(
-                          type.icon as React.ReactElement<{
+                          category.icon as React.ReactElement<{
                             color: string;
                             size: number;
                             strokeWidth: number;
@@ -99,26 +99,22 @@ export default function NotificationSettingsModal({
 
                       <View style={styles.notificationItemText}>
                         <Text style={styles.notificationItemTitle}>
-                          {type.title}
+                          {category.title}
                         </Text>
                         <Text style={styles.notificationItemDesc}>
-                          {type.description}
+                          {category.description}
                         </Text>
                       </View>
                     </View>
 
                     <Switch
-                      value={
-                        notificationSettings[
-                          type.id as keyof typeof notificationSettings
-                        ]
+                      value={notificationSettings[category.key]}
+                      onValueChange={() =>
+                        toggleNotificationSetting(category.key)
                       }
-                      onValueChange={() => toggleNotificationSetting(type.id)}
                       trackColor={{ false: "#E2E8F0", true: "#0A4977" }}
                       thumbColor={
-                        notificationSettings[
-                          type.id as keyof typeof notificationSettings
-                        ]
+                        notificationSettings[category.key]
                           ? "#ffffff"
                           : "#ffffff"
                       }

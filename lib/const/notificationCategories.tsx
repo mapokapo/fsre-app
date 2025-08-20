@@ -1,4 +1,4 @@
-import NotificationType from "@/lib/types/NotificationType";
+import NotificationCategory from "@/lib/types/NotificationCategory";
 import {
   BookOpen,
   Calendar,
@@ -7,40 +7,45 @@ import {
   Users,
 } from "lucide-react-native";
 
-export const notificationTypes: NotificationType[] = [
+export const notificationCategories: NotificationCategory[] = [
   {
-    id: "lectures",
+    key: "lectures",
     title: "Predavanja",
     description: "Obavijesti prije početka predavanja",
     icon: <BookOpen />,
-    gradient: ["#0A4977", "#1E5A8A"],
+    gradientFrom: "#0A4977",
+    gradientTo: "#1E5A8A",
   },
   {
-    id: "exercises",
+    key: "exercises",
     title: "Vježbe",
     description: "Obavijesti prije početka vježbi",
     icon: <Users />,
-    gradient: ["#059669", "#10B981"],
+    gradientFrom: "#059669",
+    gradientTo: "#10B981",
   },
   {
-    id: "labs",
+    key: "labs",
     title: "Laboratoriji",
     description: "Obavijesti prije laboratorijskih vježbi",
     icon: <FlaskConical />,
-    gradient: ["#DC2626", "#EF4444"],
+    gradientFrom: "#DC2626",
+    gradientTo: "#EF4444",
   },
   {
-    id: "exams",
+    key: "exams",
     title: "Ispiti",
     description: "Obavijesti o ispitnim rokovima",
     icon: <Calendar />,
-    gradient: ["#7C3AED", "#A855F7"],
+    gradientFrom: "#7C3AED",
+    gradientTo: "#A855F7",
   },
   {
-    id: "news",
+    key: "news",
     title: "Novosti",
     description: "Obavijesti o novostima fakulteta",
     icon: <Newspaper />,
-    gradient: ["#EA580C", "#F97316"],
+    gradientFrom: "#EA580C",
+    gradientTo: "#F97316",
   },
 ];
