@@ -1,3 +1,4 @@
+import useIntroAnimation from "@/hooks/useIntroAnimation";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
@@ -31,17 +32,8 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
 
-  const fadeAnim = useSharedValue(0);
-  const slideAnim = useSharedValue(50);
+  const { introAnimatedStyle } = useIntroAnimation();
   const shakeAnim = useSharedValue(0);
-
-  const fadeInAnimatedStyle = useAnimatedStyle(
-    () => ({
-      opacity: fadeAnim.value,
-      transform: [{ translateY: slideAnim.value }],
-    }),
-    [fadeAnim, slideAnim]
-  );
 
   const shakeAnimatedStyle = useAnimatedStyle(
     () => ({
@@ -49,15 +41,6 @@ export default function LoginScreen() {
     }),
     [shakeAnim]
   );
-
-  const startFadeInAnimation = useCallback(() => {
-    fadeAnim.value = withTiming(1, { duration: 1000 });
-    slideAnim.value = withTiming(0, { duration: 1000 });
-  }, [fadeAnim, slideAnim]);
-
-  useEffect(() => {
-    startFadeInAnimation();
-  }, [startFadeInAnimation]);
 
   const startShakeAnimation = useCallback(() => {
     shakeAnim.value = withSequence(
@@ -134,7 +117,7 @@ export default function LoginScreen() {
           <View style={[styles.circle, styles.circle3]} />
         </View>
 
-        <Animated.View style={[styles.content, fadeInAnimatedStyle]}>
+        <Animated.View style={[styles.content, introAnimatedStyle]}>
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>

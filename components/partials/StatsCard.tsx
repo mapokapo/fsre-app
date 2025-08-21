@@ -1,14 +1,17 @@
 import Stat from "@/lib/types/Stat";
 import React from "react";
-import { ColorValue, StyleSheet, Text, View } from "react-native";
+import { ColorValue, StyleSheet, Text, View, ViewProps } from "react-native";
+import Animated, { AnimatedProps } from "react-native-reanimated";
 
-export type StatsCardProps = {
+export type StatsCardProps = AnimatedProps<ViewProps> & {
   stat: Stat;
 };
 
-export default function StatsCard({ stat }: StatsCardProps) {
+export default function StatsCard({ stat, style, ...props }: StatsCardProps) {
   return (
-    <View style={styles.statCard}>
+    <Animated.View
+      style={[styles.statCard, style]}
+      {...props}>
       <View
         style={[
           styles.statIcon,
@@ -29,7 +32,7 @@ export default function StatsCard({ stat }: StatsCardProps) {
       </View>
       <Text style={styles.statValue}>{stat.value}</Text>
       <Text style={styles.statLabel}>{stat.label}</Text>
-    </View>
+    </Animated.View>
   );
 }
 

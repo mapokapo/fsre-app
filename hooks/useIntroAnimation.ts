@@ -9,7 +9,7 @@ export default function useIntroAnimation() {
   const fadeAnim = useSharedValue(0);
   const slideAnim = useSharedValue(50);
 
-  const introAnimationStyle = useAnimatedStyle(
+  const introAnimatedStyle = useAnimatedStyle(
     () => ({
       opacity: withTiming(fadeAnim.value, { duration: 800 }),
       transform: [
@@ -17,6 +17,13 @@ export default function useIntroAnimation() {
       ],
     }),
     [fadeAnim, slideAnim]
+  );
+
+  const introAnimatedOpacityStyle = useAnimatedStyle(
+    () => ({
+      opacity: withTiming(fadeAnim.value, { duration: 800 }),
+    }),
+    [fadeAnim]
   );
 
   const startAnimation = useCallback(() => {
@@ -28,5 +35,5 @@ export default function useIntroAnimation() {
     startAnimation();
   }, [startAnimation]);
 
-  return { introAnimationStyle, startAnimation };
+  return { introAnimatedStyle, startAnimation, introAnimatedOpacityStyle };
 }

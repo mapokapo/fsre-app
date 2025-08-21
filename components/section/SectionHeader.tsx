@@ -1,9 +1,14 @@
 import React, { PropsWithChildren, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, ViewProps } from "react-native";
+import Animated, { AnimatedProps } from "react-native-reanimated";
 
-export type SectionHeaderProps = PropsWithChildren;
+export type SectionHeaderProps = AnimatedProps<ViewProps> & PropsWithChildren;
 
-export default function SectionHeader({ children }: SectionHeaderProps) {
+export default function SectionHeader({
+  children,
+  style,
+  ...props
+}: SectionHeaderProps) {
   let sectionTitle: ReactNode | null = null;
   let sectionButton: ReactNode | null = null;
   const defaultChildren: ReactNode[] = [];
@@ -26,11 +31,13 @@ export default function SectionHeader({ children }: SectionHeaderProps) {
   });
 
   return (
-    <View style={styles.sectionHeader}>
+    <Animated.View
+      style={[styles.sectionHeader, style]}
+      {...props}>
       {sectionTitle}
       {defaultChildren}
       {sectionButton}
-    </View>
+    </Animated.View>
   );
 }
 

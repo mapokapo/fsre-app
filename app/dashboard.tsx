@@ -15,7 +15,6 @@ import {
 import React, { useState } from "react";
 import {
   Alert,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -147,7 +146,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <LinearGradient
         colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
@@ -495,7 +494,7 @@ export default function AdminDashboard() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

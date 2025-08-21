@@ -47,6 +47,15 @@ export default function NotificationSettingsModal({
       ref={bottomSheetModalRef}
       snapPoints={["100%", "50%"]}
       containerStyle={styles.sheetBackground}
+      backdropComponent={() => (
+        <View
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            opacity: 0,
+          }}></View>
+      )}
       onDismiss={onClose}>
       <BottomSheetScrollView>
         <View style={styles.sheetContainer}>
@@ -147,6 +156,7 @@ export default function NotificationSettingsModal({
 
 const styles = StyleSheet.create({
   sheetBackground: {
+    marginTop: -40,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   sheetContainer: {
@@ -156,6 +166,7 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   sheetHeader: {
+    paddingTop: 36,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

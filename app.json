@@ -12,11 +12,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.fsre.mobileapp",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["https", "http"]
+        "LSApplicationQueriesSchemes": [
+          "https",
+          "http"
+        ]
       }
-    },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +24,9 @@
         "backgroundColor": "#0A4977"
       },
       "package": "com.fsre.mobileapp",
-      "permissions": ["android.permission.INTERNET"],
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "edgeToEdgeEnabled": true
     },
     "web": {
@@ -41,6 +43,14 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-navigation-bar",
+        {
+          "position": "relative",
+          "visibility": "hidden",
+          "behavior": "inset-swipe"
         }
       ],
       "expo-font"

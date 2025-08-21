@@ -6,17 +6,14 @@ import {
   HeaderTitle,
 } from "@/components/header";
 import HeaderBackground from "@/components/header/HeaderBackground";
+import useIntroAnimation from "@/hooks/useIntroAnimation";
 import { PlatformPressable } from "@react-navigation/elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, usePathname } from "expo-router";
 import { Calendar, Home, Sparkles } from "lucide-react-native";
-import { useCallback, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const routePathNameToHeaderData: Record<
   string,
@@ -62,31 +59,10 @@ const routePathNameToHeaderData: Record<
 export default function TabLayout() {
   const pathname = usePathname();
   const headerData = routePathNameToHeaderData[pathname];
-
-  const fadeAnim = useSharedValue(0);
-  const slideAnim = useSharedValue(30);
-
-  const animatedStyle = useAnimatedStyle(
-    () => ({
-      opacity: withTiming(fadeAnim.value, { duration: 1000 }),
-      transform: [
-        { translateY: withTiming(slideAnim.value, { duration: 1000 }) },
-      ],
-    }),
-    [fadeAnim, slideAnim]
-  );
-
-  const startAnimation = useCallback(() => {
-    fadeAnim.value = 1;
-    slideAnim.value = 0;
-  }, [fadeAnim, slideAnim]);
-
-  useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
+  const { introAnimatedStyle } = useIntroAnimation();
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
           headerShown: true,
@@ -99,7 +75,7 @@ export default function TabLayout() {
             paddingBottom: 24,
           },
           headerTitle: () => (
-            <Animated.View style={animatedStyle}>
+            <Animated.View style={introAnimatedStyle}>
               {headerData.isMain && <HeaderIntro>Dobrodošli na</HeaderIntro>}
               <HeaderTitle isIntro={headerData.isMain}>
                 {headerData.title}
@@ -116,7 +92,7 @@ export default function TabLayout() {
           },
           headerLeft: () =>
             headerData.icon && (
-              <Animated.View style={animatedStyle}>
+              <Animated.View style={introAnimatedStyle}>
                 <HeaderIcon>{headerData.icon}</HeaderIcon>
               </Animated.View>
             ),
@@ -202,7 +178,7 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </>
+    </SafeAreaView>
   );
 }
 

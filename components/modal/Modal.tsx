@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export type ModalProps = PropsWithChildren & {
   isVisible: boolean;
@@ -40,33 +39,31 @@ export default function Modal({ isVisible, onClose, children }: ModalProps) {
   });
 
   return (
-    <SafeAreaView>
-      <RNModal
-        visible={isVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={onClose}>
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={styles.modalBackdrop}
-            activeOpacity={1}
-            onPress={onClose}
-          />
-          <View style={styles.modal}>
-            <LinearGradient
-              colors={["#ffffff", "#f8fafc"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.modalGradient}>
-              {modalHeader}
-              {modalContent}
-              {defaultChildren}
-              {modalFooter}
-            </LinearGradient>
-          </View>
+    <RNModal
+      visible={isVisible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <TouchableOpacity
+          style={styles.modalBackdrop}
+          activeOpacity={1}
+          onPress={onClose}
+        />
+        <View style={styles.modal}>
+          <LinearGradient
+            colors={["#ffffff", "#f8fafc"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.modalGradient}>
+            {modalHeader}
+            {modalContent}
+            {defaultChildren}
+            {modalFooter}
+          </LinearGradient>
         </View>
-      </RNModal>
-    </SafeAreaView>
+      </View>
+    </RNModal>
   );
 }
 
@@ -85,7 +82,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   modal: {
-    width: "100%",
+    width: "90%",
     maxWidth: 400,
     borderRadius: 24,
     overflow: "hidden",

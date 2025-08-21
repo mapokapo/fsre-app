@@ -3,13 +3,25 @@ import { getDistanceTo } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { useCallback } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewProps,
+} from "react-native";
+import Animated, { AnimatedProps } from "react-native-reanimated";
 
-export type NewsArticleItemProps = {
+export type NewsArticleItemProps = AnimatedProps<ViewProps> & {
   article: NewsArticle;
 };
 
-export default function NewsArticleItem({ article }: NewsArticleItemProps) {
+export default function NewsArticleItem({
+  article,
+  style,
+  ...props
+}: NewsArticleItemProps) {
   const getCategoryLabel = useCallback(
     (iconCode: typeof article.categoryCode) => {
       switch (iconCode) {
@@ -31,34 +43,37 @@ export default function NewsArticleItem({ article }: NewsArticleItemProps) {
   );
 
   return (
-    <Pressable
-      style={styles.article}
-      onPress={() => {
-        Linking.openURL(article.link);
-      }}>
-      <View style={styles.articleImageContainer}>
-        <Image
-          source={{ uri: article.imageUrl }}
-          style={styles.articleImage}
-        />
-        <LinearGradient
-          colors={[article.gradientFrom, article.gradientTo]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.articleCategoryBadge}>
-          <Text style={styles.articleCategoryText}>
-            {getCategoryLabel(article.categoryCode)}
+    <Animated.View
+      style={[styles.article, style]}
+      {...props}>
+      <Pressable
+        onPress={() => {
+          Linking.openURL(article.link);
+        }}>
+        <View style={styles.articleImageContainer}>
+          <Image
+            source={{ uri: article.imageUrl }}
+            style={styles.articleImage}
+          />
+          <LinearGradient
+            colors={[article.gradientFrom, article.gradientTo]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.articleCategoryBadge}>
+            <Text style={styles.articleCategoryText}>
+              {getCategoryLabel(article.categoryCode)}
+            </Text>
+          </LinearGradient>
+        </View>
+        <View style={styles.articleContent}>
+          <Text style={styles.articleTitle}>{article.title}</Text>
+          <Text style={styles.articleSummary}>{article.summary}</Text>
+          <Text style={styles.articleTime}>
+            {getDistanceTo(article.datetime)}
           </Text>
-        </LinearGradient>
-      </View>
-      <View style={styles.articleContent}>
-        <Text style={styles.articleTitle}>{article.title}</Text>
-        <Text style={styles.articleSummary}>{article.summary}</Text>
-        <Text style={styles.articleTime}>
-          {getDistanceTo(article.datetime)}
-        </Text>
-      </View>
-    </Pressable>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 

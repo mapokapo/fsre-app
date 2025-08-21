@@ -1,4 +1,4 @@
-import { mockProfileData } from "@/lib/const/mockData";
+import MockData from "@/lib/const/mockData";
 import { LinearGradient } from "expo-linear-gradient";
 import { UserIcon } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -21,18 +21,18 @@ export default function ProfileView() {
       </View>
 
       <View style={styles.studentDetails}>
-        <Text style={styles.studentName}>{mockProfileData.name}</Text>
+        <Text style={styles.studentName}>{MockData.getProfile().name}</Text>
         <Text style={styles.studentIndex}>
-          Broj indeksa: {mockProfileData.indexNumber}
+          Broj indeksa: {MockData.getProfile().indexNumber}
         </Text>
         <View style={styles.studentMeta}>
-          <Text style={styles.studentYear}>{mockProfileData.year}</Text>
+          <Text style={styles.studentYear}>{MockData.getProfile().year}</Text>
           <View style={styles.metaDot} />
           <Text style={styles.studentDepartment}>
-            {mockProfileData.department}
+            {MockData.getProfile().department}
           </Text>
         </View>
-        <Text style={styles.studentEmail}>{mockProfileData.email}</Text>
+        <Text style={styles.studentEmail}>{MockData.getProfile().email}</Text>
       </View>
     </>
   );
