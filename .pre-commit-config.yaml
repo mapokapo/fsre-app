@@ -4,3 +4,10 @@ repos:
   hooks:
     # -   id: talisman-push
     - id: talisman-commit
+- repo: local
+  hooks:
+    - id: commit-message
+      name: validate commit message format
+      language: pygrep
+      entry: '^(?:(?:feat|fix|docs|style|refactor|test|chore)(?:\([a-zA-Z0-9-\/]+\))?(?:,(?:feat|fix|docs|style|refactor|test|chore)(?:\([a-zA-Z0-9-\/]+\))?)*)\: .+$'
+      stages: [commit-msg]

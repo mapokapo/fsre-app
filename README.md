@@ -44,7 +44,7 @@ have a clear and concise description of the changes.
 Use the following format for commit messages:
 
 ```
-<type,>[(<scope>)]: <description>
+<type,>[(<scope,>)]: <description>
 ```
 
 #### `Types`
@@ -67,6 +67,7 @@ Use the following format for commit messages:
 
 - feat: Add user authentication feature
 - fix(auth): Fix incorrect token expiration handling
+- feat,docs: Add timestamp to response object, update OpenAPI docs
 - docs: Update API documentation
 - docs(README): Update README documentation
 - style: Run Prettier
