@@ -13,9 +13,9 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/section";
-import useIntroAnimation from "@/hooks/useIntroAnimation";
 import MockData from "@/lib/const/mockData";
 import { quickLinks } from "@/lib/const/quickLinks";
+import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { useStatsStore } from "@/lib/state/statsStore";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";

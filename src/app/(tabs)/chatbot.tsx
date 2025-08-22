@@ -1,8 +1,8 @@
 import Dots from "@/components/Dots";
 import MessageItem from "@/components/partials/MessageItem";
 import QuickQuestionItem from "@/components/partials/QuickQuestionItem";
-import useIntroAnimation from "@/hooks/useIntroAnimation";
-import useKeyboard from "@/hooks/useKeyboardHeight";
+import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
+import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
 import Message from "@/lib/types/Message";
 import QuickQuestion from "@/lib/types/QuickQuestion";
 import { LinearGradient } from "expo-linear-gradient";

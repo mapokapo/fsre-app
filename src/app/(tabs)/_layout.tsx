@@ -6,7 +6,7 @@ import {
   HeaderTitle,
 } from "@/components/header";
 import HeaderBackground from "@/components/header/HeaderBackground";
-import useIntroAnimation from "@/hooks/useIntroAnimation";
+import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { PlatformPressable } from "@react-navigation/elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, usePathname } from "expo-router";

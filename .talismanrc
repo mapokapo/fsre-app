@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: f68c70f3e08417ed2e90b18e7e882242d81114e674e85af074d10cd600355064
+  checksum: 43fc7eee394fab3c857c1daf1d7c57aa689ab9a752122890d51084ab59cdcaf5
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -23,4 +23,8 @@ fileignoreconfig:
   checksum: 667ba84de238ffb9f4b272540a59ebd3ab9aaeab899dd6df152034f517cfdf0f
 - filename: lib/types/NewsArticle.ts
   checksum: d1f38b91f760db56670c922668808141a5bf7865abdc307e409130865bb6a902
+- filename: nativewind-env.d.ts
+  checksum: 6f3062fda8b318d893979f0de1dafa4f7076ba82e006fb3355f2bca23373e574
+- filename: src/lib/hooks/useKeyboardHeight.ts
+  checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 version: "1.0"

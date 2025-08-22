@@ -1,4 +1,4 @@
-import useIntroAnimation from "@/hooks/useIntroAnimation";
+import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
