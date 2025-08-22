@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -26,14 +26,10 @@ export default function useIntroAnimation() {
     [fadeAnim]
   );
 
-  const startAnimation = useCallback(() => {
+  useEffect(() => {
     fadeAnim.value = 1;
     slideAnim.value = 0;
   }, [fadeAnim, slideAnim]);
 
-  useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
-
-  return { introAnimatedStyle, startAnimation, introAnimatedOpacityStyle };
+  return { introAnimatedStyle, introAnimatedOpacityStyle };
 }

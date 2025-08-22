@@ -9,7 +9,7 @@ import {
   Key,
   Shield,
 } from "lucide-react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -42,18 +42,16 @@ export default function LoginScreen() {
     [shakeAnim]
   );
 
-  const startShakeAnimation = useCallback(() => {
-    shakeAnim.value = withSequence(
-      withTiming(10, { duration: 100 }),
-      withTiming(-10, { duration: 100 }),
-      withTiming(10, { duration: 100 }),
-      withTiming(0, { duration: 100 })
-    );
-  }, [shakeAnim]);
-
   useEffect(() => {
-    if (error !== null) startShakeAnimation();
-  }, [startShakeAnimation, error]);
+    if (error !== null) {
+      shakeAnim.value = withSequence(
+        withTiming(10, { duration: 100 }),
+        withTiming(-10, { duration: 100 }),
+        withTiming(10, { duration: 100 }),
+        withTiming(0, { duration: 100 })
+      );
+    }
+  }, [error, shakeAnim]);
 
   const handleLogin = async () => {
     if (!accessCode.trim()) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { ColorValue, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -19,45 +19,6 @@ export default function Dots({ isAnimating, color = "#FFFFFF99" }: DotsProps) {
   const scaleAnim2 = useSharedValue(0.75);
   const scaleAnim3 = useSharedValue(0.5);
 
-  const startAnimation = useCallback(() => {
-    scaleAnim1.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 500 }),
-        withTiming(0.5, { duration: 500 })
-      ),
-      -1,
-      true
-    );
-    scaleAnim2.value = withDelay(
-      300,
-      withRepeat(
-        withSequence(
-          withTiming(1, { duration: 500 }),
-          withTiming(0.5, { duration: 500 })
-        ),
-        -1,
-        true
-      )
-    );
-    scaleAnim3.value = withDelay(
-      600,
-      withRepeat(
-        withSequence(
-          withTiming(1, { duration: 500 }),
-          withTiming(0.5, { duration: 500 })
-        ),
-        -1,
-        true
-      )
-    );
-  }, [scaleAnim1, scaleAnim2, scaleAnim3]);
-
-  const stopAnimation = useCallback(() => {
-    scaleAnim1.value = 1;
-    scaleAnim2.value = 0.75;
-    scaleAnim3.value = 0.5;
-  }, [scaleAnim1, scaleAnim2, scaleAnim3]);
-
   const animatedStyle1 = useAnimatedStyle(() => ({
     transform: [{ scale: scaleAnim1.value }],
   }));
@@ -72,11 +33,42 @@ export default function Dots({ isAnimating, color = "#FFFFFF99" }: DotsProps) {
 
   useEffect(() => {
     if (isAnimating) {
-      startAnimation();
+      scaleAnim1.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 500 }),
+          withTiming(0.5, { duration: 500 })
+        ),
+        -1,
+        true
+      );
+      scaleAnim2.value = withDelay(
+        300,
+        withRepeat(
+          withSequence(
+            withTiming(1, { duration: 500 }),
+            withTiming(0.5, { duration: 500 })
+          ),
+          -1,
+          true
+        )
+      );
+      scaleAnim3.value = withDelay(
+        600,
+        withRepeat(
+          withSequence(
+            withTiming(1, { duration: 500 }),
+            withTiming(0.5, { duration: 500 })
+          ),
+          -1,
+          true
+        )
+      );
     } else {
-      stopAnimation();
+      scaleAnim1.value = 1;
+      scaleAnim2.value = 0.75;
+      scaleAnim3.value = 0.5;
     }
-  }, [isAnimating, startAnimation, stopAnimation]);
+  }, [isAnimating, scaleAnim1, scaleAnim2, scaleAnim3]);
 
   return (
     <View style={styles.headerDecoration}>
