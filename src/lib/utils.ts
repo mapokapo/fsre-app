@@ -3,7 +3,7 @@ import { formatDistance } from "date-fns";
 import { hr } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
-import { NAV_THEME } from "@/lib/const/theme";
+import { NAV_THEME } from "@/lib/theme";
 import * as NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
 

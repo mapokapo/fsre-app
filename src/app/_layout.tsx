@@ -1,5 +1,5 @@
-import { NAV_THEME } from "@/lib/const/theme";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
   Inter_400Regular,
@@ -9,12 +9,8 @@ import {
   Inter_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/inter";
-import {
-  DarkTheme,
-  DefaultTheme,
-  Theme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
+import { PortalHost } from "@rn-primitives/portal";
 import "expo-dev-client";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -23,15 +19,6 @@ import { useEffect, useLayoutEffect } from "react";
 import { Appearance, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
-
-const LIGHT_THEME: Theme = {
-  ...DefaultTheme,
-  colors: NAV_THEME.light,
-};
-const DARK_THEME: Theme = {
-  ...DarkTheme,
-  colors: NAV_THEME.dark,
-};
 
 export { ErrorBoundary } from "expo-router";
 
@@ -86,15 +73,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+    <ThemeProvider value={isDarkColorScheme ? NAV_THEME.dark : NAV_THEME.light}>
       <SafeAreaProvider>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="login" />
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="login" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
       </SafeAreaProvider>
+      <PortalHost />
     </ThemeProvider>
   );
 }

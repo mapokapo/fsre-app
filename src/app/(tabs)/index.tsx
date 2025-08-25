@@ -1,4 +1,3 @@
-import { HeaderButton, HeaderProfileButton } from "@/components/header";
 import ContactItem from "@/components/partials/ContactItem";
 import NewsArticleItem from "@/components/partials/NewsArticleItem";
 import NotificationItem from "@/components/partials/NotificationItem";
@@ -13,17 +12,28 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/section";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import MockData from "@/lib/const/mockData";
 import { quickLinks } from "@/lib/const/quickLinks";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { useStatsStore } from "@/lib/state/statsStore";
+import { THEME } from "@/lib/theme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useNavigation } from "expo-router";
-import { Bell, Mail, MapPin, Newspaper, Phone } from "lucide-react-native";
+import {
+  Bell,
+  Mail,
+  MapPin,
+  Newspaper,
+  Phone,
+  UserIcon,
+} from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
@@ -36,13 +46,20 @@ export default function HomeScreen() {
 
   const navigation = useNavigation();
   const { introAnimatedStyle } = useIntroAnimation();
+  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HeaderButton onPress={() => setShowProfileModal(true)}>
-          <HeaderProfileButton />
-        </HeaderButton>
+        <Button
+          className="rounded-full bg-white/20 p-6"
+          size="icon"
+          onPress={() => setShowProfileModal(true)}>
+          <Icon
+            as={UserIcon}
+            size={24}
+          />
+        </Button>
       ),
     });
   });
@@ -72,7 +89,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       <GestureHandlerRootView>
         <BottomSheetModalProvider>
           <ProfileModal
@@ -97,7 +114,7 @@ export default function HomeScreen() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <Section>
               <SectionContent>
-                <View style={styles.statsContainer}>
+                <View className="mt-8 flex-row gap-4">
                   {stats.map(stat => (
                     <StatsCard
                       key={stat.key}
@@ -115,7 +132,7 @@ export default function HomeScreen() {
                 <SectionTitle
                   icon={
                     <Bell
-                      color="#0A4977"
+                      color={THEME[colorScheme].primary}
                       size={24}
                       strokeWidth={2.5}
                     />
@@ -141,7 +158,7 @@ export default function HomeScreen() {
                 <SectionTitle
                   icon={
                     <Newspaper
-                      color="#0A4977"
+                      color={THEME[colorScheme].primary}
                       size={24}
                       strokeWidth={2.5}
                     />
@@ -160,13 +177,12 @@ export default function HomeScreen() {
               </SectionContent>
             </Section>
 
-            {/* Quick Links - VRAĆENI SU! */}
             <Section>
               <SectionHeader>
                 <SectionTitle title="Brzi pristup" />
               </SectionHeader>
               <SectionContent>
-                <View style={styles.linksGrid}>
+                <View className="flex-row flex-wrap gap-4">
                   {quickLinks.map(link => (
                     <QuickLinkItem
                       key={link.label}
@@ -183,19 +199,19 @@ export default function HomeScreen() {
                 <SectionTitle title="Kontakt" />
               </SectionHeader>
               <SectionContent>
-                <View style={styles.contactCard}>
+                <View className="overflow-hidden rounded-3xl shadow-md">
                   <LinearGradient
+                    className="p-6"
                     colors={[
-                      "rgba(10, 73, 119, 0.05)",
-                      "rgba(59, 130, 246, 0.05)",
+                      THEME[colorScheme].cardGradient1,
+                      THEME[colorScheme].cardGradient2,
                     ]}
                     start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.contactGradient}>
+                    end={{ x: 1, y: 1 }}>
                     <ContactItem
                       icon={
                         <MapPin
-                          color="#0A4977"
+                          color={THEME[colorScheme].primary}
                           size={20}
                           strokeWidth={2.5}
                         />
@@ -205,7 +221,7 @@ export default function HomeScreen() {
                     <ContactItem
                       icon={
                         <Phone
-                          color="#0A4977"
+                          color={THEME[colorScheme].primary}
                           size={20}
                           strokeWidth={2.5}
                         />
@@ -215,7 +231,7 @@ export default function HomeScreen() {
                     <ContactItem
                       icon={
                         <Mail
-                          color="#0A4977"
+                          color={THEME[colorScheme].primary}
                           size={20}
                           strokeWidth={2.5}
                         />
@@ -232,30 +248,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-  statsContainer: {
-    marginTop: 30,
-    flexDirection: "row",
-    gap: 14,
-  },
-  linksGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 18,
-  },
-  contactCard: {
-    borderRadius: 26,
-    overflow: "hidden",
-    boxShadow: "0px 6px 15px rgba(10, 73, 119, 0.1)",
-    elevation: 8,
-  },
-  contactGradient: {
-    padding: 26,
-    backgroundColor: "#ffffff",
-  },
-});

@@ -3,8 +3,12 @@ import NewsArticle from "@/lib/types/NewsArticle";
 import Notification from "@/lib/types/Notification";
 import Profile from "@/lib/types/Profile";
 import Stat from "@/lib/types/Stat";
-import { addDays, addHours, subDays } from "date-fns";
+import Timetable from "@/lib/types/Timetable";
+import TimetableEvent from "@/lib/types/TimetableEvent";
+import { addDays, addHours, startOfDay, subDays } from "date-fns";
 import { Award, TrendingUp, Users } from "lucide-react-native";
+
+const now = new Date();
 
 const mockProfileData: Profile = {
   name: "Marko Petrović",
@@ -38,7 +42,90 @@ const mockStats: Stat[] = [
   },
 ];
 
-const now = new Date();
+const mockClassrooms = [
+  {
+    id: 1,
+    name: "A-100",
+  },
+  {
+    id: 2,
+    name: "A-101",
+  },
+  {
+    id: 3,
+    name: "E-1",
+  },
+  {
+    id: 4,
+    name: "E-2",
+  },
+  {
+    id: 5,
+    name: "L-S",
+  },
+  {
+    id: 6,
+    name: "L-R",
+  },
+  {
+    id: 7,
+    name: "L-E",
+  },
+];
+
+const mockTeachers = [
+  {
+    id: 1,
+    name: "Prof. dr. Ana Marić",
+    department: "Računarstvo",
+    email: "ana.maric@sum.ba",
+  },
+  {
+    id: 2,
+    name: "Asst. Marko Petrović",
+    department: "Računarstvo",
+    email: "marko.petrovic@sum.ba",
+  },
+  {
+    id: 3,
+    name: "Prof. dr. Petra Nikolić",
+    department: "Strojarstvo",
+    email: "petra.nikolic@sum.ba",
+  },
+  {
+    id: 4,
+    name: "Prof. dr. Milan Jovanović",
+    department: "Računarstvo",
+    email: "milan.jovanovic@sum.ba",
+  },
+  {
+    id: 5,
+    name: "Asst. Jovana Stanić",
+    department: "Računarstvo",
+    email: "jovana.stanic@sum.ba",
+  },
+  {
+    id: 6,
+    name: "Prof. dr. Stefan Popović",
+    department: "Elektrotehnika",
+    email: "stefan.popovic@sum.ba",
+  },
+];
+
+const mockDepartments = [
+  {
+    id: 1,
+    name: "Računarstvo",
+  },
+  {
+    id: 2,
+    name: "Strojarstvo",
+  },
+  {
+    id: 3,
+    name: "Elektrotehnika",
+  },
+];
 
 const mockNotifications: Notification[] = [
   {
@@ -160,5 +247,85 @@ export default class MockData {
   static getNewsArticles() {
     console.warn("You are using mock data: mockNewsArticles");
     return mockNewsArticles;
+  }
+
+  private static generateMockTimetableEvent(): TimetableEvent {
+    const department =
+      mockDepartments[Math.floor(Math.random() * mockDepartments.length)];
+    const classroom =
+      mockClassrooms[Math.floor(Math.random() * mockClassrooms.length)];
+    const teacher = mockTeachers.filter(t => t.department === department.name)[
+      Math.floor(
+        Math.random() *
+          mockTeachers.filter(t => t.department === department.name).length
+      )
+    ];
+    const startMinutes = Math.floor(Math.random() * 24 * 60);
+    const duration = Math.floor(Math.random() * 120) + 30;
+    const endMinutes = startMinutes + duration;
+    return {
+      id: Math.floor(Math.random() * 100000),
+      type: (["lecture", "exercise", "labs"] as const)[
+        Math.floor(Math.random() * 3)
+      ],
+      subject: `Subject ${Math.random().toString(36).substring(7)}`,
+      date: addDays(startOfDay(now), Math.floor(Math.random() * 30)),
+      startTime: `${Math.floor(startMinutes / 60)
+        .toString()
+        .padStart(2, "0")}:${(startMinutes % 60).toString().padStart(2, "0")}`,
+      endTime: `${Math.floor(endMinutes / 60)
+        .toString()
+        .padStart(2, "0")}:${(endMinutes % 60).toString().padStart(2, "0")}`,
+      year: Math.ceil(Math.random() * 5) as 1 | 2 | 3 | 4 | 5,
+      department,
+      classroom,
+      teacher,
+    };
+  }
+
+  private static generateMockTimetable(): Timetable {
+    return new Timetable(
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent()),
+      new Array(Math.ceil(Math.random() * 5))
+        .fill(null)
+        .map(() => this.generateMockTimetableEvent())
+    );
+  }
+
+  static getTimetable() {
+    console.warn("You are using mock data: generateMockTimetable");
+    return this.generateMockTimetable();
+  }
+
+  static getDepartments() {
+    console.warn("You are using mock data: mockDepartments");
+    return mockDepartments;
+  }
+
+  static getTeachers() {
+    console.warn("You are using mock data: mockTeachers");
+    return mockTeachers;
+  }
+
+  static getClassrooms() {
+    console.warn("You are using mock data: mockClassrooms");
+    return mockClassrooms;
   }
 }

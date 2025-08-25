@@ -37,10 +37,22 @@ module.exports = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
+        "card-gradient": {
+          1: "hsl(var(--card-gradient-1))",
+          2: "hsl(var(--card-gradient-2))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "fsre-gradient": {
+          1: "hsl(var(--fsre-gradient-1))",
+          2: "hsl(var(--fsre-gradient-2))",
+          3: "hsl(var(--fsre-gradient-3))",
+          foreground: "hsl(var(--fsre-gradient-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       borderWidth: {
         hairline: hairlineWidth(),
@@ -60,6 +72,9 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
   plugins: [require("tailwindcss-animate")],
 };

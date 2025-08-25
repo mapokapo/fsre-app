@@ -1,17 +1,16 @@
 import Dots from "@/components/Dots";
-import {
-  HeaderIcon,
-  HeaderIntro,
-  HeaderSubtitle,
-  HeaderTitle,
-} from "@/components/header";
 import HeaderBackground from "@/components/header/HeaderBackground";
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
+import { THEME } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 import { PlatformPressable } from "@react-navigation/elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, usePathname } from "expo-router";
-import { Calendar, Home, Sparkles } from "lucide-react-native";
-import { StyleSheet, View } from "react-native";
+import { Calendar, Home, LucideIcon, Sparkles } from "lucide-react-native";
+import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -20,7 +19,7 @@ const routePathNameToHeaderData: Record<
   {
     title: string;
     subtitle: string;
-    icon: React.ReactNode;
+    icon: LucideIcon | null;
     isMain: boolean;
   }
 > = {
@@ -33,25 +32,13 @@ const routePathNameToHeaderData: Record<
   "/chatbot": {
     title: "FSRE AI Asistent",
     subtitle: "Uvijek tu da pomognem",
-    icon: (
-      <Sparkles
-        color="#ffffff"
-        size={24}
-        strokeWidth={2.5}
-      />
-    ),
+    icon: Sparkles,
     isMain: false,
   },
   "/schedule": {
     title: "Raspored",
     subtitle: "Predavanja i vježbe",
-    icon: (
-      <Calendar
-        color="#ffffff"
-        size={24}
-        strokeWidth={2.5}
-      />
-    ),
+    icon: Calendar,
     isMain: false,
   },
 };
@@ -60,6 +47,7 @@ export default function TabLayout() {
   const pathname = usePathname();
   const headerData = routePathNameToHeaderData[pathname];
   const { introAnimatedStyle } = useIntroAnimation();
+  const { colorScheme } = useColorScheme();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -76,13 +64,24 @@ export default function TabLayout() {
           },
           headerTitle: () => (
             <Animated.View style={introAnimatedStyle}>
-              {headerData.isMain && <HeaderIntro>Dobrodošli na</HeaderIntro>}
-              <HeaderTitle isIntro={headerData.isMain}>
+              {headerData.isMain && (
+                <Text className="mb-1 text-foreground/90">Dobrodošli na</Text>
+              )}
+              <Text
+                className={cn(
+                  "text-xl font-bold",
+                  headerData.isMain &&
+                    "mb-2 text-5xl font-extrabold tracking-widest shadow-lg"
+                )}>
                 {headerData.title}
-              </HeaderTitle>
-              <HeaderSubtitle isIntro={headerData.isMain}>
+              </Text>
+              <Text
+                className={cn(
+                  "text-sm text-foreground/80",
+                  headerData.isMain && "text-base"
+                )}>
                 {headerData.subtitle}
-              </HeaderSubtitle>
+              </Text>
             </Animated.View>
           ),
           headerLeftContainerStyle: {
@@ -93,7 +92,10 @@ export default function TabLayout() {
           headerLeft: () =>
             headerData.icon && (
               <Animated.View style={introAnimatedStyle}>
-                <HeaderIcon>{headerData.icon}</HeaderIcon>
+                <Icon
+                  className="mr-2 h-8 w-8 p-4"
+                  as={headerData.icon}
+                />
               </Animated.View>
             ),
           headerRight: () => <Dots isAnimating={false} />,
@@ -108,8 +110,8 @@ export default function TabLayout() {
             boxShadow: "0px -5px 15px rgba(10, 73, 119, 0.1)",
             elevation: 20,
           },
-          tabBarActiveTintColor: "#0A4977",
-          tabBarInactiveTintColor: "#94A3B8",
+          tabBarActiveTintColor: THEME[colorScheme].fsreGradient3,
+          tabBarInactiveTintColor: THEME[colorScheme].mutedForeground,
           tabBarShowLabel: false,
           tabBarItemStyle: {
             paddingVertical: 5,
@@ -122,14 +124,11 @@ export default function TabLayout() {
           name="index"
           options={{
             title: "Početna",
-            tabBarIcon: ({ color, focused }) => (
-              <View style={styles.staticIconContainer}>
-                <Home
-                  color={focused ? "#0A4977" : color}
-                  size={24}
-                  strokeWidth={focused ? 2.5 : 2}
-                />
-              </View>
+            tabBarIcon: props => (
+              <Icon
+                as={Home}
+                {...props}
+              />
             ),
           }}
         />
@@ -137,24 +136,30 @@ export default function TabLayout() {
           name="chatbot"
           options={{
             title: "Chatbot",
-            tabBarIcon: ({ focused }) => (
-              <Sparkles
-                color="#ffffff"
-                size={28}
-                strokeWidth={2.5}
-                fill={focused ? "#fff" : "transparent"}
+            tabBarIcon: props => (
+              <Icon
+                as={Sparkles}
+                {...props}
+                className={cn(
+                  "stroke-foreground",
+                  props.focused && "fill-foreground"
+                )}
               />
             ),
             tabBarButton: ({ children, style, ...props }) => (
-              <View style={styles.centerButtonContainer}>
+              <View className="w-full items-center justify-center">
                 <PlatformPressable
                   {...props}
-                  style={styles.centerButton}>
+                  className="-mt-4 h-16 w-16 overflow-hidden rounded-full shadow-md">
                   <LinearGradient
-                    colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
+                    colors={[
+                      THEME[colorScheme].fsreGradient1,
+                      THEME[colorScheme].fsreGradient2,
+                      THEME[colorScheme].fsreGradient3,
+                    ]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    style={styles.centerButtonGradient}>
+                    className="h-full w-full items-center justify-center rounded-full pb-1">
                     {children}
                   </LinearGradient>
                 </PlatformPressable>
@@ -166,14 +171,11 @@ export default function TabLayout() {
           name="schedule"
           options={{
             title: "Raspored",
-            tabBarIcon: ({ color, focused }) => (
-              <View style={styles.staticIconContainer}>
-                <Calendar
-                  color={focused ? "#0A4977FF" : color}
-                  size={24}
-                  strokeWidth={focused ? 2.5 : 2}
-                />
-              </View>
+            tabBarIcon: props => (
+              <Icon
+                as={Calendar}
+                {...props}
+              />
             ),
           }}
         />
@@ -181,34 +183,3 @@ export default function TabLayout() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  staticIconContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  centerButtonContainer: {
-    width: "100%",
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  centerButton: {
-    marginTop: -15,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0px 8px 30px 30px rgba(45, 150, 224, 0.25)",
-    elevation: 12,
-  },
-  centerButtonGradient: {
-    width: "100%",
-    height: "100%",
-    paddingBottom: 4,
-    borderRadius: 35,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
