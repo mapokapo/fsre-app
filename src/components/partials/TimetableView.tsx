@@ -1,4 +1,4 @@
-import { days } from "@/app/(tabs)/schedule";
+import { days } from "@/app/(tabs)/timetable";
 import TimetableEventCard from "@/components/partials/TimetableEventCard";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
@@ -10,15 +10,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
 import { ColorValue, ScrollView, View } from "react-native";
 
-export type ScheduleViewProps = {
+export type TimetableViewProps = {
   timetable: Timetable;
   gradients: [ColorValue, ColorValue][];
 };
 
-export default function ScheduleView({
+export default function TimetableView({
   timetable,
   gradients,
-}: ScheduleViewProps) {
+}: TimetableViewProps) {
   const { colorScheme } = useColorScheme();
 
   return (

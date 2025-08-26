@@ -2,26 +2,26 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import { ScheduleFilter } from "@/lib/types/ScheduleFilter";
+import { TimetableFilter } from "@/lib/types/TimetableFilter";
 import { cn } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { ColorValue, ScrollView, View } from "react-native";
 
-export type ScheduleFilterButtonListProps = {
+export type TimetableFilterButtonListProps = {
   label: string;
-  filters: ScheduleFilter[];
+  filters: TimetableFilter[];
   gradients: [ColorValue, ColorValue][];
-  selectedFilter: ScheduleFilter | null;
-  onSelect: (filter: ScheduleFilter) => void;
+  selectedFilter: TimetableFilter | null;
+  onSelect: (filter: TimetableFilter) => void;
 };
 
-export default function ScheduleFilterButtonList({
+export default function TimetableFilterButtonList({
   label,
   filters,
   gradients,
   selectedFilter,
   onSelect,
-}: ScheduleFilterButtonListProps) {
+}: TimetableFilterButtonListProps) {
   const { colorScheme } = useColorScheme();
 
   return (

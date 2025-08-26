@@ -29,6 +29,6 @@ export const quickLinks: QuickLink[] = [
     gradientFrom: "#43e97b",
     gradientTo: "#38f9d7",
     action: "navigate",
-    to: "/(tabs)/schedule",
+    to: "/(tabs)/timetable",
   },
 ];

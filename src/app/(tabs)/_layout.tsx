@@ -35,7 +35,7 @@ const routePathNameToHeaderData: Record<
     icon: Sparkles,
     isMain: false,
   },
-  "/schedule": {
+  "/timetable": {
     title: "Raspored",
     subtitle: "Predavanja i vježbe",
     icon: Calendar,
@@ -170,7 +170,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="schedule"
+          name="timetable"
           options={{
             title: "Raspored",
             tabBarIcon: props => (

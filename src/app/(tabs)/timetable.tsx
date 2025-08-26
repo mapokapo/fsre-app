@@ -1,16 +1,16 @@
-import ScheduleFilterButtonList from "@/components/partials/ScheduleFilterButtonList";
-import ScheduleView from "@/components/partials/ScheduleView";
+import TimetableFilterButtonList from "@/components/partials/TimetableFilterButtonList";
+import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import MockData from "@/lib/const/mockData";
 import { useTimetableStore } from "@/lib/state/timetable";
-import { ScheduleFilter } from "@/lib/types/ScheduleFilter";
+import { TimetableFilter } from "@/lib/types/TimetableFilter";
 import { useNavigation } from "expo-router";
 import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { ColorValue, View } from "react-native";
 
-export const days: ScheduleFilter[] = [
+export const days: TimetableFilter[] = [
   { key: "all", name: "Sve" },
   { key: "1", name: "Ponedjeljak" },
   { key: "2", name: "Utorak" },
@@ -20,7 +20,7 @@ export const days: ScheduleFilter[] = [
   { key: "6", name: "Subota" },
   { key: "0", name: "Nedjelja" },
 ] as const;
-export const years: ScheduleFilter[] = [
+export const years: TimetableFilter[] = [
   { key: "all", name: "Sve" },
   { key: "1", name: "1. godina" },
   { key: "2", name: "2. godina" },
@@ -28,7 +28,7 @@ export const years: ScheduleFilter[] = [
   { key: "4", name: "4. godina" },
   { key: "5", name: "5. godina" },
 ];
-export const departments: ScheduleFilter[] = [
+export const departments: TimetableFilter[] = [
   { key: "all", name: "Sve" },
   ...MockData.getDepartments().map(dept => ({
     key: dept.id.toString(),
@@ -45,7 +45,7 @@ const gradients: [ColorValue, ColorValue][] = [
   ["#f093fb", "#f5576c"],
 ];
 
-export default function ScheduleScreen() {
+export default function TimetableScreen() {
   const [selectedDay, setSelectedDay] = useState(days[0]);
   const [selectedYear, setSelectedYear] = useState(years[0]);
   const [selectedDepartment, setSelectedDepartment] = useState(departments[0]);
@@ -92,7 +92,7 @@ export default function ScheduleScreen() {
     <View className="flex-1 bg-background">
       {showFilters && (
         <View className="gap-4 p-5">
-          <ScheduleFilterButtonList
+          <TimetableFilterButtonList
             label="Dan"
             filters={days}
             gradients={gradients}
@@ -100,7 +100,7 @@ export default function ScheduleScreen() {
             onSelect={setSelectedDay}
           />
 
-          <ScheduleFilterButtonList
+          <TimetableFilterButtonList
             label="Godina"
             filters={years}
             gradients={gradients}
@@ -108,7 +108,7 @@ export default function ScheduleScreen() {
             onSelect={setSelectedYear}
           />
 
-          <ScheduleFilterButtonList
+          <TimetableFilterButtonList
             label="Studij"
             filters={departments}
             gradients={gradients}
@@ -118,7 +118,7 @@ export default function ScheduleScreen() {
         </View>
       )}
 
-      <ScheduleView
+      <TimetableView
         timetable={filteredTimetable}
         gradients={gradients}
       />
