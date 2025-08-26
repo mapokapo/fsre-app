@@ -54,9 +54,6 @@ export default function NotificationSettingsModal({
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={["100%", "50%"]}
-      style={{
-        paddingTop: 40,
-      }}
       containerStyle={{
         marginTop: -40,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -67,8 +64,16 @@ export default function NotificationSettingsModal({
       onDismiss={onClose}
       handleStyle={{
         backgroundColor: THEME[colorScheme].cardGradient1,
+        borderTopRightRadius: 24,
+        borderTopLeftRadius: 24,
+      }}
+      handleIndicatorStyle={{
+        backgroundColor: THEME[colorScheme].cardForeground,
+      }}
+      backgroundStyle={{
+        backgroundColor: THEME[colorScheme].cardGradient1,
       }}>
-      <BottomSheetScrollView>
+      <BottomSheetScrollView className="-mb-10 flex-1">
         <View className="rounded-tl-lg rounded-tr-lg shadow-lg">
           <View className="flex-row items-center justify-between border-b border-border bg-card-gradient-1 px-6 pb-4 pt-9">
             <Text className="text-xl font-bold">Postavke obavijesti</Text>
@@ -94,7 +99,7 @@ export default function NotificationSettingsModal({
               {notificationCategories.map(category => (
                 <View
                   key={category.key}
-                  className="rounded-xl border border-border shadow-sm">
+                  className="rounded-xl border border-border bg-card-gradient-1 shadow-sm">
                   <View className="flex-row items-center justify-between p-4">
                     <View className="flex-1 flex-row items-center">
                       <LinearGradient
@@ -104,6 +109,7 @@ export default function NotificationSettingsModal({
                         className="mr-4 h-10 w-10 items-center justify-center overflow-hidden rounded-full">
                         <Icon
                           as={category.icon}
+                          className="text-fsre-gradient-foreground"
                           size={20}
                           strokeWidth={2.5}
                         />
