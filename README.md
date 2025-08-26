@@ -44,10 +44,10 @@ have a clear and concise description of the changes.
 Use the following format for commit messages:
 
 ```
-<type,>[(<scope,>)]: <description>
+type1,type2(scope): description
 ```
 
-#### `Types`
+#### Types
 
 - `feat`: A new feature
 
@@ -63,36 +63,41 @@ Use the following format for commit messages:
 
 - `chore` : Regular maintenance tasks (e.g., updating dependencies)
 
-#### `Example:`
+#### Examples
 
-- feat: Add user authentication feature
-- fix(auth): Fix incorrect token expiration handling
-- feat,docs: Add timestamp to response object, update OpenAPI docs
-- docs: Update API documentation
-- docs(README): Update README documentation
-- style: Run Prettier
-- refactor: Improve code structure and readability
-- test(auth): Add unit tests for authentication module
-- chore: Update dependencies
-- chore(ci): Configure continuous integration
+- `feat: Add user authentication feature`
+- `fix(auth): Fix incorrect token expiration handling`
+- `feat,docs: Add timestamp to response object, update OpenAPI docs`
+- `docs: Update API documentation`
+- `docs(README): Update README documentation`
+- `style: Run Prettier`
+- `refactor: Improve code structure and readability`
+- `test(auth): Add unit tests for authentication module`
+- `chore: Update dependencies`
+- `chore(ci): Configure continuous integration`
 
 ## Project structure
 
 ```
-app - contains pages/screens used by Expo Router
-├── +not-found.tsx - the global 404 page
-└── _layout.tsx - the root layout for all pages
-assets - contains static assets such as images and fonts
-components - contains React components
-├── */ - components may be grouped
-├── partials - contains composed components which are only used within a single page
-├── ui - contains small reusable components
-└── *.tsx - contains various utility components
-hooks - contains custom React hooks
-lib - contains utility functions and constants
-├── const - contains constant values
-├── state - contains Zustand stores
-│   └── *Store.ts - a Zustand store
-├── types - contains TypeScript types
-└── utils.ts - contains utility functions
+assets/                                   - contains static assets such as images and fonts
+src/                                      - contains the app source code
+├── app/                                  - contains pages/screens used by Expo Router
+│   └── _layout.tsx                       - the root layout for all pages, and the entrypoint of the app
+├── components/                           - contains React components
+│   ├── section/                          - components may be grouped
+│   │   ├── Section.tsx
+│   │   ├── SectionHeader.tsx
+│   │   └── ...
+│   ├── partials/                         - contains large, non-reusable components which are only used within a single page
+│   ├── ui/                               - contains React Native Reusables components
+│   └── SomeComponent.tsx                 - various components may be placed here
+└── lib/                                  - contains utility functions, constants, types, hooks, state stores, etc.
+    ├── const/                            - contains constant values (eg. mock data or static data for pages)
+    ├── hooks/                            - contains React hooks
+    │   └── useColorScheme.ts             - hooks must begin with `use`
+    ├── state/                            - contains Zustand stores
+    │   └── notificationSettingsStore.ts  - stores must end with `store`
+    ├── types/                            - contains TypeScript types and classes
+    ├── theme.ts                          - various files may be places here (eg. configuration)
+    └── utils.ts                          - contains utility functions
 ```
