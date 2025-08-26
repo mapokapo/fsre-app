@@ -1,22 +1,17 @@
 import Dots from "@/components/Dots";
 import MessageItem from "@/components/partials/MessageItem";
 import QuickQuestionItem from "@/components/partials/QuickQuestionItem";
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
 import Message from "@/lib/types/Message";
 import QuickQuestion from "@/lib/types/QuickQuestion";
-import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "expo-router";
 import { MessageSquare, Send, Zap } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 const predefinedResponses: { [key: string]: string } = {
@@ -39,28 +34,28 @@ const predefinedResponses: { [key: string]: string } = {
 const quickQuestions: QuickQuestion[] = [
   {
     text: "Gdje mogu vidjeti raspored?",
-    icon: <MessageSquare />,
+    icon: MessageSquare,
     gradientFrom: "#667eea",
     gradientTo: "#764ba2",
     description: "Pronađite raspored predavanja i vježbi",
   },
   {
     text: "Kako se prijaviti za ispite?",
-    icon: <Zap />,
+    icon: Zap,
     gradientFrom: "#f093fb",
     gradientTo: "#f5576c",
     description: "Informacije o prijavi ispita",
   },
   {
     text: "Kontakt informacije",
-    icon: <MessageSquare />,
+    icon: MessageSquare,
     gradientFrom: "#4facfe",
     gradientTo: "#00f2fe",
     description: "Adresa, telefon i email fakulteta",
   },
   {
     text: "O laboratorijima",
-    icon: <Zap />,
+    icon: Zap,
     gradientFrom: "#43e97b",
     gradientTo: "#38f9d7",
     description: "Informacije o laboratorijskim vježbama",
@@ -159,15 +154,13 @@ export default function ChatbotScreen() {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View className="flex-1 bg-background">
       <Animated.ScrollView
-        contentContainerStyle={[
-          styles.messagesContainer,
-          {
-            paddingBottom:
-              bottomContainerHeight + Math.max(keyboardHeight - 80, 0),
-          },
-        ]}>
+        contentContainerClassName="p-4 gap-4"
+        contentContainerStyle={{
+          paddingBottom:
+            bottomContainerHeight + Math.max(keyboardHeight - 80, 0),
+        }}>
         {messages.map(message => (
           <MessageItem
             key={message.id}
@@ -178,19 +171,15 @@ export default function ChatbotScreen() {
       </Animated.ScrollView>
       <KeyboardAvoidingView
         behavior="position"
-        style={styles.bottomContainer}
+        className="absolute bottom-8 left-0 right-0"
         keyboardVerticalOffset={175}
         onLayout={e =>
-          setBottomContainerHeight(
-            e.nativeEvent.layout.height +
-              styles.bottomContainer.bottom +
-              styles.messagesContainer.paddingVertical
-          )
+          setBottomContainerHeight(e.nativeEvent.layout.height + 48)
         }>
         {messages.length === 1 && (
           <ScrollView
             horizontal
-            contentContainerStyle={styles.quickQuestionsList}>
+            contentContainerClassName="mt-auto pb-3 justify-center gap-3 min-w-full px-4">
             {quickQuestions.map((question, index) => (
               <QuickQuestionItem
                 key={index}
@@ -201,100 +190,29 @@ export default function ChatbotScreen() {
             ))}
           </ScrollView>
         )}
-        <View style={styles.input}>
-          <TextInput
-            style={styles.textInput}
+        <View className="mx-4 flex-row items-center rounded-full bg-secondary shadow-lg shadow-secondary">
+          <Input
+            className="h-auto flex-1 rounded-full border-transparent bg-transparent px-4 py-5"
             placeholder="Unesite vaše pitanje..."
-            placeholderTextColor="#94A3B8"
             value={inputText}
             onChangeText={setInputText}
             maxLength={500}
             onSubmitEditing={handleSend}
           />
-          <TouchableOpacity
-            style={[
-              styles.sendButton,
-              inputText.trim() === "" && styles.sendButtonDisabled,
-            ]}
+          <Button
+            size="icon"
+            className="mr-2 h-12 w-12 overflow-hidden rounded-full"
             onPress={handleSend}
-            disabled={inputText.trim() === "" || isTyping}
-            activeOpacity={0.8}>
-            <LinearGradient
-              colors={
-                inputText.trim() === ""
-                  ? ["#E2E8F0", "#E2E8F0"]
-                  : ["#0A4977", "#1E5A8A"]
-              }
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.sendButtonGradient}>
-              <Send
-                color={inputText.trim() === "" ? "#94A3B8" : "#ffffff"}
-                size={20}
-                strokeWidth={2.5}
-              />
-            </LinearGradient>
-          </TouchableOpacity>
+            disabled={inputText.trim() === "" || isTyping}>
+            <Icon
+              as={Send}
+              className="text-fsre-gradient-foreground"
+              size={22}
+              strokeWidth={2.5}
+            />
+          </Button>
         </View>
       </KeyboardAvoidingView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-  messagesContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    gap: 16,
-  },
-  bottomContainer: {
-    backgroundColor: "transparent",
-    position: "absolute",
-    bottom: 32,
-    left: 0,
-    right: 0,
-  },
-  quickQuestionsList: {
-    marginTop: "auto",
-    paddingBottom: 12,
-    justifyContent: "center",
-    gap: 12,
-    minWidth: "100%",
-    paddingHorizontal: 16,
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderRadius: 28,
-    flexDirection: "row",
-    alignItems: "flex-end",
-    paddingHorizontal: 22,
-    paddingVertical: 14,
-    marginHorizontal: 16,
-    boxShadow: "0px 4px 12px rgba(10, 73, 119, 0.18)",
-    elevation: 6,
-  },
-  textInput: {
-    flex: 1,
-    fontFamily: "Inter-Regular",
-    color: "#1A1A1A",
-    height: 40,
-    lineHeight: 30,
-  },
-  sendButton: {
-    marginLeft: 14,
-  },
-  sendButtonDisabled: {
-    opacity: 0.5,
-  },
-  sendButtonGradient: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

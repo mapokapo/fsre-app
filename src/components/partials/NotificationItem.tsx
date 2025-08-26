@@ -37,10 +37,12 @@ export default function NotificationItem({
   );
 
   return (
-    <Animated.View {...props}>
+    <Animated.View
+      className="mb-5 flex-1 overflow-hidden rounded-2xl shadow-md"
+      {...props}>
       <Button
         variant="ghost"
-        className="mb-5 h-auto flex-row overflow-hidden rounded-2xl p-0 shadow-md">
+        className="h-auto flex-row overflow-hidden rounded-2xl p-0">
         <LinearGradient
           colors={[
             THEME[colorScheme].cardGradient1,

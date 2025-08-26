@@ -1,8 +1,13 @@
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import QuickQuestion from "@/lib/types/QuickQuestion";
 import { LinearGradient } from "expo-linear-gradient";
 import { ChevronRight } from "lucide-react-native";
 import React from "react";
-import { Pressable, StyleSheet, Text, View, ViewProps } from "react-native";
+import { View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
 export type QuickQuestionItemProps = AnimatedProps<ViewProps> & {
@@ -12,96 +17,47 @@ export type QuickQuestionItemProps = AnimatedProps<ViewProps> & {
 
 export default function QuickQuestionItem({
   question,
-  style,
   onPress,
   ...props
 }: QuickQuestionItemProps) {
+  const { colorScheme } = useColorScheme();
+
   return (
     <Animated.View
-      style={[styles.quickQuestionButton, style]}
+      className="min-w-32 flex-1 overflow-hidden rounded-2xl shadow-md"
       {...props}>
-      <Pressable onPress={onPress}>
+      <Button
+        variant="ghost"
+        className="h-auto overflow-hidden rounded-2xl p-0"
+        onPress={onPress}>
         <LinearGradient
-          colors={["rgba(255, 255, 255, 0.95)", "rgba(248, 250, 252, 0.95)"]}
+          colors={[
+            THEME[colorScheme].cardGradient1,
+            THEME[colorScheme].cardGradient2,
+          ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={styles.quickQuestionGradient}>
-          <View style={styles.quickQuestionHeader}>
+          className="p-5">
+          <View className="mb-3 flex-row items-center justify-between">
             <LinearGradient
               colors={[question.gradientFrom, question.gradientTo]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              style={styles.quickQuestionIcon}>
-              {React.cloneElement(
-                question.icon as React.ReactElement<{
-                  color: string;
-                  size: number;
-                  strokeWidth: number;
-                }>,
-                {
-                  color: "#ffffff",
-                  size: 18,
-                  strokeWidth: 2.5,
-                }
-              )}
+              className="h-9 w-9 items-center justify-center overflow-hidden rounded-full">
+              <Icon
+                as={question.icon}
+                className="text-fsre-gradient-foreground"
+                size={18}
+              />
             </LinearGradient>
-            <ChevronRight
-              color="#94A3B8"
-              size={16}
-              strokeWidth={2.5}
-            />
+            <Icon as={ChevronRight} />
           </View>
-          <Text style={styles.quickQuestionText}>{question.text}</Text>
-          <Text style={styles.quickQuestionDescription}>
+          <Text className="mb-2 font-semibold">{question.text}</Text>
+          <Text className="text-sm text-muted-foreground">
             {question.description}
           </Text>
         </LinearGradient>
-      </Pressable>
+      </Button>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  quickQuestionsTitle: {
-    fontSize: 20,
-    fontFamily: "Inter-Bold",
-    color: "#1A1A1A",
-    marginBottom: 18,
-  },
-  quickQuestionButton: {
-    borderRadius: 20,
-    overflow: "hidden",
-    boxShadow: "0px 3px 10px rgba(10, 73, 119, 0.1)",
-    elevation: 4,
-    flex: 1,
-    minWidth: 120,
-  },
-  quickQuestionGradient: {
-    padding: 20,
-  },
-  quickQuestionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  quickQuestionIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  quickQuestionText: {
-    fontSize: 16,
-    fontFamily: "Inter-SemiBold",
-    color: "#1A1A1A",
-    marginBottom: 6,
-  },
-  quickQuestionDescription: {
-    fontSize: 13,
-    fontFamily: "Inter-Regular",
-    color: "#64748B",
-    lineHeight: 18,
-  },
-});

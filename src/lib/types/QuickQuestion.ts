@@ -1,9 +1,9 @@
-import React from "react";
+import { LucideIcon } from "lucide-react-native";
 import { ColorValue } from "react-native";
 
 export default interface QuickQuestion {
   text: string;
-  icon: React.ReactNode;
+  icon: LucideIcon;
   gradientFrom: ColorValue;
   gradientTo: ColorValue;
   description: string;

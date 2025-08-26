@@ -22,7 +22,7 @@ export default function StatsCard({
 
   return (
     <Animated.View
-      className={cn("flex-1 overflow-hidden rounded-xl", className)}
+      className={cn("flex-1 overflow-hidden rounded-xl shadow-md", className)}
       {...props}>
       <LinearGradient
         colors={[
@@ -31,7 +31,7 @@ export default function StatsCard({
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="grow items-center px-3 py-5 shadow-md">
+        className="grow items-center px-3 py-5">
         <View
           className="mb-2 overflow-hidden rounded-full p-3"
           style={{ backgroundColor: stat.color.withAlpha(0.4).toHex() }}>

@@ -1,38 +1,41 @@
 import Dots from "@/components/Dots";
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import Message from "@/lib/types/Message";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Bot, User } from "lucide-react-native";
-import { StyleSheet, Text, View, ViewProps } from "react-native";
+import { View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
 export type MessageItemProps = AnimatedProps<ViewProps> & {
   message: Message;
 };
 
-export default function MessageItem({
-  message,
-  style,
-  ...props
-}: MessageItemProps) {
+export default function MessageItem({ message, ...props }: MessageItemProps) {
+  const { colorScheme } = useColorScheme();
+
   return (
     <Animated.View
-      style={[
-        styles.messageContainer,
-        message.isUser ? styles.userMessage : styles.botMessage,
-        style,
-      ]}
+      className={cn(
+        "flex-row items-end",
+        message.isUser ? "justify-end" : "justify-start"
+      )}
       {...props}>
       {!message.isUser && (
-        <View style={styles.botAvatar}>
+        <View className="mb-1 mr-4">
           <LinearGradient
             colors={["#4ECDC4", "#44A08D"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.botAvatarGradient}>
-            <Bot
-              color="#ffffff"
-              size={18}
+            className="h-10 w-10 items-center justify-center overflow-hidden rounded-full">
+            <Icon
+              as={Bot}
+              className="text-fsre-gradient-foreground"
+              size={22}
               strokeWidth={2.5}
             />
           </LinearGradient>
@@ -40,10 +43,12 @@ export default function MessageItem({
       )}
 
       <View
-        style={[
-          styles.messageBubble,
-          message.isUser ? styles.userBubble : styles.botBubble,
-        ]}>
+        className={cn(
+          "max-w-[75%] rounded-2xl p-4",
+          message.isUser
+            ? "rounded-br-md bg-fsre-gradient-1"
+            : "rounded-bl-md bg-secondary shadow-md"
+        )}>
         {message.typing ? (
           <Dots
             color="#4ECDC4"
@@ -52,17 +57,21 @@ export default function MessageItem({
         ) : (
           <>
             <Text
-              style={[
-                styles.messageText,
-                message.isUser ? styles.userText : styles.botText,
-              ]}>
+              className={cn(
+                "mb-2",
+                message.isUser
+                  ? "text-fsre-gradient-foreground"
+                  : "text-secondary-foreground"
+              )}>
               {message.text}
             </Text>
             <Text
-              style={[
-                styles.messageTime,
-                message.isUser ? styles.userTime : styles.botTime,
-              ]}>
+              className={cn(
+                "self-end text-xs",
+                message.isUser
+                  ? "text-fsre-gradient-foreground/60"
+                  : "text-muted-foreground"
+              )}>
               {format(message.timestamp, "HH:mm")}
             </Text>
           </>
@@ -70,15 +79,19 @@ export default function MessageItem({
       </View>
 
       {message.isUser && (
-        <View style={styles.userAvatar}>
+        <View className="mb-1 ml-4">
           <LinearGradient
-            colors={["#0A4977", "#1E5A8A"]}
+            colors={[
+              THEME[colorScheme].fsreGradient1,
+              THEME[colorScheme].fsreGradient2,
+            ]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.userAvatarGradient}>
-            <User
-              color="#ffffff"
-              size={18}
+            className="h-10 w-10 items-center justify-center overflow-hidden rounded-full">
+            <Icon
+              as={User}
+              className="text-fsre-gradient-foreground"
+              size={22}
               strokeWidth={2.5}
             />
           </LinearGradient>
@@ -87,76 +100,3 @@ export default function MessageItem({
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  messageContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-  },
-  userMessage: {
-    justifyContent: "flex-end",
-  },
-  botMessage: {
-    justifyContent: "flex-start",
-  },
-  botAvatar: {
-    marginRight: 14,
-    marginBottom: 5,
-  },
-  botAvatarGradient: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  userAvatar: {
-    marginLeft: 14,
-    marginBottom: 5,
-  },
-  userAvatarGradient: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  messageBubble: {
-    maxWidth: "75%",
-    borderRadius: 22,
-    padding: 18,
-  },
-  userBubble: {
-    backgroundColor: "#0A4977",
-    borderBottomRightRadius: 8,
-  },
-  botBubble: {
-    backgroundColor: "#ffffff",
-    borderBottomLeftRadius: 8,
-    boxShadow: "0px 3px 10px rgba(10, 73, 119, 0.1)",
-    elevation: 6,
-  },
-  messageText: {
-    fontSize: 15,
-    fontFamily: "Inter-Regular",
-    lineHeight: 22,
-    marginBottom: 8,
-  },
-  userText: {
-    color: "#ffffff",
-  },
-  botText: {
-    color: "#1A1A1A",
-  },
-  messageTime: {
-    fontSize: 11,
-    fontFamily: "Inter-Medium",
-    alignSelf: "flex-end",
-  },
-  userTime: {
-    color: "rgba(255, 255, 255, 0.6)",
-  },
-  botTime: {
-    color: "#94A3B8",
-  },
-});

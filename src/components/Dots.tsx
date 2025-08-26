@@ -71,15 +71,20 @@ export default function Dots({ isAnimating, color = "#FFFFFF99" }: DotsProps) {
   }, [isAnimating, scaleAnim1, scaleAnim2, scaleAnim3]);
 
   return (
-    <View style={styles.headerDecoration}>
+    <View
+      className="flex-row items-center"
+      style={styles.headerDecoration}>
       <Animated.View
-        style={[styles.headerDot, animatedStyle1, { backgroundColor: color }]}
+        className="mr-1 h-2 w-2 rounded-full"
+        style={[animatedStyle1, { backgroundColor: color }]}
       />
       <Animated.View
-        style={[styles.headerDot, animatedStyle2, { backgroundColor: color }]}
+        className="mr-1 h-2 w-2 rounded-full"
+        style={[animatedStyle2, { backgroundColor: color }]}
       />
       <Animated.View
-        style={[styles.headerDot, animatedStyle3, { backgroundColor: color }]}
+        className="mr-1 h-2 w-2 rounded-full"
+        style={[animatedStyle3, { backgroundColor: color }]}
       />
     </View>
   );
@@ -89,11 +94,5 @@ const styles = StyleSheet.create({
   headerDecoration: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  headerDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 4,
   },
 });

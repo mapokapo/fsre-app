@@ -25,6 +25,8 @@ fileignoreconfig:
   checksum: d1f38b91f760db56670c922668808141a5bf7865abdc307e409130865bb6a902
 - filename: nativewind-env.d.ts
   checksum: 6f3062fda8b318d893979f0de1dafa4f7076ba82e006fb3355f2bca23373e574
+- filename: src/app/(tabs)/chatbot.tsx
+  checksum: e5c4a8211459ab8c49c3dca858460c9e96268f9cc77462c2e405a7bd14b79840
 - filename: src/app/(tabs)/schedule.tsx
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/components/partials/ScheduleFilterButtonList.tsx
