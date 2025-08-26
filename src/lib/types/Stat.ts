@@ -1,9 +1,10 @@
 import Color from "@/lib/types/Color";
+import { LucideIcon } from "lucide-react-native";
 
 export default interface Stat {
   key: string;
   label: string;
   value: string;
-  icon: React.ReactNode;
+  icon: LucideIcon;
   color: Color;
 }

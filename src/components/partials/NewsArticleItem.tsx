@@ -1,16 +1,13 @@
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import NewsArticle from "@/lib/types/NewsArticle";
 import { getDistanceTo } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { useCallback } from "react";
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  ViewProps,
-} from "react-native";
+import { Image, View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
 export type NewsArticleItemProps = AnimatedProps<ViewProps> & {
@@ -22,6 +19,7 @@ export default function NewsArticleItem({
   style,
   ...props
 }: NewsArticleItemProps) {
+  const { colorScheme } = useColorScheme();
   const getCategoryLabel = useCallback(
     (iconCode: typeof article.categoryCode) => {
       switch (iconCode) {
@@ -43,92 +41,44 @@ export default function NewsArticleItem({
   );
 
   return (
-    <Animated.View
-      style={[styles.article, style]}
-      {...props}>
-      <Pressable
+    <Animated.View {...props}>
+      <Button
+        variant="ghost"
+        className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md"
         onPress={() => {
           Linking.openURL(article.link);
         }}>
-        <View style={styles.articleImageContainer}>
+        <LinearGradient
+          colors={[
+            THEME[colorScheme].cardGradient1,
+            THEME[colorScheme].cardGradient2,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}>
           <Image
             source={{ uri: article.imageUrl }}
-            style={styles.articleImage}
+            className="h-48 w-full"
           />
           <LinearGradient
             colors={[article.gradientFrom, article.gradientTo]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.articleCategoryBadge}>
-            <Text style={styles.articleCategoryText}>
+            className="absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2">
+            <Text className="text-sm uppercase">
               {getCategoryLabel(article.categoryCode)}
             </Text>
           </LinearGradient>
-        </View>
-        <View style={styles.articleContent}>
-          <Text style={styles.articleTitle}>{article.title}</Text>
-          <Text style={styles.articleSummary}>{article.summary}</Text>
-          <Text style={styles.articleTime}>
-            {getDistanceTo(article.datetime)}
-          </Text>
-        </View>
-      </Pressable>
+          <View className="p-5">
+            <Text className="mb-6 text-lg font-semibold">{article.title}</Text>
+            <Text className="mb-4 text-sm text-muted-foreground">
+              {article.summary}
+            </Text>
+            <Text className="text-sm text-muted-foreground">
+              {getDistanceTo(article.datetime)}
+            </Text>
+          </View>
+        </LinearGradient>
+      </Button>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  article: {
-    backgroundColor: "#ffffff",
-    borderRadius: 26,
-    marginBottom: 22,
-    overflow: "hidden",
-    boxShadow: "0px 8px 20px rgba(10, 73, 119, 0.12)",
-    elevation: 10,
-  },
-  articleImageContainer: {
-    position: "relative",
-  },
-  articleImage: {
-    width: "100%",
-    height: 190,
-    resizeMode: "cover",
-  },
-  articleCategoryBadge: {
-    position: "absolute",
-    top: 18,
-    left: 18,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 14,
-  },
-  articleCategoryText: {
-    fontSize: 12,
-    fontFamily: "Inter-SemiBold",
-    color: "#ffffff",
-    textTransform: "uppercase",
-    letterSpacing: 0.6,
-  },
-  articleContent: {
-    padding: 22,
-  },
-  articleTitle: {
-    fontSize: 19,
-    fontFamily: "Inter-Bold",
-    color: "#1A1A1A",
-    marginBottom: 10,
-    lineHeight: 26,
-  },
-  articleSummary: {
-    fontSize: 15,
-    fontFamily: "Inter-Regular",
-    color: "#64748B",
-    lineHeight: 22,
-    marginBottom: 14,
-  },
-  articleTime: {
-    fontSize: 13,
-    fontFamily: "Inter-Medium",
-    color: "#94A3B8",
-  },
-});

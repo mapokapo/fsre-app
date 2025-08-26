@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: aba5e16d85a92664daa8bf3d2486738d2d9727ea43e74200c5d081a1d14a079d
+  checksum: dfec4ad378366716cef1ffee0f15925ef25ddbb50c2fba4ead83066e5923fbda
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx

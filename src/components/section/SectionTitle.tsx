@@ -1,5 +1,6 @@
+import { Text } from "@/components/ui/text";
 import { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 
 export type SectionTitleProps = {
   title: string;
@@ -8,22 +9,9 @@ export type SectionTitleProps = {
 
 export default function SectionTitle({ title, icon }: SectionTitleProps) {
   return (
-    <View style={styles.sectionTitleContainer}>
+    <View className="flex-row items-center">
       {icon}
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text className="ml-3 text-2xl font-bold">{title}</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontFamily: "Inter-Bold",
-    color: "#1A1A1A",
-    marginLeft: 12,
-  },
-});

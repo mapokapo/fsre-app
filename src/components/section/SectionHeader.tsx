@@ -1,12 +1,13 @@
+import { cn } from "@/lib/utils";
 import React, { PropsWithChildren, ReactNode } from "react";
-import { StyleSheet, ViewProps } from "react-native";
+import { ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
 export type SectionHeaderProps = AnimatedProps<ViewProps> & PropsWithChildren;
 
 export default function SectionHeader({
   children,
-  style,
+  className,
   ...props
 }: SectionHeaderProps) {
   let sectionTitle: ReactNode | null = null;
@@ -32,7 +33,7 @@ export default function SectionHeader({
 
   return (
     <Animated.View
-      style={[styles.sectionHeader, style]}
+      className={cn("mb-6 flex-row items-center justify-between", className)}
       {...props}>
       {sectionTitle}
       {defaultChildren}
@@ -40,12 +41,3 @@ export default function SectionHeader({
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-});

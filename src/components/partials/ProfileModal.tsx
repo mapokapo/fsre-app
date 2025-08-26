@@ -8,6 +8,9 @@ import {
   ModalTitle,
 } from "@/components/modal";
 import ProfileView from "@/components/partials/ProfileView";
+import { Icon } from "@/components/ui/icon";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import { Bell, HelpCircle, LogOut } from "lucide-react-native";
 
 export type ProfileModalProps = {
@@ -21,6 +24,8 @@ export default function ProfileModal({
   onClose,
   onItemPress,
 }: ProfileModalProps) {
+  const { colorScheme } = useColorScheme();
+
   return (
     <Modal
       isVisible={isVisible}
@@ -36,8 +41,9 @@ export default function ProfileModal({
         <ModalActionButton
           onPress={() => onItemPress("notificationSettings")}
           icon={
-            <Bell
-              color="#0A4977"
+            <Icon
+              as={Bell}
+              color={THEME[colorScheme].fsreGradient3}
               size={20}
               strokeWidth={2.5}
             />
@@ -47,8 +53,9 @@ export default function ProfileModal({
         <ModalActionButton
           onPress={() => onItemPress("help")}
           icon={
-            <HelpCircle
-              color="#0A4977"
+            <Icon
+              as={HelpCircle}
+              color={THEME[colorScheme].fsreGradient3}
               size={20}
               strokeWidth={2.5}
             />
@@ -57,24 +64,16 @@ export default function ProfileModal({
         />
         <ModalActionButton
           onPress={() => onItemPress("logout")}
-          style={{
-            borderColor: "#FEE2E2",
-            backgroundColor: "#FEFEFE",
-          }}
+          destructive
           icon={
-            <LogOut
-              color="#DC2626"
+            <Icon
+              as={LogOut}
+              color={THEME[colorScheme].destructive}
               size={20}
               strokeWidth={2.5}
-              style={{
-                backgroundColor: "rgba(220, 38, 38, 0.1)",
-              }}
             />
           }
           text="Odjavi se"
-          textStyle={{
-            color: "#DC2626",
-          }}
         />
       </ModalFooter>
     </Modal>

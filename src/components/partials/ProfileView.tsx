@@ -1,98 +1,50 @@
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
 import MockData from "@/lib/const/mockData";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { UserIcon } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { useMemo } from "react";
+import { View } from "react-native";
 
 export default function ProfileView() {
+  const { colorScheme } = useColorScheme();
+  const profile = useMemo(() => MockData.getProfile(), []);
+
   return (
     <>
-      <View style={styles.studentAvatar}>
+      <View className="mb-4">
         <LinearGradient
-          colors={["#0A4977", "#1E5A8A"]}
+          colors={[
+            THEME[colorScheme].fsreGradient1,
+            THEME[colorScheme].fsreGradient2,
+          ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.studentAvatarGradient}>
-          <UserIcon
-            color="#ffffff"
+          className="h-20 w-20 items-center justify-center overflow-hidden rounded-full">
+          <Icon
+            as={UserIcon}
             size={32}
             strokeWidth={2.5}
           />
         </LinearGradient>
       </View>
 
-      <View style={styles.studentDetails}>
-        <Text style={styles.studentName}>{MockData.getProfile().name}</Text>
-        <Text style={styles.studentIndex}>
-          Broj indeksa: {MockData.getProfile().indexNumber}
+      <View className="items-center gap-2">
+        <Text className="text-lg font-bold">{profile.name}</Text>
+        <Text className="text-sm font-semibold text-fsre-gradient-3">
+          Broj indeksa: {profile.indexNumber}
         </Text>
-        <View style={styles.studentMeta}>
-          <Text style={styles.studentYear}>{MockData.getProfile().year}</Text>
-          <View style={styles.metaDot} />
-          <Text style={styles.studentDepartment}>
-            {MockData.getProfile().department}
+        <View className="mb-2 flex-row items-center">
+          <Text className="text-sm text-muted-foreground">{profile.year}</Text>
+          <View className="mx-2 h-1 w-1 rounded-full bg-muted-foreground" />
+          <Text className="text-sm text-muted-foreground">
+            {profile.department}
           </Text>
         </View>
-        <Text style={styles.studentEmail}>{MockData.getProfile().email}</Text>
+        <Text className="text-sm text-muted-foreground">{profile.email}</Text>
       </View>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  modalContent: {
-    padding: 24,
-    alignItems: "center",
-  },
-  studentAvatar: {
-    marginBottom: 16,
-  },
-  studentAvatarGradient: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  studentDetails: {
-    alignItems: "center",
-  },
-  studentName: {
-    fontSize: 22,
-    fontFamily: "Inter-Bold",
-    color: "#1A1A1A",
-    marginBottom: 6,
-  },
-  studentIndex: {
-    fontSize: 14,
-    fontFamily: "Inter-SemiBold",
-    color: "#0A4977",
-    marginBottom: 8,
-  },
-  studentMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  studentYear: {
-    fontSize: 13,
-    fontFamily: "Inter-Medium",
-    color: "#64748B",
-  },
-  metaDot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: "#CBD5E1",
-    marginHorizontal: 8,
-  },
-  studentDepartment: {
-    fontSize: 13,
-    fontFamily: "Inter-Medium",
-    color: "#64748B",
-  },
-  studentEmail: {
-    fontSize: 13,
-    fontFamily: "Inter-Regular",
-    color: "#94A3B8",
-  },
-});

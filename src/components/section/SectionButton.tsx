@@ -1,38 +1,25 @@
+import { Button, ButtonProps } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
+import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react-native";
-import { Pressable, PressableProps, StyleSheet, Text } from "react-native";
 
-export type SectionButtonProps = Omit<PressableProps, "children"> & {
+export type SectionButtonProps = Omit<ButtonProps, "children"> & {
   title: string;
 };
 
-export default function SectionButton({ title, ...props }: SectionButtonProps) {
+export default function SectionButton({
+  title,
+  className,
+  ...props
+}: SectionButtonProps) {
   return (
-    <Pressable
-      style={styles.sectionButton}
+    <Button
+      variant="secondary"
+      className={cn("rounded-full pr-3", className)}
       {...props}>
-      <Text style={styles.sectionButtonText}>{title}</Text>
-      <ChevronRight
-        color="#0A4977"
-        size={18}
-        strokeWidth={2.5}
-      />
-    </Pressable>
+      <Text>{title}</Text>
+      <Icon as={ChevronRight} />
+    </Button>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    backgroundColor: "rgba(10, 73, 119, 0.1)",
-    borderRadius: 18,
-  },
-  sectionButtonText: {
-    fontSize: 13,
-    fontFamily: "Inter-SemiBold",
-    color: "#0A4977",
-    marginRight: 5,
-  },
-});

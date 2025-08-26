@@ -1,11 +1,8 @@
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { PropsWithChildren, ReactNode } from "react";
-import {
-  Modal as RNModal,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal as RNModal, TouchableOpacity, View } from "react-native";
 
 export type ModalProps = PropsWithChildren & {
   isVisible: boolean;
@@ -13,6 +10,8 @@ export type ModalProps = PropsWithChildren & {
 };
 
 export default function Modal({ isVisible, onClose, children }: ModalProps) {
+  const { colorScheme } = useColorScheme();
+
   let modalHeader: ReactNode | null = null;
   let modalContent: ReactNode | null = null;
   let modalFooter: ReactNode | null = null;
@@ -44,18 +43,20 @@ export default function Modal({ isVisible, onClose, children }: ModalProps) {
       transparent={true}
       animationType="fade"
       onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
+      <View className="flex-1 items-center justify-center bg-black/50">
         <TouchableOpacity
-          style={styles.modalBackdrop}
+          className="absolute inset-0"
           activeOpacity={1}
           onPress={onClose}
         />
-        <View style={styles.modal}>
+        <View className="w-10/12 max-w-md overflow-hidden rounded-2xl shadow-md">
           <LinearGradient
-            colors={["#ffffff", "#f8fafc"]}
+            colors={[
+              THEME[colorScheme].cardGradient1,
+              THEME[colorScheme].cardGradient2,
+            ]}
             start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.modalGradient}>
+            end={{ x: 0, y: 1 }}>
             {modalHeader}
             {modalContent}
             {defaultChildren}
@@ -66,30 +67,3 @@ export default function Modal({ isVisible, onClose, children }: ModalProps) {
     </RNModal>
   );
 }
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBackdrop: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  modal: {
-    width: "90%",
-    maxWidth: 400,
-    borderRadius: 24,
-    overflow: "hidden",
-    boxShadow: "0px 20px 25px rgba(10, 73, 119, 0.25)",
-    elevation: 20,
-  },
-  modalGradient: {
-    padding: 0,
-  },
-});

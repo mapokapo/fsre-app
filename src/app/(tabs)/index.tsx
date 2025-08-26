@@ -112,6 +112,7 @@ export default function HomeScreen() {
           />
 
           <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Stats */}
             <Section>
               <SectionContent>
                 <View className="mt-8 flex-row gap-4">
@@ -131,8 +132,9 @@ export default function HomeScreen() {
               <SectionHeader style={introAnimatedStyle}>
                 <SectionTitle
                   icon={
-                    <Bell
-                      color={THEME[colorScheme].primary}
+                    <Icon
+                      as={Bell}
+                      color={THEME[colorScheme].fsreGradient3}
                       size={24}
                       strokeWidth={2.5}
                     />
@@ -157,8 +159,9 @@ export default function HomeScreen() {
               <SectionHeader>
                 <SectionTitle
                   icon={
-                    <Newspaper
-                      color={THEME[colorScheme].primary}
+                    <Icon
+                      as={Newspaper}
+                      color={THEME[colorScheme].fsreGradient3}
                       size={24}
                       strokeWidth={2.5}
                     />
@@ -177,12 +180,13 @@ export default function HomeScreen() {
               </SectionContent>
             </Section>
 
+            {/* Quick links */}
             <Section>
               <SectionHeader>
                 <SectionTitle title="Brzi pristup" />
               </SectionHeader>
               <SectionContent>
-                <View className="flex-row flex-wrap gap-4">
+                <View className="flex-row flex-wrap justify-between gap-4">
                   {quickLinks.map(link => (
                     <QuickLinkItem
                       key={link.label}
@@ -201,7 +205,7 @@ export default function HomeScreen() {
               <SectionContent>
                 <View className="overflow-hidden rounded-3xl shadow-md">
                   <LinearGradient
-                    className="p-6"
+                    className="gap-2 p-4"
                     colors={[
                       THEME[colorScheme].cardGradient1,
                       THEME[colorScheme].cardGradient2,
@@ -210,8 +214,9 @@ export default function HomeScreen() {
                     end={{ x: 1, y: 1 }}>
                     <ContactItem
                       icon={
-                        <MapPin
-                          color={THEME[colorScheme].primary}
+                        <Icon
+                          as={MapPin}
+                          color={THEME[colorScheme].fsreGradient3}
                           size={20}
                           strokeWidth={2.5}
                         />
@@ -220,8 +225,9 @@ export default function HomeScreen() {
                     />
                     <ContactItem
                       icon={
-                        <Phone
-                          color={THEME[colorScheme].primary}
+                        <Icon
+                          as={Phone}
+                          color={THEME[colorScheme].fsreGradient3}
                           size={20}
                           strokeWidth={2.5}
                         />
@@ -230,8 +236,9 @@ export default function HomeScreen() {
                     />
                     <ContactItem
                       icon={
-                        <Mail
-                          color={THEME[colorScheme].primary}
+                        <Icon
+                          as={Mail}
+                          color={THEME[colorScheme].fsreGradient3}
                           size={20}
                           strokeWidth={2.5}
                         />

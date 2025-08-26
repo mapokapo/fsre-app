@@ -1,5 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { X } from "lucide-react-native";
-import { StyleSheet, TouchableOpacity } from "react-native";
 
 export type ModalCloseButtonProps = {
   onClose: () => void;
@@ -7,26 +8,14 @@ export type ModalCloseButtonProps = {
 
 export default function ModalCloseButton({ onClose }: ModalCloseButtonProps) {
   return (
-    <TouchableOpacity
-      style={styles.closeButton}
-      onPress={onClose}
-      activeOpacity={0.8}>
-      <X
-        color="#64748B"
+    <Button
+      variant="ghost"
+      size="icon"
+      onPress={onClose}>
+      <Icon
+        as={X}
         size={20}
-        strokeWidth={2.5}
       />
-    </TouchableOpacity>
+    </Button>
   );
 }
-
-const styles = StyleSheet.create({
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

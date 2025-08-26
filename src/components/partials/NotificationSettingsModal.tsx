@@ -1,10 +1,16 @@
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { Switch } from "@/components/ui/switch";
+import { Text } from "@/components/ui/text";
 import { notificationCategories } from "@/lib/const/notificationCategories";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { useNotificationSettingsStore } from "@/lib/state/notificationSettingsStore";
+import { THEME } from "@/lib/theme";
 import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { X } from "lucide-react-native";
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 export type NotificationSettingsModalProps = {
   isVisible: boolean;
@@ -17,6 +23,8 @@ export default function NotificationSettingsModal({
 }: NotificationSettingsModalProps) {
   const { notificationSettings, setNotificationSettings } =
     useNotificationSettingsStore();
+  const { colorScheme } = useColorScheme();
+
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const toggleNotificationSetting = (
@@ -46,88 +54,74 @@ export default function NotificationSettingsModal({
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={["100%", "50%"]}
-      containerStyle={styles.sheetBackground}
+      containerStyle={{
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      }}
       backdropComponent={() => (
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            opacity: 0,
-          }}></View>
+        <View className="absolute h-full w-full opacity-0"></View>
       )}
-      onDismiss={onClose}>
+      onDismiss={onClose}
+      handleStyle={{
+        backgroundColor: THEME[colorScheme].cardGradient1,
+      }}>
       <BottomSheetScrollView>
-        <View style={styles.sheetContainer}>
-          <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>Postavke obavijesti</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={onClose}
-              activeOpacity={0.8}>
-              <X
-                color="#64748B"
+        <View className="rounded-tl-lg rounded-tr-lg shadow-lg">
+          <View className="flex-row items-center justify-between border-b border-border bg-card-gradient-1 px-6 pb-4 pt-9">
+            <Text className="text-xl font-bold">Postavke obavijesti</Text>
+            <Button
+              variant="ghost"
+              size="icon"
+              onPress={onClose}>
+              <Icon
+                as={X}
                 size={20}
                 strokeWidth={2.5}
               />
-            </TouchableOpacity>
+            </Button>
           </View>
 
-          {/* Notification Settings Content - Fixed */}
-          <View style={styles.notificationContent}>
-            <Text style={styles.notificationDescription}>
+          <View className="flex-1 bg-background p-6 pt-4">
+            <Text className="mb-6 text-center text-sm text-muted-foreground">
               Odaberite za koje aktivnosti želite primati obavijesti. Obavijesti
               će vam stići 15 minuta prije početka.
             </Text>
 
-            <View style={styles.notificationList}>
+            <View className="mb-8 gap-4">
               {notificationCategories.map(category => (
                 <View
                   key={category.key}
-                  style={styles.notificationItem}>
-                  <View style={styles.notificationItemContent}>
-                    <View style={styles.notificationItemLeft}>
+                  className="rounded-xl border border-border shadow-sm">
+                  <View className="flex-row items-center justify-between p-4">
+                    <View className="flex-1 flex-row items-center">
                       <LinearGradient
                         colors={[category.gradientFrom, category.gradientTo]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
-                        style={styles.notificationItemIcon}>
-                        {React.cloneElement(
-                          category.icon as React.ReactElement<{
-                            color: string;
-                            size: number;
-                            strokeWidth: number;
-                          }>,
-                          {
-                            color: "#ffffff",
-                            size: 20,
-                            strokeWidth: 2.5,
-                          }
-                        )}
+                        className="mr-4 h-10 w-10 items-center justify-center overflow-hidden rounded-full">
+                        <Icon
+                          as={category.icon}
+                          size={20}
+                          strokeWidth={2.5}
+                        />
                       </LinearGradient>
 
-                      <View style={styles.notificationItemText}>
-                        <Text style={styles.notificationItemTitle}>
+                      <View className="flex-1">
+                        <Text className="mb-1 font-semibold">
                           {category.title}
                         </Text>
-                        <Text style={styles.notificationItemDesc}>
+                        <Text className="text-sm text-muted-foreground">
                           {category.description}
                         </Text>
                       </View>
                     </View>
 
                     <Switch
-                      value={notificationSettings[category.key]}
-                      onValueChange={() =>
+                      checked={notificationSettings[category.key]}
+                      onCheckedChange={() =>
                         toggleNotificationSetting(category.key)
                       }
-                      trackColor={{ false: "#E2E8F0", true: "#0A4977" }}
-                      thumbColor={
-                        notificationSettings[category.key]
-                          ? "#ffffff"
-                          : "#ffffff"
-                      }
-                      ios_backgroundColor="#E2E8F0"
+                      id={`notification-switch-${category.key}`}
+                      nativeID={`notification-switch-${category.key}`}
                     />
                   </View>
                 </View>
@@ -135,139 +129,14 @@ export default function NotificationSettingsModal({
             </View>
 
             {/* Save Button */}
-            <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleSaveNotificationSettings}
-              activeOpacity={0.8}>
-              <LinearGradient
-                colors={["#0A4977", "#1E5A8A"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.saveButtonGradient}>
-                <Text style={styles.saveButtonText}>Spremi postavke</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <Button
+              className="mb-4 h-auto py-4"
+              onPress={handleSaveNotificationSettings}>
+              <Text className="text-base font-bold">Spremi postavke</Text>
+            </Button>
           </View>
         </View>
       </BottomSheetScrollView>
     </BottomSheetModal>
   );
 }
-
-const styles = StyleSheet.create({
-  sheetBackground: {
-    marginTop: -40,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  sheetContainer: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    boxShadow: "0px -10px 25px rgba(10, 73, 119, 0.25)",
-    elevation: 20,
-  },
-  sheetHeader: {
-    paddingTop: 36,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
-    backgroundColor: "#ffffff",
-  },
-  sheetTitle: {
-    fontSize: 20,
-    fontFamily: "Inter-Bold",
-    color: "#1A1A1A",
-  },
-  backButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  notificationContent: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    padding: 24,
-    paddingTop: 16,
-  },
-  notificationDescription: {
-    fontSize: 14,
-    fontFamily: "Inter-Regular",
-    color: "#64748B",
-    lineHeight: 20,
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  notificationList: {
-    gap: 16,
-    marginBottom: 32,
-  },
-  notificationItem: {
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
-    boxShadow: "0px 2px 8px rgba(10, 73, 119, 0.08)",
-    elevation: 4,
-  },
-  notificationItemContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-  },
-  notificationItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  notificationItemIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 14,
-  },
-  notificationItemText: {
-    flex: 1,
-  },
-  notificationItemTitle: {
-    fontSize: 16,
-    fontFamily: "Inter-SemiBold",
-    color: "#1A1A1A",
-    marginBottom: 2,
-  },
-  notificationItemDesc: {
-    fontSize: 13,
-    fontFamily: "Inter-Regular",
-    color: "#64748B",
-    lineHeight: 18,
-  },
-  saveButton: {
-    marginBottom: 16,
-  },
-  saveButtonGradient: {
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    alignItems: "center",
-  },
-  saveButtonText: {
-    fontSize: 16,
-    fontFamily: "Inter-Bold",
-    color: "#ffffff",
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#F8FAFC",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
