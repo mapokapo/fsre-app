@@ -92,7 +92,7 @@ export default function ScheduleScreen() {
       {showFilters && (
         <View className="gap-4 p-5">
           <ScheduleFilterButtonList
-            label="Smjer"
+            label="Dan"
             filters={days}
             gradients={gradients}
             selectedFilter={selectedDay}
