@@ -25,6 +25,7 @@ export default function ProfileView() {
           className="h-20 w-20 items-center justify-center overflow-hidden rounded-full">
           <Icon
             as={UserIcon}
+            className="text-fsre-gradient-foreground"
             size={32}
             strokeWidth={2.5}
           />

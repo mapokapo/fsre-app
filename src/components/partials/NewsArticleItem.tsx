@@ -64,7 +64,7 @@ export default function NewsArticleItem({
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             className="absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2">
-            <Text className="text-sm uppercase">
+            <Text className="text-sm uppercase !text-primary-foreground">
               {getCategoryLabel(article.categoryCode)}
             </Text>
           </LinearGradient>

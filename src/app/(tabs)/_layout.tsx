@@ -65,11 +65,13 @@ export default function TabLayout() {
           headerTitle: () => (
             <Animated.View style={introAnimatedStyle}>
               {headerData.isMain && (
-                <Text className="mb-1 text-foreground/90">Dobrodošli na</Text>
+                <Text className="mb-1 text-primary-foreground/90">
+                  Dobrodošli na
+                </Text>
               )}
               <Text
                 className={cn(
-                  "text-xl font-bold",
+                  "text-xl font-bold text-primary-foreground",
                   headerData.isMain &&
                     "mb-2 text-5xl font-extrabold tracking-widest shadow-lg"
                 )}>
@@ -77,7 +79,7 @@ export default function TabLayout() {
               </Text>
               <Text
                 className={cn(
-                  "text-sm text-foreground/80",
+                  "text-sm text-primary-foreground/80",
                   headerData.isMain && "text-base"
                 )}>
                 {headerData.subtitle}
@@ -93,7 +95,7 @@ export default function TabLayout() {
             headerData.icon && (
               <Animated.View style={introAnimatedStyle}>
                 <Icon
-                  className="mr-2 h-8 w-8 p-4"
+                  className="mr-2 h-8 w-8 p-4 text-primary-foreground"
                   as={headerData.icon}
                 />
               </Animated.View>
@@ -141,8 +143,8 @@ export default function TabLayout() {
                 as={Sparkles}
                 {...props}
                 className={cn(
-                  "stroke-foreground",
-                  props.focused && "fill-foreground"
+                  "stroke-primary-foreground",
+                  props.focused && "fill-primary-foreground"
                 )}
               />
             ),

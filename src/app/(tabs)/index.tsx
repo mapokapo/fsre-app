@@ -57,6 +57,7 @@ export default function HomeScreen() {
           onPress={() => setShowProfileModal(true)}>
           <Icon
             as={UserIcon}
+            className="text-primary-foreground"
             size={24}
           />
         </Button>

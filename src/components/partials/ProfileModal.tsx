@@ -68,7 +68,7 @@ export default function ProfileModal({
           icon={
             <Icon
               as={LogOut}
-              color={THEME[colorScheme].destructive}
+              color={THEME[colorScheme].fsreGradientForeground}
               size={20}
               strokeWidth={2.5}
             />

@@ -1,7 +1,7 @@
+import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import { MoonStar } from "@/lib/icons/MoonStar";
-import { Sun } from "@/lib/icons/Sun";
 import { setAndroidNavigationBar } from "@/lib/utils";
+import { MoonStar, Sun } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 
 export default function ThemeToggle() {
@@ -16,17 +16,17 @@ export default function ThemeToggle() {
   return (
     <Pressable
       onPress={toggleColorScheme}
-      className="web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2 active:opacity-70">
-      <View className="flex-1 aspect-square pt-0.5 justify-center items-start web:px-5">
+      className="active:opacity-70 web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2">
+      <View className="aspect-square flex-1 items-start justify-center pt-0.5 web:px-5">
         {isDarkColorScheme ? (
-          <MoonStar
-            className="text-foreground"
+          <Icon
+            as={MoonStar}
             size={23}
             strokeWidth={1.25}
           />
         ) : (
-          <Sun
-            className="text-foreground"
+          <Icon
+            as={Sun}
             size={24}
             strokeWidth={1.25}
           />

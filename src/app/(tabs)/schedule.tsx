@@ -63,6 +63,7 @@ export default function ScheduleScreen() {
           onPress={() => setShowFilters(!showFilters)}>
           <Icon
             as={Filter}
+            className="text-fsre-gradient-foreground"
             size={24}
           />
         </Button>

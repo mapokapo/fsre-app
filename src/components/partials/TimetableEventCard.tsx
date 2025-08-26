@@ -72,6 +72,7 @@ export default function TimetableEventCard({
             className="h-12 w-12 items-center justify-center overflow-hidden rounded-full">
             <Icon
               as={getIconByType(event)}
+              className="text-fsre-gradient-foreground"
               size={24}
             />
           </LinearGradient>

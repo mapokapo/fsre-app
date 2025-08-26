@@ -57,6 +57,7 @@ export default function NotificationItem({
                 className="h-10 w-10 items-center justify-center overflow-hidden rounded-full">
                 <Icon
                   as={getIcon(notification.iconCode)}
+                  className="text-fsre-gradient-foreground"
                   size={22}
                 />
               </LinearGradient>

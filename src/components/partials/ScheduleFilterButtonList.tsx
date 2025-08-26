@@ -51,7 +51,8 @@ export default function ScheduleFilterButtonList({
               <Text
                 className={cn(
                   "text-sm text-muted-foreground",
-                  filter.key === selectedFilter?.key && "text-foreground"
+                  filter.key === selectedFilter?.key &&
+                    "text-fsre-gradient-foreground"
                 )}>
                 {filter.name}
               </Text>

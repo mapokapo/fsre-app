@@ -43,6 +43,7 @@ export default function QuickLinkItem({ link }: QuickLinkItemProps) {
         className="h-12 w-12 items-center justify-center overflow-hidden rounded-full">
         <Icon
           as={link.icon}
+          className="text-fsre-gradient-foreground"
           size={22}
           strokeWidth={2.5}
         />

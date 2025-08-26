@@ -54,7 +54,11 @@ export default function NotificationSettingsModal({
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={["100%", "50%"]}
+      style={{
+        paddingTop: 40,
+      }}
       containerStyle={{
+        marginTop: -40,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}
       backdropComponent={() => (

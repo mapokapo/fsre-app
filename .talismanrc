@@ -28,7 +28,7 @@ fileignoreconfig:
 - filename: src/app/(tabs)/schedule.tsx
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/components/partials/ScheduleFilterButtonList.tsx
-  checksum: f3fd1fe4d38d06e8d82073b05a29a3c14c29290bfadb0685fb1055979363d946
+  checksum: 81a110f66638c28738b8ac71778d62148d8f6dace292696e57084ea3f5a1e01a
 - filename: src/components/partials/ScheduleView.tsx
   checksum: bb8d78d37ccb1ce915693dd834250bb3210575ed375ec3c643330b0ef4c5f813
 - filename: src/lib/hooks/useKeyboardHeight.ts
