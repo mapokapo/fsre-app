@@ -1,5 +1,4 @@
 import Dots from "@/components/Dots";
-import HeaderBackground from "@/components/header/HeaderBackground";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
@@ -45,7 +44,7 @@ const routePathNameToHeaderData: Record<
 
 export default function TabLayout() {
   const pathname = usePathname();
-  const headerData = routePathNameToHeaderData[pathname];
+  const headerData = routePathNameToHeaderData[pathname]!;
   const { introAnimatedStyle } = useIntroAnimation();
   const { colorScheme } = useColorScheme();
 
@@ -57,7 +56,17 @@ export default function TabLayout() {
           headerStyle: {
             height: headerData.isMain ? 200 : 120,
           },
-          headerBackground: () => <HeaderBackground />,
+          headerBackground: () => (
+            <LinearGradient
+              colors={[
+                THEME["light"]["fsreGradient1"],
+                THEME["light"]["fsreGradient2"],
+                THEME["light"]["fsreGradient3"],
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              className="h-full overflow-hidden rounded-bl-3xl rounded-br-3xl"></LinearGradient>
+          ),
           headerTitleContainerStyle: {
             paddingTop: 24,
             paddingBottom: 24,
@@ -73,7 +82,7 @@ export default function TabLayout() {
                 className={cn(
                   "text-xl font-bold text-primary-foreground",
                   headerData.isMain &&
-                    "mb-2 text-5xl font-extrabold tracking-widest shadow-lg"
+                    "mb-2 text-5xl font-extrabold tracking-widest"
                 )}>
                 {headerData.title}
               </Text>
@@ -95,7 +104,8 @@ export default function TabLayout() {
             headerData.icon && (
               <Animated.View style={introAnimatedStyle}>
                 <Icon
-                  className="mr-2 h-8 w-8 p-4 text-primary-foreground"
+                  className="mr-2 p-1 text-primary-foreground"
+                  size={40}
                   as={headerData.icon}
                 />
               </Animated.View>
@@ -143,16 +153,31 @@ export default function TabLayout() {
                 as={Sparkles}
                 {...props}
                 className={cn(
-                  "stroke-primary-foreground",
+                  "!h-full !w-full stroke-primary-foreground",
                   props.focused && "fill-primary-foreground"
                 )}
               />
             ),
-            tabBarButton: ({ children, style, ...props }) => (
+            tabBarButton: ({
+              children,
+              style,
+              pressColor,
+              pressOpacity,
+              ref,
+              ...props
+            }) => (
               <View className="w-full items-center justify-center">
                 <PlatformPressable
                   {...props}
-                  className="-mt-4 h-16 w-16 overflow-hidden rounded-full shadow-md">
+                  style={{
+                    marginTop: -16,
+                    height: 64,
+                    width: 64,
+                    overflow: "hidden",
+                    borderRadius: 9999,
+                    padding: 0,
+                    boxShadow: "0 3px 10px 1px rgba(0, 0, 0, 0.35",
+                  }}>
                   <LinearGradient
                     colors={[
                       THEME[colorScheme].fsreGradient1,

@@ -44,7 +44,7 @@ export default function NewsArticleItem({
     <Animated.View {...props}>
       <Button
         variant="ghost"
-        className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md"
+        className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md web:flex-1"
         onPress={() => {
           Linking.openURL(article.link);
         }}>
@@ -54,7 +54,8 @@ export default function NewsArticleItem({
             THEME[colorScheme].cardGradient2,
           ]}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}>
+          end={{ x: 1, y: 0 }}
+          className="h-full w-full">
           <Image
             source={{ uri: article.imageUrl }}
             className="h-48 w-full"

@@ -28,7 +28,7 @@ export default function QuickQuestionItem({
       {...props}>
       <Button
         variant="ghost"
-        className="h-auto overflow-hidden rounded-2xl p-0"
+        className="h-auto overflow-hidden rounded-2xl p-0 web:!h-auto"
         onPress={onPress}>
         <LinearGradient
           colors={[
@@ -37,7 +37,7 @@ export default function QuickQuestionItem({
           ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          className="p-5">
+          className="h-full w-full p-5">
           <View className="mb-3 flex-row items-center justify-between">
             <LinearGradient
               colors={[question.gradientFrom, question.gradientTo]}

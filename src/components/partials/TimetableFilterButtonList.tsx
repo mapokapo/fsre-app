@@ -39,7 +39,10 @@ export default function TimetableFilterButtonList({
             <LinearGradient
               colors={
                 filter.key === selectedFilter?.key
-                  ? gradients[i % gradients.length]
+                  ? (gradients[i % gradients.length] as [
+                      ColorValue,
+                      ColorValue,
+                    ])
                   : [
                       THEME[colorScheme].cardGradient1,
                       THEME[colorScheme].cardGradient2,

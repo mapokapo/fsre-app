@@ -20,7 +20,7 @@ export default function ModalActionButton({
   return (
     <Button
       variant={destructive ? "destructive" : "outline"}
-      className="h-auto justify-start px-2 py-2"
+      className="h-auto justify-start px-2 py-2 web:!h-auto"
       onPress={onPress}>
       <View className="h-10 w-10 items-center justify-center rounded-full">
         {icon}

@@ -11,6 +11,7 @@ import {
 } from "@expo-google-fonts/inter";
 import { ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "expo-dev-client";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -47,6 +48,8 @@ const useIsomorphicLayoutEffect =
     ? useEffect
     : useLayoutEffect;
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme();
 
@@ -73,16 +76,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? NAV_THEME.dark : NAV_THEME.light}>
-      <SafeAreaProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      </SafeAreaProvider>
-      <PortalHost />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        value={isDarkColorScheme ? NAV_THEME.dark : NAV_THEME.light}>
+        <SafeAreaProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        </SafeAreaProvider>
+        <PortalHost />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

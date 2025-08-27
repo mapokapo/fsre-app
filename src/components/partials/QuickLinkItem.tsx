@@ -34,7 +34,7 @@ export default function QuickLinkItem({ link }: QuickLinkItemProps) {
   return (
     <Button
       variant="ghost"
-      className="h-auto w-[47.5%] flex-col items-center rounded-2xl bg-card-gradient-1 p-6 shadow-md"
+      className="h-auto w-[47.5%] flex-col items-center rounded-2xl bg-card-gradient-1 p-6 shadow-md web:!h-auto web:w-full"
       onPress={() => handleQuickLinkPress(link)}>
       <LinearGradient
         colors={[link.gradientFrom, link.gradientTo]}

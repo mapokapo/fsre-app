@@ -2,9 +2,10 @@ import { days } from "@/app/(tabs)/timetable";
 import TimetableEventCard from "@/components/partials/TimetableEventCard";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import { Timetable } from "@/lib/api/client";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import Timetable from "@/lib/types/Timetable";
+import { getTimetableEvents } from "@/lib/utils";
 import { compareAsc } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
@@ -25,7 +26,9 @@ export default function TimetableView({
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerClassName="p-4 grow">
-      {Object.keys(timetable).length === 0 ? (
+      {getTimetableEvents(timetable)
+        .map(e => e.events)
+        .flat().length === 0 ? (
         <View className="flex-1 items-center justify-center">
           <LinearGradient
             colors={[
@@ -48,7 +51,7 @@ export default function TimetableView({
           </Text>
         </View>
       ) : (
-        timetable.entries().map(({ events, day }) => (
+        getTimetableEvents(timetable).map(({ events, day }) => (
           <View
             key={day}
             className="mb-8">
@@ -71,8 +74,7 @@ export default function TimetableView({
             </View>
 
             {events
-              .sort((a, b) => compareAsc(a.date, b.date))
-              .sort((a, b) => a.startTime.localeCompare(b.startTime))
+              .sort((a, b) => compareAsc(a.startDateTime, b.endDateTime))
               .map(event => {
                 return (
                   <TimetableEventCard

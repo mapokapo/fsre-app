@@ -42,14 +42,15 @@ export default function NotificationItem({
       {...props}>
       <Button
         variant="ghost"
-        className="h-auto flex-row overflow-hidden rounded-2xl p-0">
+        className="h-auto flex-row overflow-hidden rounded-2xl p-0 web:flex-1">
         <LinearGradient
           colors={[
             THEME[colorScheme].cardGradient1,
             THEME[colorScheme].cardGradient2,
           ]}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}>
+          end={{ x: 1, y: 0 }}
+          className="h-full w-full">
           <View className="p-5">
             <View className="mb-3 flex-row flex-wrap items-center justify-between gap-3">
               <LinearGradient

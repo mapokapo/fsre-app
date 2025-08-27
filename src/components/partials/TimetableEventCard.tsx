@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import { TimetableEvent } from "@/lib/api/client";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import TimetableEvent from "@/lib/types/TimetableEvent";
+import { formatDate } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   BookOpen,
@@ -11,6 +12,7 @@ import {
   Clock,
   LucideIcon,
   MapPin,
+  NotebookPen,
   User,
   Users,
   Zap,
@@ -22,40 +24,83 @@ export type TimetableEventCardProps = {
   gradients: [ColorValue, ColorValue][];
 };
 
+const getIndexByType = (event: TimetableEvent) => {
+  switch (event.type) {
+    case "LECTURE":
+      return 0;
+    case "EXERCISE":
+      return 1;
+    case "LABS":
+      return 2;
+    case "LECTURE_AND_EXERCISE":
+      return 3;
+    default:
+      return 4;
+  }
+};
+
+const getIconByType = (event: TimetableEvent): LucideIcon => {
+  switch (event.type) {
+    case "LECTURE":
+      return BookOpen;
+    case "EXERCISE":
+      return Users;
+    case "LECTURE_AND_EXERCISE":
+      return NotebookPen;
+    case "LABS":
+      return Zap;
+    default:
+      return Calendar;
+  }
+};
+
+const getDepartmentName = (department: TimetableEvent["department"]) => {
+  switch (department) {
+    case "COMPUTER_SCIENCE":
+      return "Računarstvo";
+    case "ELECTRICAL_ENGINEERING":
+      return "Elektrotehnika";
+    case "MECHANICAL_ENGINEERING":
+      return "Strojarstvo";
+    default:
+      return department;
+  }
+};
+
+const getYear = (year: TimetableEvent["year"]) => {
+  switch (year) {
+    case "FIRST":
+      return 1;
+    case "SECOND":
+      return 2;
+    case "THIRD":
+      return 3;
+    case "FOURTH":
+      return 4;
+    case "FIFTH":
+      return 5;
+    default:
+      return year;
+  }
+};
+
 export default function TimetableEventCard({
   event,
   gradients,
 }: TimetableEventCardProps) {
   const { colorScheme } = useColorScheme();
 
-  const getIndexByType = (event: TimetableEvent) => {
-    switch (event.type) {
-      case "lecture":
-        return 0;
-      case "exercise":
-        return 1;
-      case "labs":
-        return 2;
-      default:
-        return 3;
-    }
-  };
-
-  const getIconByType = (event: TimetableEvent): LucideIcon => {
-    switch (event.type) {
-      case "lecture":
-        return BookOpen;
-      case "exercise":
-        return Users;
-      case "labs":
-        return Zap;
-      default:
-        return Calendar;
-    }
+  const getGradientByType = (
+    event: TimetableEvent
+  ): [ColorValue, ColorValue] => {
+    const index = getIndexByType(event) % gradients.length;
+    return gradients[index] as [ColorValue, ColorValue];
   };
 
   return (
-    <Button className="mb-4 h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md">
+    <Button
+      variant="ghost"
+      className="mb-4 !h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md">
       <LinearGradient
         colors={[
           THEME[colorScheme].cardGradient1,
@@ -66,7 +111,7 @@ export default function TimetableEventCard({
         className="w-full p-5">
         <View className="mb-4 flex-row items-center gap-2">
           <LinearGradient
-            colors={gradients[getIndexByType(event)]}
+            colors={getGradientByType(event)}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             className="h-12 w-12 items-center justify-center overflow-hidden rounded-full">
@@ -78,14 +123,14 @@ export default function TimetableEventCard({
           </LinearGradient>
 
           <View className="flex-1">
-            <Text>{event.subject}</Text>
+            <Text>{event.name}</Text>
             <View className="flex-row flex-wrap items-center gap-1">
               <Text className="text-sm text-muted-foreground">
-                {event.year}. godina
+                {getYear(event.year)}. godina
               </Text>
               <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
               <Text className="text-sm text-muted-foreground">
-                {event.department.name}
+                {getDepartmentName(event.department)}
               </Text>
             </View>
           </View>
@@ -97,7 +142,8 @@ export default function TimetableEventCard({
               <Icon as={Clock} />
             </View>
             <Text className="text-sm text-muted-foreground">
-              {event.startTime} - {event.endTime}
+              {formatDate(event.startDateTime, "HH:mm")} -{" "}
+              {formatDate(event.startDateTime, "HH:mm")}
             </Text>
           </View>
           <View className="flex-row items-center">
@@ -105,7 +151,7 @@ export default function TimetableEventCard({
               <Icon as={MapPin} />
             </View>
             <Text className="text-sm text-muted-foreground">
-              {event.classroom.name}
+              {event.classRoomNames[0]}
             </Text>
           </View>
           <View className="flex-row items-center">
@@ -113,7 +159,7 @@ export default function TimetableEventCard({
               <Icon as={User} />
             </View>
             <Text className="text-sm text-muted-foreground">
-              {event.teacher.name}
+              {event.teacherNames[0]}
             </Text>
           </View>
         </View>

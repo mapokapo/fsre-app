@@ -2,13 +2,14 @@ import TimetableFilterButtonList from "@/components/partials/TimetableFilterButt
 import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import MockData from "@/lib/const/mockData";
-import { useTimetableStore } from "@/lib/state/timetable";
+import { Text } from "@/components/ui/text";
+import { $api } from "@/lib/api/client";
 import { TimetableFilter } from "@/lib/types/TimetableFilter";
+import { filterTimetable } from "@/lib/utils";
 import { useNavigation } from "expo-router";
 import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { ColorValue, View } from "react-native";
+import { ActivityIndicator, ColorValue, View } from "react-native";
 
 export const days: TimetableFilter[] = [
   { key: "all", name: "Sve" },
@@ -22,18 +23,17 @@ export const days: TimetableFilter[] = [
 ] as const;
 export const years: TimetableFilter[] = [
   { key: "all", name: "Sve" },
-  { key: "1", name: "1. godina" },
-  { key: "2", name: "2. godina" },
-  { key: "3", name: "3. godina" },
-  { key: "4", name: "4. godina" },
-  { key: "5", name: "5. godina" },
+  { key: "FIRST", name: "1. godina" },
+  { key: "SECOND", name: "2. godina" },
+  { key: "THIRD", name: "3. godina" },
+  { key: "FOURTH", name: "4. godina" },
+  { key: "FIFTH", name: "5. godina" },
 ];
 export const departments: TimetableFilter[] = [
   { key: "all", name: "Sve" },
-  ...MockData.getDepartments().map(dept => ({
-    key: dept.id.toString(),
-    name: dept.name,
-  })),
+  { key: "COMPUTER_SCIENCE", name: "Računarstvo" },
+  { key: "ELECTRICAL_ENGINEERING", name: "Elektrotehnika" },
+  { key: "MECHANICAL_ENGINEERING", name: "Mašinstvo" },
 ];
 
 const gradients: [ColorValue, ColorValue][] = [
@@ -46,11 +46,24 @@ const gradients: [ColorValue, ColorValue][] = [
 ];
 
 export default function TimetableScreen() {
-  const [selectedDay, setSelectedDay] = useState(days[0]);
-  const [selectedYear, setSelectedYear] = useState(years[0]);
-  const [selectedDepartment, setSelectedDepartment] = useState(departments[0]);
+  const [selectedDay, setSelectedDay] = useState(days[0] as TimetableFilter);
+  const [selectedYear, setSelectedYear] = useState(years[0] as TimetableFilter);
+  const [selectedDepartment, setSelectedDepartment] = useState(
+    departments[0] as TimetableFilter
+  );
   const [showFilters, setShowFilters] = useState(false);
-  const { timetable } = useTimetableStore();
+  const {
+    data: timetable,
+    error,
+    isLoading,
+  } = $api.useQuery("get", "/timetable", {
+    params: {
+      query: {
+        isoWeek: `2025-W24`,
+        studyProgram: -55,
+      },
+    },
+  });
 
   const navigation = useNavigation();
 
@@ -73,20 +86,51 @@ export default function TimetableScreen() {
 
   const filteredTimetable = useMemo(
     () =>
-      timetable.filter(({ event, day }) => {
-        const dayMatch =
-          selectedDay.key === "all" || day === parseInt(selectedDay.key);
-        const yearMatch =
-          selectedYear.key === "all" ||
-          event.year === parseInt(selectedYear.key);
-        const departmentMatch =
-          selectedDepartment.key === "all" ||
-          event.department.id === parseInt(selectedDepartment.key);
+      timetable === undefined
+        ? {
+            monday: [],
+            tuesday: [],
+            wednesday: [],
+            thursday: [],
+            friday: [],
+            saturday: [],
+            sunday: [],
+          }
+        : filterTimetable(timetable, ({ event, day }) => {
+            const dayMatch =
+              selectedDay.key === "all" || day === parseInt(selectedDay.key);
+            const yearMatch =
+              selectedYear.key === "all" || event.year === selectedYear.key;
+            const departmentMatch =
+              selectedDepartment.key === "all" ||
+              event.department === selectedDepartment.key;
 
-        return dayMatch && yearMatch && departmentMatch;
-      }),
+            return dayMatch && yearMatch && departmentMatch;
+          }),
     [selectedDay, selectedYear, selectedDepartment, timetable]
   );
+
+  if (error) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <View className="rounded-lg bg-destructive/30 p-4">
+          <Text className="text-center text-xl font-bold">Error</Text>
+          <Text className="text-center">{error.message}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (isLoading || !timetable) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator
+          size={64}
+          className="text-fsre-gradient-3"
+        />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-background">

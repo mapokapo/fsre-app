@@ -10,7 +10,7 @@ import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { X } from "lucide-react-native";
 import React, { useEffect, useRef } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export type NotificationSettingsModalProps = {
   isVisible: boolean;
@@ -53,7 +53,10 @@ export default function NotificationSettingsModal({
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
-      snapPoints={["100%", "50%"]}
+      snapPoints={Platform.select({
+        native: ["100%", "50%"],
+        web: ["100%"],
+      })}
       containerStyle={{
         marginTop: -40,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -78,12 +81,12 @@ export default function NotificationSettingsModal({
           <View className="flex-row items-center justify-between border-b border-border bg-card-gradient-1 px-6 pb-4 pt-9">
             <Text className="text-xl font-bold">Postavke obavijesti</Text>
             <Button
-              variant="ghost"
               size="icon"
               onPress={onClose}>
               <Icon
                 as={X}
-                size={20}
+                className="text-fsre-gradient-foreground web:!h-full web:!w-full web:!p-2"
+                size={24}
                 strokeWidth={2.5}
               />
             </Button>

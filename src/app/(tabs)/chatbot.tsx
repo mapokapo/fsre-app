@@ -190,7 +190,7 @@ export default function ChatbotScreen() {
             ))}
           </ScrollView>
         )}
-        <View className="mx-4 flex-row items-center rounded-full bg-secondary shadow-lg shadow-secondary">
+        <View className="mx-4 flex-row items-center rounded-full bg-secondary shadow-md shadow-black/35">
           <Input
             className="h-auto flex-1 rounded-full border-transparent bg-transparent px-4 py-5"
             placeholder="Unesite vaše pitanje..."

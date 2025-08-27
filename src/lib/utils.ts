@@ -1,8 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
-import { formatDistance } from "date-fns";
+import { Day, formatDistance } from "date-fns";
 import { hr } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
+import { Timetable, TimetableEvent } from "@/lib/api/client";
 import { NAV_THEME } from "@/lib/theme";
 import * as NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
@@ -32,4 +33,35 @@ export async function setAndroidNavigationBar(theme: "light" | "dark") {
       ? NAV_THEME.dark.colors.background
       : NAV_THEME.light.colors.background
   );
+}
+
+export function filterTimetable(
+  timetable: Timetable,
+  predicate: (item: { event: TimetableEvent; day: Day }) => boolean
+): Timetable {
+  return {
+    monday: timetable.monday.filter(event => predicate({ event, day: 1 })),
+    tuesday: timetable.tuesday.filter(event => predicate({ event, day: 2 })),
+    wednesday: timetable.wednesday.filter(event =>
+      predicate({ event, day: 3 })
+    ),
+    thursday: timetable.thursday.filter(event => predicate({ event, day: 4 })),
+    friday: timetable.friday.filter(event => predicate({ event, day: 5 })),
+    saturday: timetable.saturday.filter(event => predicate({ event, day: 6 })),
+    sunday: timetable.sunday.filter(event => predicate({ event, day: 0 })),
+  };
+}
+
+export function getTimetableEvents(
+  timetable: Timetable
+): { day: Day; events: TimetableEvent[] }[] {
+  return [
+    { day: 1, events: timetable.monday },
+    { day: 2, events: timetable.tuesday },
+    { day: 3, events: timetable.wednesday },
+    { day: 4, events: timetable.thursday },
+    { day: 5, events: timetable.friday },
+    { day: 6, events: timetable.saturday },
+    { day: 0, events: timetable.sunday },
+  ];
 }

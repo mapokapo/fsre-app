@@ -187,7 +187,7 @@ export default function HomeScreen() {
                 <SectionTitle title="Brzi pristup" />
               </SectionHeader>
               <SectionContent>
-                <View className="flex-row flex-wrap justify-between gap-4">
+                <View className="flex-row flex-wrap justify-between gap-4 web:grid web:grid-cols-2">
                   {quickLinks.map(link => (
                     <QuickLinkItem
                       key={link.label}

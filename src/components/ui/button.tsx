@@ -14,8 +14,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: cn(
-          "bg-primary active:bg-primary/90 shadow-sm shadow-black/5",
-          Platform.select({ web: "hover:bg-primary/90" })
+          "bg-fsre-gradient-1 active:bg-fsre-gradient-1/90 shadow-sm shadow-black/5",
+          Platform.select({ web: "hover:bg-fsre-gradient-1/90" })
         ),
         destructive: cn(
           "bg-destructive active:bg-destructive/90 dark:bg-destructive/60 shadow-sm shadow-black/5",
@@ -70,7 +70,7 @@ const buttonTextVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-primary-foreground",
+        default: "text-fsre-gradient-foreground",
         destructive: "text-white",
         outline: cn(
           "group-active:text-accent-foreground",
@@ -79,7 +79,7 @@ const buttonTextVariants = cva(
         secondary: "text-secondary-foreground",
         ghost: "group-active:text-accent-foreground",
         link: cn(
-          "text-primary group-active:underline",
+          "text-fsre-gradient-1 group-active:underline",
           Platform.select({
             web: "underline-offset-4 hover:underline group-hover:underline",
           })
