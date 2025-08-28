@@ -35,6 +35,8 @@ fileignoreconfig:
   checksum: 81a110f66638c28738b8ac71778d62148d8f6dace292696e57084ea3f5a1e01a
 - filename: src/components/partials/ScheduleView.tsx
   checksum: bb8d78d37ccb1ce915693dd834250bb3210575ed375ec3c643330b0ef4c5f813
+- filename: src/components/partials/TimetableView.tsx
+  checksum: ae523399297e10bba689075ec849aaa2e96ff58fb36e6a20bf9be5c8c210335f
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 version: "1.0"

@@ -10,3 +10,4 @@ export const $api = createClient(fetchClient);
 
 export type Timetable = components["schemas"]["Timetable"];
 export type TimetableEvent = components["schemas"]["TimetableEvent"];
+export type TimetableDatabase = components["schemas"]["TimetableDatabase"];

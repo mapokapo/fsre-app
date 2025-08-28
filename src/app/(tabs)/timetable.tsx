@@ -6,6 +6,7 @@ import { Text } from "@/components/ui/text";
 import { $api } from "@/lib/api/client";
 import { TimetableFilter } from "@/lib/types/TimetableFilter";
 import { filterTimetable } from "@/lib/utils";
+import { getWeek, getYear } from "date-fns";
 import { useNavigation } from "expo-router";
 import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
@@ -53,17 +54,33 @@ export default function TimetableScreen() {
   );
   const [showFilters, setShowFilters] = useState(false);
   const {
+    data: timetableDatabase,
+    error: timetableDatabaseError,
+    isLoading: isTimetableDatabaseLoading,
+  } = $api.useQuery("get", "/timetable-database");
+  const {
     data: timetable,
-    error,
-    isLoading,
-  } = $api.useQuery("get", "/timetable", {
-    params: {
-      query: {
-        isoWeek: `2025-W24`,
-        studyProgram: -55,
+    error: timetableError,
+    isLoading: isTimetableLoading,
+  } = $api.useQuery(
+    "get",
+    "/timetable",
+    {
+      params: {
+        query: {
+          isoWeek: `${getYear(new Date())}-W${getWeek(new Date())}`,
+          studyProgram: timetableDatabase?.studyPrograms.find(
+            program =>
+              program.studyYear === selectedYear.key &&
+              program.department === selectedDepartment.key
+          )?.id,
+        },
       },
     },
-  });
+    {
+      enabled: !!timetableDatabase,
+    }
+  );
 
   const navigation = useNavigation();
 
@@ -110,18 +127,25 @@ export default function TimetableScreen() {
     [selectedDay, selectedYear, selectedDepartment, timetable]
   );
 
-  if (error) {
+  if (timetableError || timetableDatabaseError) {
     return (
       <View className="flex-1 items-center justify-center">
         <View className="rounded-lg bg-destructive/30 p-4">
           <Text className="text-center text-xl font-bold">Error</Text>
-          <Text className="text-center">{error.message}</Text>
+          <Text className="text-center">
+            {timetableError?.message ?? "Error fetching timetable database"}
+          </Text>
         </View>
       </View>
     );
   }
 
-  if (isLoading || !timetable) {
+  if (
+    isTimetableLoading ||
+    !timetable ||
+    isTimetableDatabaseLoading ||
+    !timetableDatabase
+  ) {
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator

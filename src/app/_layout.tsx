@@ -1,3 +1,4 @@
+import { Text } from "@/components/ui/text";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
@@ -69,10 +70,12 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-  usePlatformSpecificSetup();
-
-  if (!fontsLoaded && !fontError) {
+  if (!fontsLoaded) {
     return null;
+  }
+
+  if (fontError) {
+    return <Text>Font error: {fontError.message}</Text>;
   }
 
   return (

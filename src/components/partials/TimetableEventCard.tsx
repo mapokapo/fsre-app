@@ -143,7 +143,7 @@ export default function TimetableEventCard({
             </View>
             <Text className="text-sm text-muted-foreground">
               {formatDate(event.startDateTime, "HH:mm")} -{" "}
-              {formatDate(event.startDateTime, "HH:mm")}
+              {formatDate(event.endDateTime, "HH:mm")}
             </Text>
           </View>
           <View className="flex-row items-center">

@@ -78,7 +78,7 @@ export default function TimetableView({
               .map(event => {
                 return (
                   <TimetableEventCard
-                    key={event.id}
+                    key={`${event.id}-${event.startDateTime}`}
                     event={event}
                     gradients={gradients}
                   />
