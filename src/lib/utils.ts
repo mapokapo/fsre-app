@@ -65,3 +65,10 @@ export function getTimetableEvents(
     { day: 0, events: timetable.sunday },
   ];
 }
+
+export function mapError(error: unknown) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Unknown error";
+}

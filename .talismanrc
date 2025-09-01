@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: 2acb201b8b07de1b6c4708b7475b01ddde805c465daaae509456d59c75d85ac9
+  checksum: 54782d677e57aae75f1a597ceb082e08e3724d71741203e8c7a09e4703a75894
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -31,6 +31,8 @@ fileignoreconfig:
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/app/(tabs)/timetable.tsx
   checksum: 16215348d420a4a3fb20cf5be3a8faba334a08b0d6eb79533ccbe308390ec97b
+- filename: src/components/partials/NewsSection.tsx
+  checksum: b35d2afbe7dd5d913115cce0fa3ddf79517e9b7ccd21acaf0053f1f665f3488e
 - filename: src/components/partials/ScheduleFilterButtonList.tsx
   checksum: 81a110f66638c28738b8ac71778d62148d8f6dace292696e57084ea3f5a1e01a
 - filename: src/components/partials/ScheduleView.tsx

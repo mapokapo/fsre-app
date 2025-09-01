@@ -1,16 +1,17 @@
+import ErrorMessage from "@/components/ErrorMessage";
 import TimetableFilterButtonList from "@/components/partials/TimetableFilterButtonList";
 import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Text } from "@/components/ui/text";
 import { $api } from "@/lib/api/client";
+import { gradients } from "@/lib/const/gradients";
 import { TimetableFilter } from "@/lib/types/TimetableFilter";
 import { filterTimetable } from "@/lib/utils";
 import { getWeek, getYear } from "date-fns";
 import { useNavigation } from "expo-router";
 import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, ColorValue, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 export const days: TimetableFilter[] = [
   { key: "all", name: "Sve" },
@@ -35,15 +36,6 @@ export const departments: TimetableFilter[] = [
   { key: "COMPUTER_SCIENCE", name: "Računarstvo" },
   { key: "ELECTRICAL_ENGINEERING", name: "Elektrotehnika" },
   { key: "MECHANICAL_ENGINEERING", name: "Mašinstvo" },
-];
-
-const gradients: [ColorValue, ColorValue][] = [
-  ["#0A4977", "#1E5A8A"],
-  ["#667eea", "#764ba2"],
-  ["#4facfe", "#00f2fe"],
-  ["#43e97b", "#38f9d7"],
-  ["#f093fb", "#f5576c"],
-  ["#f093fb", "#f5576c"],
 ];
 
 export default function TimetableScreen() {
@@ -128,16 +120,7 @@ export default function TimetableScreen() {
   );
 
   if (timetableError || timetableDatabaseError) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <View className="rounded-lg bg-destructive/30 p-4">
-          <Text className="text-center text-xl font-bold">Error</Text>
-          <Text className="text-center">
-            {timetableError?.message ?? "Error fetching timetable database"}
-          </Text>
-        </View>
-      </View>
-    );
+    return <ErrorMessage error={timetableError ?? timetableDatabaseError} />;
   }
 
   if (
@@ -163,7 +146,6 @@ export default function TimetableScreen() {
           <TimetableFilterButtonList
             label="Dan"
             filters={days}
-            gradients={gradients}
             selectedFilter={selectedDay}
             onSelect={setSelectedDay}
           />
@@ -171,7 +153,6 @@ export default function TimetableScreen() {
           <TimetableFilterButtonList
             label="Godina"
             filters={years}
-            gradients={gradients}
             selectedFilter={selectedYear}
             onSelect={setSelectedYear}
           />
@@ -179,7 +160,6 @@ export default function TimetableScreen() {
           <TimetableFilterButtonList
             label="Studij"
             filters={departments}
-            gradients={gradients}
             selectedFilter={selectedDepartment}
             onSelect={setSelectedDepartment}
           />

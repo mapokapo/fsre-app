@@ -1,13 +1,16 @@
-import { ColorValue } from "react-native";
-
 export default interface NewsArticle {
   id: number;
   title: string;
-  summary: string;
+  subtitle: string | null;
+  views: number;
+  content: string;
   imageUrl: string;
   datetime: Date;
   link: string;
-  categoryCode: "tech" | "awards" | "labs" | "scholarships" | "lectures";
-  gradientFrom: ColorValue;
-  gradientTo: ColorValue;
+  categories: (
+    | "FSRE web - Globalne objave"
+    | "FSRE web - Strojarstvo"
+    | "FSRE web - Računarstvo"
+    | "FSRE web - Elektrotehnika"
+  )[];
 }

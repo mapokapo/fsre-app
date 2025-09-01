@@ -1,5 +1,5 @@
 import ContactItem from "@/components/partials/ContactItem";
-import NewsArticleItem from "@/components/partials/NewsArticleItem";
+import NewsSection from "@/components/partials/NewsSection";
 import NotificationItem from "@/components/partials/NotificationItem";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import ProfileModal from "@/components/partials/ProfileModal";
@@ -14,7 +14,6 @@ import {
 } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import MockData from "@/lib/const/mockData";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
@@ -172,12 +171,7 @@ export default function HomeScreen() {
                 <SectionButton title="Sve" />
               </SectionHeader>
               <SectionContent>
-                {MockData.getNewsArticles().map(article => (
-                  <NewsArticleItem
-                    key={article.id}
-                    article={article}
-                  />
-                ))}
+                <NewsSection />
               </SectionContent>
             </Section>
 

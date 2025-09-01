@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { gradients } from "@/lib/const/gradients";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import { TimetableFilter } from "@/lib/types/TimetableFilter";
@@ -10,7 +11,6 @@ import { ColorValue, ScrollView, View } from "react-native";
 export type TimetableFilterButtonListProps = {
   label: string;
   filters: TimetableFilter[];
-  gradients: [ColorValue, ColorValue][];
   selectedFilter: TimetableFilter | null;
   onSelect: (filter: TimetableFilter) => void;
 };
@@ -18,7 +18,6 @@ export type TimetableFilterButtonListProps = {
 export default function TimetableFilterButtonList({
   label,
   filters,
-  gradients,
   selectedFilter,
   onSelect,
 }: TimetableFilterButtonListProps) {
