@@ -9,8 +9,6 @@ fileignoreconfig:
   checksum: 0fe06cf1fb7529eed42c4f329d372360052a5d57f8dc6a36823113b4bf4e1da4
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
-- filename: bun.lock
-  checksum: 54782d677e57aae75f1a597ceb082e08e3724d71741203e8c7a09e4703a75894
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -41,4 +39,10 @@ fileignoreconfig:
   checksum: ae523399297e10bba689075ec849aaa2e96ff58fb36e6a20bf9be5c8c210335f
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
+- filename: src/lib/firebase.ts
+  checksum: e19e6f1e2e4cf3a9aee39fa4a7a64adc73abb4985ccba42296bf864be52fd626
+- filename: bun.lock
+  checksum: d247e9521dc71e23f40210baf5f88658c256e20b1ffad48a36236b095c025882
+- filename: yarn.lock
+  checksum: 2c8257524611d41438621462cc35130f482934115f9b48b43251a9a2887a4a97
 version: "1.0"

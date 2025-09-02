@@ -1,4 +1,5 @@
 import { Text } from "@/components/ui/text";
+import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
@@ -10,6 +11,10 @@ import {
   Inter_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/inter";
+import {
+  AuthorizationStatus,
+  requestPermission,
+} from "@react-native-firebase/messaging";
 import { ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,13 +23,17 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
-import { Appearance, Platform } from "react-native";
+import { Appearance, PermissionsAndroid, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
 
 export { ErrorBoundary } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
+
+if (__DEV__) {
+  require("../reactotron");
+}
 
 const useSetWebBackgroundClassName = () => {
   useIsomorphicLayoutEffect(() => {
@@ -69,6 +78,26 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
+
+  useEffect(() => {
+    const requestNotificationPermission = async () => {
+      const statusIos = await requestPermission(messaging!);
+      const statusAndroid = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+
+      if (
+        statusIos !== AuthorizationStatus.AUTHORIZED ||
+        statusAndroid !== "granted"
+      ) {
+        console.warn("User denied notifications");
+      }
+    };
+
+    if (fontsLoaded && !fontError && Platform.OS !== "web") {
+      requestNotificationPermission();
+    }
+  }, [fontError, fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
