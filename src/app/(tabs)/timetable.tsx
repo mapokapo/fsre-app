@@ -15,7 +15,9 @@ import { $api } from "@/lib/api/client";
 import { gradients } from "@/lib/const/gradients";
 import { messaging } from "@/lib/firebase";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
-import { TimetableFilter } from "@/lib/types/TimetableFilter";
+import Department from "@/lib/types/Department";
+import StudyYear from "@/lib/types/StudyYear";
+import TimetableFilter from "@/lib/types/TimetableFilter";
 import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
 import { useNavigation } from "expo-router";
@@ -23,37 +25,36 @@ import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Platform, View } from "react-native";
 
-export const days: TimetableFilter[] = [
-  { key: "all", name: "Sve" },
-  { key: "1", name: "Ponedjeljak" },
-  { key: "2", name: "Utorak" },
-  { key: "3", name: "Srijeda" },
-  { key: "4", name: "Četvrtak" },
-  { key: "5", name: "Petak" },
-  { key: "6", name: "Subota" },
-  { key: "0", name: "Nedjelja" },
-] as const;
-export const years: TimetableFilter[] = [
-  { key: "all", name: "Sve" },
-  { key: "FIRST", name: "1. godina" },
-  { key: "SECOND", name: "2. godina" },
-  { key: "THIRD", name: "3. godina" },
-  { key: "FOURTH", name: "4. godina" },
-  { key: "FIFTH", name: "5. godina" },
+export const days: TimetableFilter<"0" | "1" | "2" | "3" | "4" | "5" | "6">[] =
+  [
+    { value: null, label: "Sve" },
+    { value: "1", label: "Ponedjeljak" },
+    { value: "2", label: "Utorak" },
+    { value: "3", label: "Srijeda" },
+    { value: "4", label: "Četvrtak" },
+    { value: "5", label: "Petak" },
+    { value: "6", label: "Subota" },
+    { value: "0", label: "Nedjelja" },
+  ] as const;
+export const years: TimetableFilter<StudyYear>[] = [
+  { value: null, label: "Sve" },
+  { value: "FIRST", label: "1. godina" },
+  { value: "SECOND", label: "2. godina" },
+  { value: "THIRD", label: "3. godina" },
+  { value: "FOURTH", label: "4. godina" },
+  { value: "FIFTH", label: "5. godina" },
 ];
-export const departments: TimetableFilter[] = [
-  { key: "all", name: "Sve" },
-  { key: "COMPUTER_SCIENCE", name: "Računarstvo" },
-  { key: "ELECTRICAL_ENGINEERING", name: "Elektrotehnika" },
-  { key: "MECHANICAL_ENGINEERING", name: "Strojarstvo" },
+export const departments: TimetableFilter<Department>[] = [
+  { value: null, label: "Sve" },
+  { value: "COMPUTER_SCIENCE", label: "Računarstvo" },
+  { value: "ELECTRICAL_ENGINEERING", label: "Elektrotehnika" },
+  { value: "MECHANICAL_ENGINEERING", label: "Strojarstvo" },
 ];
 
 export default function TimetableScreen() {
-  const [selectedDay, setSelectedDay] = useState(days[0] as TimetableFilter);
-  const [selectedYear, setSelectedYear] = useState(years[0] as TimetableFilter);
-  const [selectedDepartment, setSelectedDepartment] = useState(
-    departments[0] as TimetableFilter
-  );
+  const [selectedDay, setSelectedDay] = useState(days[0]!);
+  const [selectedYear, setSelectedYear] = useState(years[0]!);
+  const [selectedDepartment, setSelectedDepartment] = useState(departments[0]!);
   const [selectedDirection, setSelectedDirection] = useState<string | null>(
     null
   );
@@ -88,8 +89,8 @@ export default function TimetableScreen() {
           isoWeek: `2025-W24`,
           studyProgram: timetableDatabase?.studyPrograms.find(
             program =>
-              program.studyYear === selectedYear.key &&
-              program.department === selectedDepartment.key
+              program.studyYear === selectedYear.value &&
+              program.department === selectedDepartment.value
           )?.id,
         },
       },
@@ -121,12 +122,12 @@ export default function TimetableScreen() {
   useEffect(() => {
     const main = async () => {
       const studyProgramId =
-        selectedYear.key === "all" || selectedDepartment.key === "all"
+        selectedYear.value === null || selectedDepartment.value === null
           ? null
           : (timetableDatabase?.studyPrograms.find(
               program =>
-                program.studyYear === selectedYear.key &&
-                program.department === selectedDepartment.key &&
+                program.studyYear === selectedYear.value &&
+                program.department === selectedDepartment.value &&
                 program.direction === selectedDirection
             )?.id ?? null);
 
@@ -169,25 +170,17 @@ export default function TimetableScreen() {
           },
         });
         setSubscriptionKey({
-          department: selectedDepartment.key as
-            | "COMPUTER_SCIENCE"
-            | "ELECTRICAL_ENGINEERING"
-            | "MECHANICAL_ENGINEERING",
-          year: selectedYear.key as
-            | "FIRST"
-            | "SECOND"
-            | "THIRD"
-            | "FOURTH"
-            | "FIFTH",
+          department: selectedDepartment.value,
+          year: selectedYear.value,
           studyProgramId,
         });
       }
     };
     if (Platform.OS !== "web") main();
   }, [
-    selectedDepartment.key,
+    selectedDepartment.value,
     selectedDirection,
-    selectedYear.key,
+    selectedYear.value,
     setSubscriptionKey,
     subscribeToTimetable,
     subscriptionKey,
@@ -209,12 +202,12 @@ export default function TimetableScreen() {
           }
         : filterTimetable(timetable, ({ event, day }) => {
             const dayMatch =
-              selectedDay.key === "all" || day === parseInt(selectedDay.key);
+              selectedDay.value === null || day === parseInt(selectedDay.value);
             const yearMatch =
-              selectedYear.key === "all" || event.year === selectedYear.key;
+              selectedYear.value === null || event.year === selectedYear.value;
             const departmentMatch =
-              selectedDepartment.key === "all" ||
-              event.department === selectedDepartment.key;
+              selectedDepartment.value === null ||
+              event.department === selectedDepartment.value;
             const directionMatch =
               selectedDirection === null ||
               (event.directions?.includes(selectedDirection) ?? false);
@@ -238,15 +231,15 @@ export default function TimetableScreen() {
               timetableDatabase.studyPrograms
                 .filter(
                   sp =>
-                    sp.department === selectedDepartment.key &&
-                    sp.studyYear === selectedYear.key
+                    sp.department === selectedDepartment.value &&
+                    sp.studyYear === selectedYear.value
                 )
                 .map(sp => sp.direction)
                 .filter(d => d !== null)
             ),
           ]
         : [],
-    [selectedDepartment.key, selectedYear.key, timetableDatabase]
+    [selectedDepartment.value, selectedYear.value, timetableDatabase]
   );
 
   if (timetableError || timetableDatabaseError) {

@@ -44,7 +44,7 @@ fileignoreconfig:
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 - filename: src/lib/state/timetableSubscriptionStore.ts
-  checksum: ece9719df6b65b61ecd4db7fe89afb34f2cc947d05a6a3f8d29259b32b2912ed
+  checksum: af4ea50273d7020935b7b7756f77d385b98c8c40544e078480a38b3cccab9449
 - filename: yarn.lock
   checksum: 2c8257524611d41438621462cc35130f482934115f9b48b43251a9a2887a4a97
 version: "1.0"

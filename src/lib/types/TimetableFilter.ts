@@ -1,4 +1,4 @@
-export interface TimetableFilter {
-  key: string;
-  name: string;
+export default interface TimetableFilter<T> {
+  value: T | null;
+  label: string;
 }

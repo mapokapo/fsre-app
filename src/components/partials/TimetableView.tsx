@@ -65,7 +65,7 @@ export default function TimetableView({
                 end={{ x: 1, y: 0 }}
                 className="flex-row items-center justify-between overflow-hidden rounded-2xl px-4 py-3">
                 <Text className="text-lg text-fsre-gradient-foreground">
-                  {days.find(d => parseInt(d.key) === day)?.name}
+                  {days.find(d => parseInt(d.value ?? "-1") === day)?.label}
                 </Text>
                 <Text className="rounded-full bg-primary/80 px-4 py-2 font-semibold text-primary-foreground">
                   {events.length}
