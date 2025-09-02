@@ -100,7 +100,7 @@ export default function TimetableEventCard({
   return (
     <Button
       variant="ghost"
-      className="mb-4 !h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md">
+      className="mb-4 h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md web:!h-auto">
       <LinearGradient
         colors={[
           THEME[colorScheme].cardGradient1,
