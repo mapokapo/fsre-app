@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: d247e9521dc71e23f40210baf5f88658c256e20b1ffad48a36236b095c025882
+  checksum: f3c5885727898c8bab595aa9a799f62456a4ee31345571f920ea3f3543177439
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -43,6 +43,8 @@ fileignoreconfig:
   checksum: e19e6f1e2e4cf3a9aee39fa4a7a64adc73abb4985ccba42296bf864be52fd626
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
+- filename: src/lib/i18n/index.ts
+  checksum: d1ee306818ae95f615fcb48b9a8205484426e3e67d676bab59ce57cf72d5616c
 - filename: src/lib/state/timetableSubscriptionStore.ts
   checksum: af4ea50273d7020935b7b7756f77d385b98c8c40544e078480a38b3cccab9449
 - filename: yarn.lock

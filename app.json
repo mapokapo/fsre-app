@@ -12,8 +12,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.fsre.mobileapp",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["https", "http"],
-        "UIBackgroundModes": ["remote-notification"]
+        "LSApplicationQueriesSchemes": [
+          "https",
+          "http"
+        ],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
@@ -26,7 +31,9 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#0A4977"
       },
-      "permissions": ["android.permission.INTERNET"],
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
@@ -64,7 +71,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

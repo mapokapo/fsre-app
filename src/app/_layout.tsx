@@ -1,6 +1,8 @@
 import { Text } from "@/components/ui/text";
+import "@/global.css";
 import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import "@/lib/i18n";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
@@ -25,13 +27,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
 import { Appearance, PermissionsAndroid, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import "../global.css";
 
 export { ErrorBoundary } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 
 if (__DEV__) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require("../reactotron");
 }
 
