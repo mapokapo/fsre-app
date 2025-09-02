@@ -30,7 +30,7 @@ fileignoreconfig:
 - filename: src/app/(tabs)/schedule.tsx
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/app/(tabs)/timetable.tsx
-  checksum: 16215348d420a4a3fb20cf5be3a8faba334a08b0d6eb79533ccbe308390ec97b
+  checksum: a6c8e76c34d97f83537bc396b1204e9c85510c1cfa2587fa7ff0af768ee8aae5
 - filename: src/components/partials/NewsSection.tsx
   checksum: b35d2afbe7dd5d913115cce0fa3ddf79517e9b7ccd21acaf0053f1f665f3488e
 - filename: src/components/partials/ScheduleFilterButtonList.tsx
@@ -43,6 +43,8 @@ fileignoreconfig:
   checksum: e19e6f1e2e4cf3a9aee39fa4a7a64adc73abb4985ccba42296bf864be52fd626
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
+- filename: src/lib/state/timetableSubscriptionStore.ts
+  checksum: ece9719df6b65b61ecd4db7fe89afb34f2cc947d05a6a3f8d29259b32b2912ed
 - filename: yarn.lock
   checksum: 2c8257524611d41438621462cc35130f482934115f9b48b43251a9a2887a4a97
 version: "1.0"
