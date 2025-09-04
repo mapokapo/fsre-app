@@ -1,0 +1,212 @@
+{
+  "common": {
+    "welcomeTo": "Welcome to",
+    "all": "All",
+    "save": "Save",
+    "saveSettings": "Save settings",
+    "help": "Help",
+    "logout": "Log out",
+    "error": "Error",
+    "refresh": "Refresh",
+    "weekDays": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "studyYear": "Year {{count}}",
+    "studyYearEnum": {
+      "FIRST": "First year",
+      "SECOND": "Second year",
+      "THIRD": "Third year",
+      "FOURTH": "Fourth year",
+      "FIFTH": "Fifth year"
+    },
+    "departments": {
+      "computerScience": "Computer Science",
+      "electricalEngineering": "Electrical Engineering",
+      "mechanicalEngineering": "Mechanical Engineering"
+    },
+    "departmentEnum": {
+      "COMPUTER_SCIENCE": "Computer Science",
+      "ELECTRICAL_ENGINEERING": "Electrical Engineering",
+      "MECHANICAL_ENGINEERING": "Mechanical Engineering"
+    },
+    "language": "Language",
+    "chooseLanguage": "Choose language",
+    "languages": {
+      "hr": "Croatian",
+      "en": "English"
+    }
+  },
+  "notFound": {
+    "title": "Not found",
+    "message": "This page does not exist.",
+    "linkText": "Back to homepage"
+  },
+  "navigation": {
+    "home": "Home",
+    "chatbot": "Chatbot",
+    "timetable": "Timetable"
+  },
+  "header": {
+    "home": {
+      "title": "FSRE",
+      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering"
+    },
+    "chatbot": {
+      "title": "FSRE AI Assistant",
+      "subtitle": "Always here to help"
+    },
+    "timetable": {
+      "title": "Timetable",
+      "subtitle": "Lectures and exercises"
+    }
+  },
+  "home": {
+    "notifications": {
+      "title": "Notifications"
+    },
+    "news": {
+      "title": "News"
+    },
+    "quickAccess": {
+      "title": "Quick access"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Matice hrvatske bb, 88000 Mostar",
+      "phone": "+387 36 355 025",
+      "email": "info@fsre.sum.ba"
+    }
+  },
+  "news": {
+    "categories": {
+      "global": "Global",
+      "mechanicalEngineering": "Mechanical Engineering",
+      "computerScience": "Computer Science",
+      "electricalEngineering": "Electrical Engineering",
+      "default": "News"
+    }
+  },
+  "quickLinks": {
+    "studomat": "Studomat",
+    "eLearning": "eLearning",
+    "webmail": "Webmail",
+    "schedule": "Timetable"
+  },
+  "chatbot": {
+    "intro": "Hello! 👋 I am the FSRE AI assistant. How can I help you today? You can ask me about the timetable, exams, labs, scholarships, or anything else related to the faculty.",
+    "input": {
+      "placeholder": "Enter your question..."
+    },
+    "quickQuestions": {
+      "schedule": {
+        "text": "Where can I see the timetable?",
+        "description": "Find lecture and exercise schedules"
+      },
+      "exams": {
+        "text": "How to register for exams?",
+        "description": "Information about exam registration"
+      },
+      "contact": {
+        "text": "Contact information",
+        "description": "Faculty address, phone, and email"
+      },
+      "labs": {
+        "text": "About laboratories",
+        "description": "Information about lab exercises"
+      }
+    },
+    "responses": {
+      "schedule": "You can find the timetable in the application's \"Timetable\" section. You can filter by study year and department. 📅",
+      "exams": "Exam registration is done through the Studomat system. Registration for the winter exam period is currently open until January 15. 📝",
+      "labs": "FSRE has modern laboratories for mechanical engineering, computer science, and electrical engineering. To book a lab, contact the appropriate assistants. 🔬",
+      "scholarships": "You can find information about scholarships on the official faculty website or by contacting the student office. 💰",
+      "enrollment": "Enrollment for the new academic year begins in June. A detailed schedule and requirements will be available on the faculty website. 🎓",
+      "contact": "The faculty is located at Matice hrvatske bb, 88000 Mostar. Phone: +387 36 355 025, Email: info@fsre.sum.ba 📍",
+      "ebooks": "Electronic textbooks are available via the eLearning platform. Log in with your student credentials. 📚",
+      "wifi": "The FSRE WiFi network is available to students. Login details are available at the student office. 📶",
+      "thanks": "You're welcome! 😊 If you have more questions, feel free to ask.",
+      "greeting": "Hello! 👋 How can I help you?",
+      "unknown": "Sorry, I'm not sure how to answer that. 🤔 You can ask me about the timetable, exams, labs, scholarships, enrollment, or contact information. You can also contact the student office for more details."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "indexNumber": "Index number: {{index}}"
+  },
+  "notifications": {
+    "settings": {
+      "title": "Notification settings",
+      "description": "Choose which activities you want to receive notifications for. You will receive notifications 15 minutes before the start.",
+      "save": "Save settings"
+    },
+    "categories": {
+      "lectures": {
+        "title": "Lectures",
+        "description": "Notifications before lectures start"
+      },
+      "exercises": {
+        "title": "Exercises",
+        "description": "Notifications before exercises start"
+      },
+      "labs": {
+        "title": "Laboratory exercises",
+        "description": "Notifications before lab exercises start"
+      },
+      "exams": {
+        "title": "Exams",
+        "description": "Notifications about exam periods"
+      },
+      "news": {
+        "title": "News",
+        "description": "Notifications about faculty news"
+      }
+    }
+  },
+  "timetable": {
+    "filters": {
+      "day": "Day",
+      "studyYear": "Year",
+      "department": "Program",
+      "direction": "Track",
+      "chooseDirection": "Choose track"
+    },
+    "noClasses": {
+      "title": "No classes",
+      "description": "No timetable for the selected filters"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome to FSRE",
+      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering",
+      "description": "Enter the access code you received from the administration",
+      "accessCodeLabel": "Access code",
+      "accessCodePlaceholder": "Enter access code",
+      "validating": "Validating...",
+      "submit": "Sign in",
+      "errors": {
+        "empty": "Please enter the access code",
+        "minLength": "The access code must be at least 6 characters",
+        "invalid": "Invalid access code. Please contact the administration."
+      }
+    },
+    "help": {
+      "title": "Need help?",
+      "contact": "Contact the student office at\n{{email}} or {{phone}}"
+    },
+    "securityNotice": "Your data is safe and protected"
+  },
+  "stats": {
+    "activeStudents": { "label": "Active students" },
+    "completedProjects": { "label": "Completed projects" },
+    "successRate": { "label": "Success rate" }
+  }
+}

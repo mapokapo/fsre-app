@@ -6,6 +6,7 @@ import Stat from "@/lib/types/Stat";
 import { cn } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
@@ -19,6 +20,7 @@ export default function StatsCard({
   ...props
 }: StatsCardProps) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Animated.View
@@ -42,7 +44,7 @@ export default function StatsCard({
         </View>
         <Text className="text-lg font-bold">{stat.value}</Text>
         <Text className="text-center text-sm text-muted-foreground">
-          {stat.label}
+          {stat.label(t)}
         </Text>
       </LinearGradient>
     </Animated.View>

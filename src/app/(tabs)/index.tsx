@@ -4,7 +4,7 @@ import NotificationItem from "@/components/partials/NotificationItem";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import ProfileModal from "@/components/partials/ProfileModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
-import StatsCard from "@/components/partials/StatsCard";
+import StatsSection from "@/components/partials/StatsSection";
 import {
   Section,
   SectionButton,
@@ -18,7 +18,6 @@ import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
-import { useStatsStore } from "@/lib/state/statsStore";
 import { THEME } from "@/lib/theme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
@@ -32,12 +31,13 @@ import {
   UserIcon,
 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
   const { notifications } = useNotificationsStore();
-  const { stats } = useStatsStore();
+  const { t } = useTranslation();
 
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
@@ -115,15 +115,7 @@ export default function HomeScreen() {
             {/* Stats */}
             <Section>
               <SectionContent>
-                <View className="mt-8 flex-row gap-4">
-                  {stats.map(stat => (
-                    <StatsCard
-                      key={stat.key}
-                      stat={stat}
-                      style={introAnimatedStyle}
-                    />
-                  ))}
-                </View>
+                <StatsSection introAnimatedStyle={introAnimatedStyle} />
               </SectionContent>
             </Section>
 
@@ -139,9 +131,9 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="Obavijesti"
+                  title={t("home.notifications.title")}
                 />
-                <SectionButton title="Sve" />
+                <SectionButton title={t("common.all")} />
               </SectionHeader>
               <SectionContent>
                 {notifications.map(notification => (
@@ -166,9 +158,9 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="Novosti"
+                  title={t("home.news.title")}
                 />
-                <SectionButton title="Sve" />
+                <SectionButton title={t("common.all")} />
               </SectionHeader>
               <SectionContent>
                 <NewsSection />
@@ -178,13 +170,13 @@ export default function HomeScreen() {
             {/* Quick links */}
             <Section>
               <SectionHeader>
-                <SectionTitle title="Brzi pristup" />
+                <SectionTitle title={t("home.quickAccess.title")} />
               </SectionHeader>
               <SectionContent>
                 <View className="flex-row flex-wrap justify-between gap-4 web:grid web:grid-cols-2">
                   {quickLinks.map(link => (
                     <QuickLinkItem
-                      key={link.label}
+                      key={link.label(t)}
                       link={link}
                     />
                   ))}
@@ -195,7 +187,7 @@ export default function HomeScreen() {
             {/* Contact */}
             <Section>
               <SectionHeader>
-                <SectionTitle title="Kontakt" />
+                <SectionTitle title={t("home.contact.title")} />
               </SectionHeader>
               <SectionContent>
                 <View className="overflow-hidden rounded-3xl shadow-md">
@@ -216,7 +208,7 @@ export default function HomeScreen() {
                           strokeWidth={2.5}
                         />
                       }
-                      title="Matice hrvatske bb, 88000 Mostar"
+                      title={t("home.contact.address")}
                     />
                     <ContactItem
                       icon={
@@ -227,7 +219,7 @@ export default function HomeScreen() {
                           strokeWidth={2.5}
                         />
                       }
-                      title="+387 36 355 025"
+                      title={t("home.contact.phone")}
                     />
                     <ContactItem
                       icon={
@@ -238,7 +230,7 @@ export default function HomeScreen() {
                           strokeWidth={2.5}
                         />
                       }
-                      title="info@fsre.sum.ba"
+                      title={t("home.contact.email")}
                     />
                   </LinearGradient>
                 </View>

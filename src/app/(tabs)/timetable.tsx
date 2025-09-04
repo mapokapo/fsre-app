@@ -13,43 +13,17 @@ import {
 import { Text } from "@/components/ui/text";
 import { $api } from "@/lib/api/client";
 import { gradients } from "@/lib/const/gradients";
+import { days, departments, years } from "@/lib/const/timetableFilters";
 import { messaging } from "@/lib/firebase";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
-import Department from "@/lib/types/Department";
-import StudyYear from "@/lib/types/StudyYear";
-import TimetableFilter from "@/lib/types/TimetableFilter";
 import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
+import { getWeek, getYear } from "date-fns";
 import { useNavigation } from "expo-router";
 import { Filter } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Platform, View } from "react-native";
-
-export const days: TimetableFilter<"0" | "1" | "2" | "3" | "4" | "5" | "6">[] =
-  [
-    { value: null, label: "Sve" },
-    { value: "1", label: "Ponedjeljak" },
-    { value: "2", label: "Utorak" },
-    { value: "3", label: "Srijeda" },
-    { value: "4", label: "Četvrtak" },
-    { value: "5", label: "Petak" },
-    { value: "6", label: "Subota" },
-    { value: "0", label: "Nedjelja" },
-  ] as const;
-export const years: TimetableFilter<StudyYear>[] = [
-  { value: null, label: "Sve" },
-  { value: "FIRST", label: "1. godina" },
-  { value: "SECOND", label: "2. godina" },
-  { value: "THIRD", label: "3. godina" },
-  { value: "FOURTH", label: "4. godina" },
-  { value: "FIFTH", label: "5. godina" },
-];
-export const departments: TimetableFilter<Department>[] = [
-  { value: null, label: "Sve" },
-  { value: "COMPUTER_SCIENCE", label: "Računarstvo" },
-  { value: "ELECTRICAL_ENGINEERING", label: "Elektrotehnika" },
-  { value: "MECHANICAL_ENGINEERING", label: "Strojarstvo" },
-];
 
 export default function TimetableScreen() {
   const [selectedDay, setSelectedDay] = useState(days[0]!);
@@ -60,6 +34,7 @@ export default function TimetableScreen() {
   );
   const [showFilters, setShowFilters] = useState(false);
 
+  const { t } = useTranslation();
   const { subscriptionKey, setSubscriptionKey } =
     useTimetableSubscriptionStore();
   const { mutateAsync: subscribeToTimetable } = $api.useMutation(
@@ -75,18 +50,20 @@ export default function TimetableScreen() {
     data: timetableDatabase,
     error: timetableDatabaseError,
     isLoading: isTimetableDatabaseLoading,
+    refetch: refetchTimetableDatabase,
   } = $api.useQuery("get", "/timetable-database");
   const {
     data: timetable,
     error: timetableError,
     isLoading: isTimetableLoading,
+    refetch: refetchTimetable,
   } = $api.useQuery(
     "get",
     "/timetable",
     {
       params: {
         query: {
-          isoWeek: `2025-W24`,
+          isoWeek: `${getYear(new Date())}-W${getWeek(new Date())}`,
           studyProgram: timetableDatabase?.studyPrograms.find(
             program =>
               program.studyYear === selectedYear.value &&
@@ -243,7 +220,15 @@ export default function TimetableScreen() {
   );
 
   if (timetableError || timetableDatabaseError) {
-    return <ErrorMessage error={timetableError ?? timetableDatabaseError} />;
+    return (
+      <ErrorMessage
+        error={timetableError ?? timetableDatabaseError}
+        onRetry={() => {
+          refetchTimetableDatabase();
+          refetchTimetable();
+        }}
+      />
+    );
   }
 
   if (
@@ -267,21 +252,21 @@ export default function TimetableScreen() {
       {showFilters && (
         <View className="gap-4 p-5">
           <TimetableFilterButtonList
-            label="Dan"
+            label={t("timetable.filters.day")}
             filters={days}
             selectedFilter={selectedDay}
             onSelect={setSelectedDay}
           />
 
           <TimetableFilterButtonList
-            label="Godina"
+            label={t("timetable.filters.studyYear")}
             filters={years}
             selectedFilter={selectedYear}
             onSelect={setSelectedYear}
           />
 
           <TimetableFilterButtonList
-            label="Studij"
+            label={t("timetable.filters.department")}
             filters={departments}
             selectedFilter={selectedDepartment}
             onSelect={setSelectedDepartment}
@@ -293,10 +278,12 @@ export default function TimetableScreen() {
                 setSelectedDirection(newValue?.value ?? null);
               }}>
               <Text className="mb-1 ml-1 text-sm text-muted-foreground">
-                Smjer
+                {t("timetable.filters.direction")}
               </Text>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Odaberite smjer" />
+                <SelectValue
+                  placeholder={t("timetable.filters.chooseDirection")}
+                />
               </SelectTrigger>
               <SelectContent>
                 {directions.map(direction => (

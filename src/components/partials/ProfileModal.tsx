@@ -1,19 +1,26 @@
-import {
-  Modal,
-  ModalActionButton,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-} from "@/components/modal";
+import LanguagePicker from "@/components/LanguagePicker";
+import { ModalActionButton } from "@/components/modal";
 import ProfileView from "@/components/partials/ProfileView";
 import ThemeToggle from "@/components/ThemeToggle";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import { Text } from "@/components/ui/text";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import { Bell, HelpCircle, LogOut } from "lucide-react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  Bell,
+  HelpCircle,
+  Languages,
+  LogOut,
+  Paintbrush,
+} from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export type ProfileModalProps = {
@@ -28,61 +35,98 @@ export default function ProfileModal({
   onItemPress,
 }: ProfileModalProps) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   return (
-    <Modal
-      isVisible={isVisible}
-      onClose={onClose}>
-      <ModalHeader>
-        <ModalTitle>Profil</ModalTitle>
-        <ModalCloseButton onClose={onClose} />
-      </ModalHeader>
-      <ModalContent>
-        <View className="mb-4 flex-row items-center gap-2">
-          <Text>{isDarkColorScheme ? "Tamni" : "Svijetli"} način</Text>
-          <ThemeToggle />
-        </View>
-        <ProfileView />
-      </ModalContent>
-      <ModalFooter>
-        <ModalActionButton
-          onPress={() => onItemPress("notificationSettings")}
-          icon={
-            <Icon
-              as={Bell}
-              color={THEME[colorScheme].fsreGradient3}
-              size={20}
-              strokeWidth={2.5}
+    <Dialog
+      open={isVisible}
+      onOpenChange={open => {
+        if (!open) onClose();
+      }}
+      className="shadow-md">
+      <DialogContent className="!w-80 overflow-hidden rounded-2xl p-0">
+        <LinearGradient
+          colors={[
+            THEME[colorScheme].cardGradient1,
+            THEME[colorScheme].cardGradient2,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          className="p-6">
+          <DialogHeader>
+            <DialogTitle>{t("profile.title")}</DialogTitle>
+          </DialogHeader>
+          <ProfileView />
+          <DialogFooter className="mt-6 flex-col gap-3">
+            <ModalActionButton
+              onPress={() => onItemPress("notificationSettings")}
+              icon={
+                <Icon
+                  as={Bell}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }
+              text={t("notifications.settings.title")}
             />
-          }
-          text="Postavke obavijesti"
-        />
-        <ModalActionButton
-          onPress={() => onItemPress("help")}
-          icon={
-            <Icon
-              as={HelpCircle}
-              color={THEME[colorScheme].fsreGradient3}
-              size={20}
-              strokeWidth={2.5}
+            <ModalActionButton
+              icon={
+                <Icon
+                  as={Paintbrush}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }
+              text={
+                isDarkColorScheme
+                  ? t("profile.darkMode")
+                  : t("profile.lightMode")
+              }>
+              <ThemeToggle />
+            </ModalActionButton>
+            <ModalActionButton
+              icon={
+                <Icon
+                  as={Languages}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }>
+              <View className="flex-1">
+                <LanguagePicker />
+              </View>
+            </ModalActionButton>
+            <ModalActionButton
+              onPress={() => onItemPress("help")}
+              icon={
+                <Icon
+                  as={HelpCircle}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }
+              text={t("common.help")}
             />
-          }
-          text="Pomoć"
-        />
-        <ModalActionButton
-          onPress={() => onItemPress("logout")}
-          destructive
-          icon={
-            <Icon
-              as={LogOut}
-              color={THEME[colorScheme].fsreGradientForeground}
-              size={20}
-              strokeWidth={2.5}
+            <ModalActionButton
+              onPress={() => onItemPress("logout")}
+              destructive
+              icon={
+                <Icon
+                  as={LogOut}
+                  color={THEME[colorScheme].fsreGradientForeground}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }
+              text={t("common.logout")}
             />
-          }
-          text="Odjavi se"
-        />
-      </ModalFooter>
-    </Modal>
+          </DialogFooter>
+        </LinearGradient>
+      </DialogContent>
+    </Dialog>
   );
 }

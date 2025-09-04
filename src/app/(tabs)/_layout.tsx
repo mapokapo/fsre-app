@@ -1,6 +1,7 @@
 import Dots from "@/components/Dots";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import { routeData } from "@/lib/const/routeData";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { THEME } from "@/lib/theme";
@@ -8,45 +9,19 @@ import { cn } from "@/lib/utils";
 import { PlatformPressable } from "@react-navigation/elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, usePathname } from "expo-router";
-import { Calendar, Home, LucideIcon, Sparkles } from "lucide-react-native";
+import { Calendar, Home, Sparkles } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const routePathNameToHeaderData: Record<
-  string,
-  {
-    title: string;
-    subtitle: string;
-    icon: LucideIcon | null;
-    isMain: boolean;
-  }
-> = {
-  "/": {
-    title: "FSRE",
-    subtitle: "Fakultet strojarstva, računarstva i elektrotehnike",
-    icon: null,
-    isMain: true,
-  },
-  "/chatbot": {
-    title: "FSRE AI Asistent",
-    subtitle: "Uvijek tu da pomognem",
-    icon: Sparkles,
-    isMain: false,
-  },
-  "/timetable": {
-    title: "Raspored",
-    subtitle: "Predavanja i vježbe",
-    icon: Calendar,
-    isMain: false,
-  },
-};
-
 export default function TabLayout() {
-  const pathname = usePathname();
-  const headerData = routePathNameToHeaderData[pathname]!;
+  const { t } = useTranslation();
+  const pathname = usePathname() as "/" | "/chatbot" | "/timetable";
   const { introAnimatedStyle } = useIntroAnimation();
   const { colorScheme } = useColorScheme();
+
+  const headerData = routeData[pathname];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -75,7 +50,7 @@ export default function TabLayout() {
             <Animated.View style={introAnimatedStyle}>
               {headerData.isMain && (
                 <Text className="mb-1 text-primary-foreground/90">
-                  Dobrodošli na
+                  {t("common.welcomeTo")}
                 </Text>
               )}
               <Text
@@ -84,14 +59,14 @@ export default function TabLayout() {
                   headerData.isMain &&
                     "mb-2 text-5xl font-extrabold tracking-widest"
                 )}>
-                {headerData.title}
+                {headerData.title(t)}
               </Text>
               <Text
                 className={cn(
                   "text-sm text-primary-foreground/80",
                   headerData.isMain && "text-base"
                 )}>
-                {headerData.subtitle}
+                {headerData.subtitle(t)}
               </Text>
             </Animated.View>
           ),
@@ -135,7 +110,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Početna",
+            title: t("navigation.home"),
             tabBarIcon: props => (
               <Icon
                 as={Home}
@@ -147,7 +122,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="chatbot"
           options={{
-            title: "Chatbot",
+            title: t("navigation.chatbot"),
             tabBarIcon: props => (
               <Icon
                 as={Sparkles}
@@ -197,7 +172,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="timetable"
           options={{
-            title: "Raspored",
+            title: t("navigation.timetable"),
             tabBarIcon: props => (
               <Icon
                 as={Calendar}

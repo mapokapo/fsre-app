@@ -7,29 +7,33 @@ import { TouchableOpacityProps, View } from "react-native";
 
 export type ModalActionButtonProps = TouchableOpacityProps & {
   icon: React.ReactNode;
-  text: string;
+  text?: string;
   destructive?: boolean;
 };
 
 export default function ModalActionButton({
-  onPress,
   icon,
   text,
   destructive = false,
+  children,
+  ...props
 }: ModalActionButtonProps) {
   return (
     <Button
       variant={destructive ? "destructive" : "outline"}
       className="h-auto justify-start px-2 py-2 web:!h-auto"
-      onPress={onPress}>
+      {...props}>
       <View className="h-10 w-10 items-center justify-center rounded-full">
         {icon}
       </View>
-      <Text className="flex-1 font-semibold">{text}</Text>
-      <Icon
-        as={ChevronRight}
-        className={cn(destructive && "text-fsre-gradient-foreground")}
-      />
+      {text && <Text className="flex-1 font-semibold">{text}</Text>}
+      {children === undefined && (
+        <Icon
+          as={ChevronRight}
+          className={cn(destructive && "text-fsre-gradient-foreground")}
+        />
+      )}
+      {children}
     </Button>
   );
 }

@@ -6,14 +6,16 @@ import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { UserIcon } from "lucide-react-native";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export default function ProfileView() {
   const { colorScheme } = useColorScheme();
   const profile = useMemo(() => MockData.getProfile(), []);
+  const { t } = useTranslation();
 
   return (
-    <>
+    <View className="items-center justify-center">
       <View className="mb-4">
         <LinearGradient
           colors={[
@@ -35,17 +37,19 @@ export default function ProfileView() {
       <View className="items-center gap-2">
         <Text className="text-lg font-bold">{profile.name}</Text>
         <Text className="text-sm font-semibold text-fsre-gradient-3">
-          Broj indeksa: {profile.indexNumber}
+          {t("profile.indexNumber", { index: profile.indexNumber })}
         </Text>
         <View className="mb-2 flex-row items-center">
-          <Text className="text-sm text-muted-foreground">{profile.year}</Text>
+          <Text className="text-sm text-muted-foreground">
+            {t(`common.studyYearEnum.${profile.year}`)}
+          </Text>
           <View className="mx-2 h-1 w-1 rounded-full bg-muted-foreground" />
           <Text className="text-sm text-muted-foreground">
-            {profile.department}
+            {t(`common.departmentEnum.${profile.department}`)}
           </Text>
         </View>
         <Text className="text-sm text-muted-foreground">{profile.email}</Text>
       </View>
-    </>
+    </View>
   );
 }

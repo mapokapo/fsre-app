@@ -10,7 +10,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: f3c5885727898c8bab595aa9a799f62456a4ee31345571f920ea3f3543177439
+  checksum: 3e25620234e7664c4abaf51d9fbacdc3561e7e8b0db3f6212b39e72fb5ec764c
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -26,7 +26,9 @@ fileignoreconfig:
 - filename: nativewind-env.d.ts
   checksum: 6f3062fda8b318d893979f0de1dafa4f7076ba82e006fb3355f2bca23373e574
 - filename: src/app/(tabs)/chatbot.tsx
-  checksum: e5c4a8211459ab8c49c3dca858460c9e96268f9cc77462c2e405a7bd14b79840
+  checksum: 1e8203217034b9b22f57a8c721d785e116ca99d4ca707b09418c25cdd415875c
+- filename: src/app/(tabs)/index.tsx
+  checksum: 52cb2f318e6c7d8fa03d5b98560e6363f597880c39b56e9f96f733768667b10c
 - filename: src/app/(tabs)/schedule.tsx
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/app/(tabs)/timetable.tsx
@@ -37,6 +39,10 @@ fileignoreconfig:
   checksum: 81a110f66638c28738b8ac71778d62148d8f6dace292696e57084ea3f5a1e01a
 - filename: src/components/partials/ScheduleView.tsx
   checksum: bb8d78d37ccb1ce915693dd834250bb3210575ed375ec3c643330b0ef4c5f813
+- filename: src/components/partials/StatsSection.tsx
+  checksum: cad367ac4bdec64d5bf3586fd649c193a75984f919f6a6d001de8195b300e5f1
+- filename: src/components/partials/TimetableFilterButtonList.tsx
+  checksum: 46b5fdd2e76cf5c6ba741fbb3bdaa3eb920004a865af0db90e7793495718dfa8
 - filename: src/components/partials/TimetableView.tsx
   checksum: 63e467f1a117c0661b5116832253a91f4926602239bedbc30d0ddc2e92c6d32c
 - filename: src/lib/firebase.ts
@@ -44,7 +50,7 @@ fileignoreconfig:
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 - filename: src/lib/i18n/index.ts
-  checksum: d1ee306818ae95f615fcb48b9a8205484426e3e67d676bab59ce57cf72d5616c
+  checksum: e2a2ca9b750c1834cd83b732fbde82057f988081a1c86e086f058a56bd24cbb1
 - filename: src/lib/state/timetableSubscriptionStore.ts
   checksum: af4ea50273d7020935b7b7756f77d385b98c8c40544e078480a38b3cccab9449
 - filename: yarn.lock

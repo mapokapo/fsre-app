@@ -3,25 +3,27 @@ import { Text } from "@/components/ui/text";
 import { gradients } from "@/lib/const/gradients";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import { TimetableFilter } from "@/lib/types/TimetableFilter";
+import TimetableFilter from "@/lib/types/TimetableFilter";
 import { cn } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 import { ColorValue, ScrollView, View } from "react-native";
 
-export type TimetableFilterButtonListProps = {
+export type TimetableFilterButtonListProps<T> = {
   label: string;
-  filters: TimetableFilter[];
-  selectedFilter: TimetableFilter | null;
-  onSelect: (filter: TimetableFilter) => void;
+  filters: TimetableFilter<T>[];
+  selectedFilter: TimetableFilter<T> | null;
+  onSelect: (filter: TimetableFilter<T>) => void;
 };
 
-export default function TimetableFilterButtonList({
+export default function TimetableFilterButtonList<T>({
   label,
   filters,
   selectedFilter,
   onSelect,
-}: TimetableFilterButtonListProps) {
+}: TimetableFilterButtonListProps<T>) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -32,12 +34,12 @@ export default function TimetableFilterButtonList({
         contentContainerClassName="gap-2">
         {filters.map((filter, i) => (
           <Button
-            key={filter.key}
+            key={`${filter.value}`}
             className="overflow-hidden rounded-full p-0"
             onPress={() => onSelect(filter)}>
             <LinearGradient
               colors={
-                filter.key === selectedFilter?.key
+                filter.value === selectedFilter?.value
                   ? (gradients[i % gradients.length] as [
                       ColorValue,
                       ColorValue,
@@ -53,10 +55,10 @@ export default function TimetableFilterButtonList({
               <Text
                 className={cn(
                   "text-sm text-muted-foreground",
-                  filter.key === selectedFilter?.key &&
+                  filter.value === selectedFilter?.value &&
                     "text-fsre-gradient-foreground"
                 )}>
-                {filter.name}
+                {filter.label(t)}
               </Text>
             </LinearGradient>
           </Button>

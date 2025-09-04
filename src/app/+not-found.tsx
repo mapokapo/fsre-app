@@ -1,35 +1,21 @@
+import { Text } from "@/components/ui/text";
 import { Link, Stack } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { View } from "react-native";
 
 export default function NotFoundScreen() {
+  const { t } = useTranslation();
   return (
     <>
-      <Stack.Screen options={{ title: "Oops!" }} />
-      <View style={styles.container}>
-        <Text style={styles.text}>This screen doesn&apos;t exist.</Text>
+      <Stack.Screen options={{ title: t("notFound.title") }} />
+      <View className="flex-1 items-center justify-center p-5">
+        <Text className="text-xl font-semibold">{t("notFound.message")}</Text>
         <Link
           href="/"
-          style={styles.link}>
-          <Text>Go to home screen!</Text>
+          className="mt-4 py-4">
+          <Text>{t("notFound.linkText")}</Text>
         </Link>
       </View>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 600,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-});

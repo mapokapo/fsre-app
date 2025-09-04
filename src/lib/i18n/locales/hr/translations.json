@@ -1,0 +1,212 @@
+{
+  "common": {
+    "welcomeTo": "Dobrodošli na",
+    "all": "Sve",
+    "save": "Spremi",
+    "saveSettings": "Spremi postavke",
+    "help": "Pomoć",
+    "logout": "Odjavi se",
+    "error": "Greška",
+    "refresh": "Osvježi",
+    "weekDays": {
+      "monday": "Ponedjeljak",
+      "tuesday": "Utorak",
+      "wednesday": "Srijeda",
+      "thursday": "Četvrtak",
+      "friday": "Petak",
+      "saturday": "Subota",
+      "sunday": "Nedjelja"
+    },
+    "studyYear": "{{count}}. godina",
+    "studyYearEnum": {
+      "FIRST": "Prva godina",
+      "SECOND": "Druga godina",
+      "THIRD": "Treća godina",
+      "FOURTH": "Četvrta godina",
+      "FIFTH": "Peta godina"
+    },
+    "departments": {
+      "computerScience": "Računarstvo",
+      "electricalEngineering": "Elektrotehnika",
+      "mechanicalEngineering": "Strojarstvo"
+    },
+    "departmentEnum": {
+      "COMPUTER_SCIENCE": "Računarstvo",
+      "ELECTRICAL_ENGINEERING": "Elektrotehnika",
+      "MECHANICAL_ENGINEERING": "Strojarstvo"
+    },
+    "language": "Jezik",
+    "chooseLanguage": "Odaberite jezik",
+    "languages": {
+      "hr": "Hrvatski",
+      "en": "English"
+    }
+  },
+  "notFound": {
+    "title": "Nije pronađeno",
+    "message": "Ova stranica ne postoji.",
+    "linkText": "Nazad na početnu stranicu"
+  },
+  "navigation": {
+    "home": "Početna",
+    "chatbot": "Chatbot",
+    "timetable": "Raspored"
+  },
+  "header": {
+    "home": {
+      "title": "FSRE",
+      "subtitle": "Fakultet strojarstva, računarstva i elektrotehnike"
+    },
+    "chatbot": {
+      "title": "FSRE AI Asistent",
+      "subtitle": "Uvijek tu da pomognem"
+    },
+    "timetable": {
+      "title": "Raspored",
+      "subtitle": "Predavanja i vježbe"
+    }
+  },
+  "home": {
+    "notifications": {
+      "title": "Obavijesti"
+    },
+    "news": {
+      "title": "Novosti"
+    },
+    "quickAccess": {
+      "title": "Brzi pristup"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "address": "Matice hrvatske bb, 88000 Mostar",
+      "phone": "+387 36 355 025",
+      "email": "info@fsre.sum.ba"
+    }
+  },
+  "news": {
+    "categories": {
+      "global": "Globalno",
+      "mechanicalEngineering": "Strojarstvo",
+      "computerScience": "Računarstvo",
+      "electricalEngineering": "Elektrotehnika",
+      "default": "Novosti"
+    }
+  },
+  "quickLinks": {
+    "studomat": "Studomat",
+    "eLearning": "eLearning",
+    "webmail": "Webmail",
+    "schedule": "Raspored"
+  },
+  "chatbot": {
+    "intro": "Pozdrav! 👋 Ja sam FSRE AI asistent. Kako vam mogu pomoći danas? Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama ili bilo čemu drugom vezanom za fakultet.",
+    "input": {
+      "placeholder": "Unesite vaše pitanje..."
+    },
+    "quickQuestions": {
+      "schedule": {
+        "text": "Gdje mogu vidjeti raspored?",
+        "description": "Pronađite raspored predavanja i vježbi"
+      },
+      "exams": {
+        "text": "Kako se registrirati za ispite?",
+        "description": "Informacije o prijavi ispita"
+      },
+      "contact": {
+        "text": "Kontakt informacije",
+        "description": "Adresa, telefon i email fakulteta"
+      },
+      "labs": {
+        "text": "O laboratorijima",
+        "description": "Informacije o laboratorijskim vježbama"
+      }
+    },
+    "responses": {
+      "schedule": "Možete pronaći raspored sati u dijelu \"Raspored\" aplikacije. Možete filtrirati prema godini studija i smjeru. 📅",
+      "exams": "Prijava za ispite se vrši putem Studomat sustava. Prijave za zimski ispitni rok su trenutno otvorene do 15. siječnja. 📝",
+      "labs": "FSRE ima moderne laboratorije za strojarstvo, računarstvo i elektrotehniku. Za rezervaciju laboratorija, kontaktirajte odgovarajuće asistente. 🔬",
+      "scholarships": "Informacije o stipendijama možete pronaći na službenoj web stranici fakulteta ili kontaktirati studentsku službu. 💰",
+      "enrollment": "Upis za novu akademsku godinu počinje u lipnju. Detaljan raspored i uvjeti bit će dostupni na web stranici fakulteta. 🎓",
+      "contact": "Fakultet se nalazi na adresi Matice hrvatske bb, 88000 Mostar. Telefon: +387 36 355 025, Email: info@fsre.sum.ba 📍",
+      "ebooks": "Elektronički udžbenici dostupni su putem eLearning platforme. Prijavite se sa svojim studentskim podacima. 📚",
+      "wifi": "FSRE WiFi mreža dostupna je studentima. Podatci za prijavu su dostupni u studentskoj referadi. 📶",
+      "thanks": "Nema na čemu! 😊 Ako imate još pitanja, slobodno pitajte.",
+      "greeting": "Pozdrav! 👋 Kako vam mogu pomoći?",
+      "unknown": "Izvinjavam se, ali nisam siguran kako da odgovorim na to pitanje. 🤔 Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama, upisu ili kontakt informacijama. Također možete kontaktirati studentsku službu za detaljnije informacije."
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "darkMode": "Tamni način",
+    "lightMode": "Svijetli način",
+    "indexNumber": "Broj indeksa: {{index}}"
+  },
+  "notifications": {
+    "settings": {
+      "title": "Postavke obavijesti",
+      "description": "Odaberite za koje aktivnosti želite primati obavijesti. Obavijesti će vam stići 15 minuta prije početka.",
+      "save": "Spremi postavke"
+    },
+    "categories": {
+      "lectures": {
+        "title": "Predavanja",
+        "description": "Obavijesti prije početka predavanja"
+      },
+      "exercises": {
+        "title": "Vježbe",
+        "description": "Obavijesti prije početka vježbi"
+      },
+      "labs": {
+        "title": "Laboratorijske vježbe",
+        "description": "Obavijesti prije početka laboratorijskih vježbi"
+      },
+      "exams": {
+        "title": "Ispiti",
+        "description": "Obavijesti o ispitnim rokovima"
+      },
+      "news": {
+        "title": "Novosti",
+        "description": "Obavijesti o novostima fakulteta"
+      }
+    }
+  },
+  "timetable": {
+    "filters": {
+      "day": "Dan",
+      "studyYear": "Godina",
+      "department": "Studij",
+      "direction": "Smjer",
+      "chooseDirection": "Odaberite smjer"
+    },
+    "noClasses": {
+      "title": "Nema predavanja",
+      "description": "Nema rasporeda za odabrane filtere"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Dobrodošli na FSRE",
+      "subtitle": "Fakultet strojarstva, računarstva i elektrotehnike",
+      "description": "Unesite pristupni kod koji ste primili od administracije",
+      "accessCodeLabel": "Pristupni kod",
+      "accessCodePlaceholder": "Unesite pristupni kod",
+      "validating": "Provjera...",
+      "submit": "Prijavite se",
+      "errors": {
+        "empty": "Molimo unesite pristupni kod",
+        "minLength": "Pristupni kod mora imati najmanje 6 znakova",
+        "invalid": "Nevažeći pristupni kod. Molimo kontaktirajte administraciju."
+      }
+    },
+    "help": {
+      "title": "Trebate pomoć?",
+      "contact": "Kontaktirajte studentsku službu na\n{{email}} ili {{phone}}"
+    },
+    "securityNotice": "Vaši podaci su sigurni i zaštićeni"
+  },
+  "stats": {
+    "activeStudents": { "label": "Aktivnih studenata" },
+    "completedProjects": { "label": "Završenih projekata" },
+    "successRate": { "label": "Uspješnost" }
+  }
+}

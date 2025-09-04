@@ -5,6 +5,7 @@ import QuickLink from "@/lib/types/QuickLink";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Linking } from "react-native";
 
 export type QuickLinkItemProps = {
@@ -13,6 +14,7 @@ export type QuickLinkItemProps = {
 
 export default function QuickLinkItem({ link }: QuickLinkItemProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleQuickLinkPress = async (link: QuickLink) => {
     if ("action" in link && link.action === "navigate") {
@@ -48,7 +50,7 @@ export default function QuickLinkItem({ link }: QuickLinkItemProps) {
           strokeWidth={2.5}
         />
       </LinearGradient>
-      <Text className="text-center font-semibold">{link.label}</Text>
+      <Text className="text-center font-semibold">{link.label(t)}</Text>
     </Button>
   );
 }

@@ -3,20 +3,20 @@ import * as Localization from "expo-localization";
 import * as i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
-import translationEn from "./locales/en-US/translations.json";
-import translationHr from "./locales/hr-HR/translations.json";
+import translationEn from "./locales/en/translations.json";
+import translationHr from "./locales/hr/translations.json";
 
 const resources = {
-  "en-US": { translation: translationEn },
-  "en-GB": { translation: translationEn },
   en: { translation: translationEn },
-  "hr-HR": { translation: translationHr },
   hr: { translation: translationHr },
 };
 
+export type SupportedLanguage = keyof typeof resources;
+export const supportedLanguages = Object.keys(resources) as SupportedLanguage[];
+
 const RTL_LANGUAGES: string[] = [];
 
-const LANGUAGE_KEY = "@app_language";
+export const LANGUAGE_KEY = "@app_language";
 
 const initI18n = async () => {
   try {
@@ -29,7 +29,7 @@ const initI18n = async () => {
     if (!selectedLanguage) {
       // If no saved language, use device locale or fallback
       const deviceLocales = Localization.getLocales();
-      const deviceLocale = deviceLocales[0]?.languageTag || "hr-HR";
+      const deviceLocale = deviceLocales[0]?.languageTag ?? "hr";
       const languageCode = deviceLocale.split("-")[0]!;
 
       // Try exact locale match first
@@ -41,7 +41,7 @@ const initI18n = async () => {
       else if (languageCode in resources) {
         selectedLanguage = languageCode;
       } else {
-        selectedLanguage = "hr-HR";
+        selectedLanguage = "hr";
       }
     }
 
@@ -57,9 +57,9 @@ const initI18n = async () => {
       resources,
       lng: selectedLanguage,
       fallbackLng: {
-        "hr-*": ["hr-HR", "hr"],
-        "en-*": ["en-US", "en", "hr-HR"],
-        default: ["hr-HR"],
+        en: ["en", "hr"],
+        hr: ["hr"],
+        default: ["hr"],
       },
       interpolation: {
         escapeValue: false,
@@ -79,8 +79,8 @@ const initI18n = async () => {
     // Initialize with defaults if there's an error
     await i18n.use(initReactI18next).init({
       resources,
-      lng: "hr-HR",
-      fallbackLng: "hr-HR",
+      lng: "hr",
+      fallbackLng: "hr",
       interpolation: {
         escapeValue: false,
       },

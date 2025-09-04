@@ -10,6 +10,7 @@ import {
   Shield,
 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -27,6 +28,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const [accessCode, setAccessCode] = useState("");
   const [showCode, setShowCode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,12 +57,12 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!accessCode.trim()) {
-      setError("Molimo unesite pristupni kod");
+      setError(t("auth.login.errors.empty"));
       return;
     }
 
     if (accessCode.length < 6) {
-      setError("Pristupni kod mora imati najmanje 6 znakova");
+      setError(t("auth.login.errors.minLength"));
       return;
     }
 
@@ -76,9 +78,7 @@ export default function LoginScreen() {
         // Success - navigate to main app
         router.replace("/(tabs)");
       } else {
-        setError(
-          "Neispravni pristupni kod. Molimo kontaktirajte administraciju."
-        );
+        setError(t("auth.login.errors.invalid"));
       }
 
       setIsLoading(false);
@@ -131,12 +131,10 @@ export default function LoginScreen() {
               </LinearGradient>
             </View>
 
-            <Text style={styles.title}>Dobrodošli na FSRE</Text>
-            <Text style={styles.subtitle}>
-              Fakultet strojarstva, računarstva i elektrotehnike
-            </Text>
+            <Text style={styles.title}>{t("auth.login.title")}</Text>
+            <Text style={styles.subtitle}>{t("auth.login.subtitle")}</Text>
             <Text style={styles.description}>
-              Unesite pristupni kod koji ste dobili od administracije
+              {t("auth.login.description")}
             </Text>
           </View>
 
@@ -152,7 +150,9 @@ export default function LoginScreen() {
               style={styles.formGradient}>
               {/* Access Code Input */}
               <View style={styles.inputSection}>
-                <Text style={styles.inputLabel}>Pristupni kod</Text>
+                <Text style={styles.inputLabel}>
+                  {t("auth.login.accessCodeLabel")}
+                </Text>
 
                 <View
                   style={[styles.inputContainer, error && styles.inputError]}>
@@ -166,7 +166,7 @@ export default function LoginScreen() {
 
                   <TextInput
                     style={styles.textInput}
-                    placeholder="Unesite pristupni kod"
+                    placeholder={t("auth.login.accessCodePlaceholder")}
                     placeholderTextColor="#94A3B8"
                     value={accessCode}
                     onChangeText={handleCodeChange}
@@ -229,11 +229,15 @@ export default function LoginScreen() {
                   {isLoading ? (
                     <View style={styles.loadingContainer}>
                       <View style={styles.loadingDot} />
-                      <Text style={styles.loginButtonText}>Provjera...</Text>
+                      <Text style={styles.loginButtonText}>
+                        {t("auth.login.validating")}
+                      </Text>
                     </View>
                   ) : (
                     <View style={styles.buttonContent}>
-                      <Text style={styles.loginButtonText}>Prijavite se</Text>
+                      <Text style={styles.loginButtonText}>
+                        {t("auth.login.submit")}
+                      </Text>
                       <ArrowRight
                         color="#ffffff"
                         size={20}
@@ -252,7 +256,7 @@ export default function LoginScreen() {
                   strokeWidth={2.5}
                 />
                 <Text style={styles.securityText}>
-                  Vaši podaci su sigurni i zaštićeni
+                  {t("auth.securityNotice")}
                 </Text>
               </View>
             </LinearGradient>
@@ -260,11 +264,12 @@ export default function LoginScreen() {
 
           {/* Help Section */}
           <View style={styles.helpSection}>
-            <Text style={styles.helpTitle}>Trebate pomoć?</Text>
+            <Text style={styles.helpTitle}>{t("auth.help.title")}</Text>
             <Text style={styles.helpText}>
-              Kontaktirajte studentsku službu na{"\n"}
-              <Text style={styles.helpContact}>info@fsre.sum.ba</Text> ili{" "}
-              <Text style={styles.helpContact}>+387 36 355 025</Text>
+              {t("auth.help.contact", {
+                email: "info@fsre.sum.ba",
+                phone: "+387 36 355 025",
+              })}
             </Text>
           </View>
         </Animated.View>

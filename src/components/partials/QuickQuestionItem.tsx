@@ -7,6 +7,7 @@ import QuickQuestion from "@/lib/types/QuickQuestion";
 import { LinearGradient } from "expo-linear-gradient";
 import { ChevronRight } from "lucide-react-native";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
@@ -21,6 +22,7 @@ export default function QuickQuestionItem({
   ...props
 }: QuickQuestionItemProps) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Animated.View
@@ -52,9 +54,9 @@ export default function QuickQuestionItem({
             </LinearGradient>
             <Icon as={ChevronRight} />
           </View>
-          <Text className="mb-2 font-semibold">{question.text}</Text>
+          <Text className="mb-2 font-semibold">{question.text(t)}</Text>
           <Text className="text-sm text-muted-foreground">
-            {question.description}
+            {question.description(t)}
           </Text>
         </LinearGradient>
       </Button>

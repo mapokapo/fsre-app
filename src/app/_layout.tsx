@@ -1,8 +1,7 @@
-import { Text } from "@/components/ui/text";
+import ErrorMessage from "@/components/ErrorMessage";
 import "@/global.css";
 import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import "@/lib/i18n";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
@@ -106,7 +105,7 @@ export default function RootLayout() {
   }
 
   if (fontError) {
-    return <Text>Font error: {fontError.message}</Text>;
+    return <ErrorMessage error={fontError} />;
   }
 
   return (

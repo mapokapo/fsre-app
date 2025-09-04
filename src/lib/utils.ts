@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 
 import { Timetable, TimetableEvent } from "@/lib/api/client";
 import { NAV_THEME } from "@/lib/theme";
+import StudyYear from "@/lib/types/StudyYear";
 import * as NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
 
@@ -71,4 +72,19 @@ export function mapError(error: unknown) {
     return error.message;
   }
   return "Unknown error";
+}
+
+export function studyYearToInt(year: StudyYear) {
+  switch (year) {
+    case "FIRST":
+      return 1;
+    case "SECOND":
+      return 2;
+    case "THIRD":
+      return 3;
+    case "FOURTH":
+      return 4;
+    case "FIFTH":
+      return 5;
+  }
 }

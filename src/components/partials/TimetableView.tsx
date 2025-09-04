@@ -1,4 +1,3 @@
-import { days } from "@/app/(tabs)/timetable";
 import TimetableEventCard from "@/components/partials/TimetableEventCard";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
@@ -9,6 +8,7 @@ import { getTimetableEvents } from "@/lib/utils";
 import { compareAsc } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { ColorValue, ScrollView, View } from "react-native";
 
 export type TimetableViewProps = {
@@ -21,6 +21,20 @@ export default function TimetableView({
   gradients,
 }: TimetableViewProps) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
+
+  const getWeekDayFromIndex = (index: number) => {
+    const weekDays = [
+      t("common.weekDays.monday"),
+      t("common.weekDays.tuesday"),
+      t("common.weekDays.wednesday"),
+      t("common.weekDays.thursday"),
+      t("common.weekDays.friday"),
+      t("common.weekDays.saturday"),
+      t("common.weekDays.sunday"),
+    ];
+    return weekDays[index] ?? "";
+  };
 
   return (
     <ScrollView
@@ -44,10 +58,10 @@ export default function TimetableView({
             />
           </LinearGradient>
           <Text className="mt-4 text-xl font-bold text-muted-foreground">
-            Nema rasporeda
+            {t("timetable.noClasses.title")}
           </Text>
           <Text className="text-muted-foreground">
-            Nema rasporeda za odabrane filtere
+            {t("timetable.noClasses.description")}
           </Text>
         </View>
       ) : (
@@ -65,7 +79,7 @@ export default function TimetableView({
                 end={{ x: 1, y: 0 }}
                 className="flex-row items-center justify-between overflow-hidden rounded-2xl px-4 py-3">
                 <Text className="text-lg text-fsre-gradient-foreground">
-                  {days.find(d => parseInt(d.value ?? "-1") === day)?.label}
+                  {getWeekDayFromIndex(day)}
                 </Text>
                 <Text className="rounded-full bg-primary/80 px-4 py-2 font-semibold text-primary-foreground">
                   {events.length}

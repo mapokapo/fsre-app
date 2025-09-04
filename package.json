@@ -19,6 +19,7 @@
     "@react-navigation/bottom-tabs": "^7.4.6",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.17",
+    "@rn-primitives/dialog": "^1.2.0",
     "@rn-primitives/portal": "^1.3.0",
     "@rn-primitives/select": "^1.2.0",
     "@rn-primitives/slot": "^1.2.0",

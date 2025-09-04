@@ -10,6 +10,7 @@ import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { X } from "lucide-react-native";
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Platform, View } from "react-native";
 
 export type NotificationSettingsModalProps = {
@@ -24,6 +25,7 @@ export default function NotificationSettingsModal({
   const { notificationSettings, setNotificationSettings } =
     useNotificationSettingsStore();
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -79,7 +81,9 @@ export default function NotificationSettingsModal({
       <BottomSheetScrollView className="-mb-10 flex-1">
         <View className="rounded-tl-lg rounded-tr-lg shadow-lg">
           <View className="flex-row items-center justify-between border-b border-border bg-card-gradient-1 px-6 pb-4 pt-9">
-            <Text className="text-xl font-bold">Postavke obavijesti</Text>
+            <Text className="text-xl font-bold">
+              {t("notifications.settings.title")}
+            </Text>
             <Button
               size="icon"
               onPress={onClose}>
@@ -94,8 +98,7 @@ export default function NotificationSettingsModal({
 
           <View className="flex-1 bg-background p-6 pt-4">
             <Text className="mb-6 text-center text-sm text-muted-foreground">
-              Odaberite za koje aktivnosti želite primati obavijesti. Obavijesti
-              će vam stići 15 minuta prije početka.
+              {t("notifications.settings.description")}
             </Text>
 
             <View className="mb-8 gap-4">
@@ -120,10 +123,10 @@ export default function NotificationSettingsModal({
 
                       <View className="flex-1">
                         <Text className="mb-1 font-semibold">
-                          {category.title}
+                          {category.title(t)}
                         </Text>
                         <Text className="text-sm text-muted-foreground">
-                          {category.description}
+                          {category.description(t)}
                         </Text>
                       </View>
                     </View>
@@ -141,11 +144,12 @@ export default function NotificationSettingsModal({
               ))}
             </View>
 
-            {/* Save Button */}
             <Button
               className="mb-4 h-auto py-4"
               onPress={handleSaveNotificationSettings}>
-              <Text className="text-base font-bold">Spremi postavke</Text>
+              <Text className="text-base font-bold">
+                {t("notifications.settings.save")}
+              </Text>
             </Button>
           </View>
         </View>

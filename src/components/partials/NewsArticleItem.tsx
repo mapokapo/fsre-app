@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { gradients } from "@/lib/const/gradients";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import i18n from "@/lib/i18n";
 import { THEME } from "@/lib/theme";
 import NewsArticle from "@/lib/types/NewsArticle";
 import { getDistanceTo } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { htmlToText } from "html-to-text";
+import { useTranslation } from "react-i18next";
 import { Image, View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
@@ -32,21 +34,11 @@ const getIndexByCategory = (article: NewsArticle) => {
   }
 };
 
-const getCategoryLabel = (category: NewsArticle["categories"]) => {
-  if (category.includes("FSRE web - Globalne objave")) {
-    return "Globalno";
-  }
-
-  switch (category[0]) {
-    case "FSRE web - Strojarstvo":
-      return "Strojarstvo";
-    case "FSRE web - Računarstvo":
-      return "Računarstvo";
-    case "FSRE web - Elektrotehnika":
-      return "Elektrotehnika";
-    default:
-      return "Vijesti";
-  }
+const categoryNameToLabel = {
+  "FSRE web - Globalne objave": i18n.t("news.categories.global"),
+  "FSRE web - Strojarstvo": i18n.t("news.categories.mechanicalEngineering"),
+  "FSRE web - Računarstvo": i18n.t("news.categories.computerScience"),
+  "FSRE web - Elektrotehnika": i18n.t("news.categories.electricalEngineering"),
 };
 
 export default function NewsArticleItem({
@@ -55,6 +47,7 @@ export default function NewsArticleItem({
   ...props
 }: NewsArticleItemProps) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Animated.View {...props}>
@@ -62,8 +55,6 @@ export default function NewsArticleItem({
         variant="ghost"
         className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md web:flex-1"
         onPress={() => {
-          console.log(article.link);
-
           Linking.openURL(article.link);
         }}>
         <LinearGradient
@@ -89,7 +80,10 @@ export default function NewsArticleItem({
             end={{ x: 1, y: 0 }}
             className="absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2">
             <Text className="text-sm uppercase !text-primary-foreground">
-              {getCategoryLabel(article.categories)}
+              {article.categories[0] === undefined
+                ? t("news.categories.default")
+                : (categoryNameToLabel[article.categories[0]] ??
+                  t("news.categories.default"))}
             </Text>
           </LinearGradient>
           <View className="p-5">

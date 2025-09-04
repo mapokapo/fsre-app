@@ -4,6 +4,7 @@ import { Text } from "@/components/ui/text";
 import { TimetableEvent } from "@/lib/api/client";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
+import { studyYearToInt } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -17,6 +18,7 @@ import {
   Users,
   Zap,
 } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { ColorValue, View } from "react-native";
 
 export type TimetableEventCardProps = {
@@ -54,41 +56,12 @@ const getIconByType = (event: TimetableEvent): LucideIcon => {
   }
 };
 
-const getDepartmentName = (department: TimetableEvent["department"]) => {
-  switch (department) {
-    case "COMPUTER_SCIENCE":
-      return "Računarstvo";
-    case "ELECTRICAL_ENGINEERING":
-      return "Elektrotehnika";
-    case "MECHANICAL_ENGINEERING":
-      return "Strojarstvo";
-    default:
-      return department;
-  }
-};
-
-const getYear = (year: TimetableEvent["year"]) => {
-  switch (year) {
-    case "FIRST":
-      return 1;
-    case "SECOND":
-      return 2;
-    case "THIRD":
-      return 3;
-    case "FOURTH":
-      return 4;
-    case "FIFTH":
-      return 5;
-    default:
-      return year;
-  }
-};
-
 export default function TimetableEventCard({
   event,
   gradients,
 }: TimetableEventCardProps) {
   const { colorScheme } = useColorScheme();
+  const { t } = useTranslation();
 
   const getGradientByType = (
     event: TimetableEvent
@@ -126,11 +99,13 @@ export default function TimetableEventCard({
             <Text>{event.name}</Text>
             <View className="flex-row flex-wrap items-center gap-1">
               <Text className="text-sm text-muted-foreground">
-                {getYear(event.year)}. godina
+                {t("common.studyYear", {
+                  count: studyYearToInt(event.year),
+                })}
               </Text>
               <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
               <Text className="text-sm text-muted-foreground">
-                {getDepartmentName(event.department)}
+                {t(`common.departmentEnum.${event.department}`)}
               </Text>
             </View>
           </View>
