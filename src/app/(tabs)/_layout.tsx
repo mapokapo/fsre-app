@@ -53,14 +53,18 @@ export default function TabLayout() {
                   {t("common.welcomeTo")}
                 </Text>
               )}
-              <Text
-                className={cn(
-                  "text-xl font-bold text-primary-foreground",
-                  headerData.isMain &&
-                    "mb-2 text-5xl font-extrabold tracking-widest"
-                )}>
-                {headerData.title(t)}
-              </Text>
+              {"image" in headerData ? (
+                headerData.image
+              ) : (
+                <Text
+                  className={cn(
+                    "text-xl font-bold text-primary-foreground",
+                    headerData.isMain &&
+                      "mb-2 text-5xl font-extrabold tracking-widest"
+                  )}>
+                  {headerData.title(t)}
+                </Text>
+              )}
               <Text
                 className={cn(
                   "text-sm text-primary-foreground/80",

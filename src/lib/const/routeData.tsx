@@ -1,9 +1,18 @@
 import RouteData from "@/lib/types/RouteData";
 import { Calendar, Sparkles } from "lucide-react-native";
+import { Image, View } from "react-native";
 
 export const routeData: Record<"/" | "/chatbot" | "/timetable", RouteData> = {
   "/": {
-    title: t => t("header.home.title"),
+    image: (
+      <View className="my-1 flex h-12 w-32">
+        <Image
+          source={require("@/assets/images/fsre_logo.png")}
+          resizeMode="contain"
+          className="h-full w-full"
+        />
+      </View>
+    ),
     subtitle: t => t("header.home.subtitle"),
     icon: null,
     isMain: true,

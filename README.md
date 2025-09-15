@@ -79,8 +79,8 @@ type1,type2(scope): description
 ## Project structure
 
 ```
-assets/                                   - contains static assets such as images and fonts
 src/                                      - contains the app source code
+├── assets/                               - contains static assets such as images and fonts
 ├── app/                                  - contains pages/screens used by Expo Router
 │   └── _layout.tsx                       - the root layout for all pages, and the entrypoint of the app
 ├── components/                           - contains React components

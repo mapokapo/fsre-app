@@ -4,7 +4,7 @@
     "slug": "fsre-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "scheme": "fsreapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,13 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.fsre.mobileapp",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "https",
-          "http"
-        ],
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "LSApplicationQueriesSchemes": ["https", "http"],
+        "UIBackgroundModes": ["remote-notification"]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
@@ -28,26 +23,24 @@
     "android": {
       "package": "com.fsre.mobileapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./src/assets/images/icon.png",
         "backgroundColor": "#0A4977"
       },
-      "permissions": [
-        "android.permission.INTERNET"
-      ],
+      "permissions": ["android.permission.INTERNET"],
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./src/assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icon.png",
+          "image": "./src/assets/images/icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
