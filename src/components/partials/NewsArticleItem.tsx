@@ -53,7 +53,7 @@ export default function NewsArticleItem({
     <Animated.View {...props}>
       <Button
         variant="ghost"
-        className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md web:flex-1"
+        className="mb-5 h-auto overflow-hidden rounded-2xl p-0 shadow-md web:mb-0 web:flex-1"
         onPress={() => {
           Linking.openURL(article.link);
         }}>
@@ -69,7 +69,7 @@ export default function NewsArticleItem({
             source={{
               uri: `https://web-admin.sum.ba/api/storage/${article.imageUrl}`,
             }}
-            className="h-48 w-full"
+            className="aspect-video h-auto w-full"
           />
           <LinearGradient
             colors={[
@@ -87,7 +87,9 @@ export default function NewsArticleItem({
             </Text>
           </LinearGradient>
           <View className="p-5">
-            <Text className="mb-6 text-lg font-semibold">{article.title}</Text>
+            <Text className="mb-6 line-clamp-3 text-lg font-semibold">
+              {article.title}
+            </Text>
             <Text className="mb-4 text-sm text-muted-foreground">
               {htmlToText(article.content)
                 .replace(/\n{2,}/g, "")

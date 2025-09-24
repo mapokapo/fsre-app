@@ -63,10 +63,15 @@ export default function NewsSection() {
     );
   if (error) return <ErrorMessage error={error} />;
 
-  return data?.map(article => (
-    <NewsArticleItem
-      key={article.id}
-      article={article}
-    />
-  ));
+  return (
+    <View className="flex w-full flex-col overflow-x-scroll web:flex-row web:gap-8 web:px-2 web:pb-4">
+      {data?.map(article => (
+        <NewsArticleItem
+          key={article.id}
+          article={article}
+          className="web:max-w-96"
+        />
+      ))}
+    </View>
+  );
 }

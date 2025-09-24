@@ -9,7 +9,7 @@ export const routeData: Record<"/" | "/chatbot" | "/timetable", RouteData> = {
         <Image
           source={require("@/assets/images/fsre_logo.png")}
           resizeMode="contain"
-          className="h-full w-full"
+          className="!h-full !w-full"
         />
       </View>
     ),

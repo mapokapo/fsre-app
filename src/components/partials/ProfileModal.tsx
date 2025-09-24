@@ -44,7 +44,7 @@ export default function ProfileModal({
         if (!open) onClose();
       }}
       className="shadow-md">
-      <DialogContent className="!w-80 overflow-hidden rounded-2xl p-0">
+      <DialogContent className="w-80 overflow-hidden rounded-2xl p-0 md:w-96">
         <LinearGradient
           colors={[
             THEME[colorScheme].cardGradient1,
@@ -57,7 +57,7 @@ export default function ProfileModal({
             <DialogTitle>{t("profile.title")}</DialogTitle>
           </DialogHeader>
           <ProfileView />
-          <DialogFooter className="mt-6 flex-col gap-3">
+          <DialogFooter className="mt-6 !flex-col gap-3">
             <ModalActionButton
               onPress={() => onItemPress("notificationSettings")}
               icon={
@@ -71,6 +71,7 @@ export default function ProfileModal({
               text={t("notifications.settings.title")}
             />
             <ModalActionButton
+              isButton={false}
               icon={
                 <Icon
                   as={Paintbrush}
@@ -87,6 +88,7 @@ export default function ProfileModal({
               <ThemeToggle />
             </ModalActionButton>
             <ModalActionButton
+              isButton={false}
               icon={
                 <Icon
                   as={Languages}

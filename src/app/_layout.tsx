@@ -31,11 +31,6 @@ export { ErrorBoundary } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 
-if (__DEV__) {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  require("../reactotron");
-}
-
 const useSetWebBackgroundClassName = () => {
   useIsomorphicLayoutEffect(() => {
     document.documentElement.classList.add("bg-background");

@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Text } from "@/components/ui/text";
 import {
   LANGUAGE_KEY,
   SupportedLanguage,
@@ -30,9 +31,9 @@ export default function LanguagePicker() {
       onValueChange={val => {
         if (val) changeLanguage(val.value as SupportedLanguage);
       }}>
-      <SelectTrigger>
+      <SelectTrigger className="w-full">
         <SelectValue placeholder={t("common.chooseLanguage")}>
-          {t(`common.languages.${i18n.language}`)}
+          <Text>{t(`common.languages.${i18n.language}`)}</Text>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
