@@ -1,10 +1,8 @@
 import ContactItem from "@/components/partials/ContactItem";
 import NewsSection from "@/components/partials/NewsSection";
-import NotificationItem from "@/components/partials/NotificationItem";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import ProfileModal from "@/components/partials/ProfileModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
-import StatsSection from "@/components/partials/StatsSection";
 import {
   Section,
   SectionButton,
@@ -14,6 +12,7 @@ import {
 } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
@@ -22,14 +21,7 @@ import { THEME } from "@/lib/theme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useNavigation } from "expo-router";
-import {
-  Bell,
-  Mail,
-  MapPin,
-  Newspaper,
-  Phone,
-  UserIcon,
-} from "lucide-react-native";
+import { Mail, MapPin, Newspaper, Phone, UserIcon } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
@@ -113,13 +105,16 @@ export default function HomeScreen() {
 
           <ScrollView showsVerticalScrollIndicator={false}>
             {/* Stats */}
+            {/*
             <Section>
               <SectionContent>
                 <StatsSection introAnimatedStyle={introAnimatedStyle} />
               </SectionContent>
             </Section>
+            */}
 
             {/* Notifications */}
+            {/*
             <Section>
               <SectionHeader style={introAnimatedStyle}>
                 <SectionTitle
@@ -145,9 +140,10 @@ export default function HomeScreen() {
                 ))}
               </SectionContent>
             </Section>
+            */}
 
             {/* News */}
-            <Section>
+            <Section className="mt-8">
               <SectionHeader>
                 <SectionTitle
                   icon={
@@ -221,6 +217,9 @@ export default function HomeScreen() {
                       }
                       title={t("home.contact.phone")}
                     />
+                    <Text className="ml-3 text-sm text-fsre-gradient-foreground/85">
+                      Za opće upite:
+                    </Text>
                     <ContactItem
                       icon={
                         <Icon
@@ -230,7 +229,21 @@ export default function HomeScreen() {
                           strokeWidth={2.5}
                         />
                       }
-                      title={t("home.contact.email")}
+                      title={"fsre@sum.ba"}
+                    />
+                    <Text className="ml-3 text-sm text-fsre-gradient-foreground/85">
+                      Za studentska pitanja:
+                    </Text>
+                    <ContactItem
+                      icon={
+                        <Icon
+                          as={Mail}
+                          color={THEME[colorScheme].fsreGradient3}
+                          size={20}
+                          strokeWidth={2.5}
+                        />
+                      }
+                      title={"referada@fsre.sum.ba"}
                     />
                   </LinearGradient>
                 </View>

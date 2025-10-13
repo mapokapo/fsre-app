@@ -94,8 +94,8 @@
   },
   "quickLinks": {
     "studomat": "Studomat",
-    "eLearning": "eLearning",
-    "webmail": "Webmail",
+    "eLearning": "e-Učenje",
+    "news": "Novosti",
     "schedule": "Raspored"
   },
   "chatbot": {
@@ -176,7 +176,9 @@
       "studyYear": "Godina",
       "department": "Studij",
       "direction": "Smjer",
-      "chooseDirection": "Odaberite smjer"
+      "chooseDirection": "Odaberite smjer",
+      "currentWeek": "Trenutni tjedan",
+      "week": "Tjedan {{week}}"
     },
     "noClasses": {
       "title": "Nema predavanja",

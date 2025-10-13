@@ -15,17 +15,27 @@ import { $api } from "@/lib/api/client";
 import { gradients } from "@/lib/const/gradients";
 import { days, departments, years } from "@/lib/const/timetableFilters";
 import { messaging } from "@/lib/firebase";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
+import { THEME } from "@/lib/theme";
 import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
-import { getWeek, getYear } from "date-fns";
+import { getWeek, getYear, parse } from "date-fns";
 import { useNavigation } from "expo-router";
-import { Filter } from "lucide-react-native";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  RefreshCw,
+} from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Platform, View } from "react-native";
 
 export default function TimetableScreen() {
+  const [currentIsoWeek, setCurrentIsoWeek] = useState(
+    `${getYear(new Date())}-W${getWeek(new Date())}`
+  );
   const [selectedDay, setSelectedDay] = useState(days[0]!);
   const [selectedYear, setSelectedYear] = useState(years[0]!);
   const [selectedDepartment, setSelectedDepartment] = useState(departments[0]!);
@@ -35,6 +45,7 @@ export default function TimetableScreen() {
   const [showFilters, setShowFilters] = useState(false);
 
   const { t } = useTranslation();
+  const { colorScheme } = useColorScheme();
   const { subscriptionKey, setSubscriptionKey } =
     useTimetableSubscriptionStore();
   const { mutateAsync: subscribeToTimetable } = $api.useMutation(
@@ -63,7 +74,7 @@ export default function TimetableScreen() {
     {
       params: {
         query: {
-          isoWeek: `${getYear(new Date())}-W${getWeek(new Date())}`,
+          isoWeek: currentIsoWeek,
           studyProgram: timetableDatabase?.studyPrograms.find(
             program =>
               program.studyYear === selectedYear.value &&
@@ -94,7 +105,7 @@ export default function TimetableScreen() {
         </Button>
       ),
     });
-  });
+  }, [navigation, showFilters]);
 
   useEffect(() => {
     const main = async () => {
@@ -299,7 +310,59 @@ export default function TimetableScreen() {
           )}
         </View>
       )}
-
+      <View className="flex-row items-center justify-between px-5 py-3">
+        <Button
+          className="rounded-xl p-4"
+          onPress={() => {
+            const current = parse(currentIsoWeek, "R-'W'I", new Date());
+            const previous = new Date(current);
+            previous.setDate(current.getDate() - 7);
+            setCurrentIsoWeek(`${getYear(previous)}-W${getWeek(previous)}`);
+          }}>
+          <ChevronLeft
+            color={THEME[colorScheme].primaryForeground}
+            size={20}
+          />
+        </Button>
+        <View className="flex-row items-center">
+          <Text className="text-lg font-semibold">
+            {currentIsoWeek === `${getYear(new Date())}-W${getWeek(new Date())}`
+              ? t("timetable.filters.currentWeek")
+              : t("timetable.filters.week", {
+                  week: currentIsoWeek.split("-W")[1],
+                })}
+          </Text>
+          {currentIsoWeek !==
+            `${getYear(new Date())}-W${getWeek(new Date())}` && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onPress={() => {
+                setCurrentIsoWeek(
+                  `${getYear(new Date())}-W${getWeek(new Date())}`
+                );
+              }}>
+              <RefreshCw
+                color={THEME[colorScheme].primaryForeground}
+                size={16}
+              />
+            </Button>
+          )}
+        </View>
+        <Button
+          className="rounded-xl p-4"
+          onPress={() => {
+            const current = parse(currentIsoWeek, "R-'W'I", new Date());
+            const next = new Date(current);
+            next.setDate(current.getDate() + 7);
+            setCurrentIsoWeek(`${getYear(next)}-W${getWeek(next)}`);
+          }}>
+          <ChevronRight
+            color={THEME[colorScheme].primaryForeground}
+            size={20}
+          />
+        </Button>
+      </View>
       <TimetableView
         timetable={filteredTimetable}
         gradients={gradients}

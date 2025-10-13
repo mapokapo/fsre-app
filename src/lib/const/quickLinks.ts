@@ -1,5 +1,5 @@
 import QuickLink from "@/lib/types/QuickLink";
-import { Calendar, ExternalLink, Globe, Mail } from "lucide-react-native";
+import { Calendar, ExternalLink, Globe, Newspaper } from "lucide-react-native";
 
 export const quickLinks: QuickLink[] = [
   {
@@ -14,14 +14,14 @@ export const quickLinks: QuickLink[] = [
     icon: Globe,
     gradientFrom: "#f093fb",
     gradientTo: "#f5576c",
-    url: "https://elearning.sum.ba",
+    url: "https://eucenje.sum.ba/moodle/",
   },
   {
-    label: t => t("quickLinks.webmail"),
-    icon: Mail,
+    label: t => t("quickLinks.news"),
+    icon: Newspaper,
     gradientFrom: "#4facfe",
     gradientTo: "#00f2fe",
-    url: "https://webmail.sum.ba",
+    url: "https://fsre.sum.ba",
   },
   {
     label: t => t("quickLinks.schedule"),

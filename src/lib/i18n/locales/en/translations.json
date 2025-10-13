@@ -79,8 +79,7 @@
     "contact": {
       "title": "Contact",
       "address": "Matice hrvatske bb, 88000 Mostar",
-      "phone": "+387 36 355 025",
-      "email": "info@fsre.sum.ba"
+      "phone": "+387 36 355 025"
     }
   },
   "news": {
@@ -95,7 +94,7 @@
   "quickLinks": {
     "studomat": "Studomat",
     "eLearning": "eLearning",
-    "webmail": "Webmail",
+    "news": "News",
     "schedule": "Timetable"
   },
   "chatbot": {
@@ -176,7 +175,9 @@
       "studyYear": "Year",
       "department": "Program",
       "direction": "Track",
-      "chooseDirection": "Choose track"
+      "chooseDirection": "Choose track",
+      "currentWeek": "Current week",
+      "week": "Week {{week}}"
     },
     "noClasses": {
       "title": "No classes",
