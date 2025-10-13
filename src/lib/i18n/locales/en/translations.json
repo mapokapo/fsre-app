@@ -140,6 +140,9 @@
     "lightMode": "Light mode",
     "indexNumber": "Index number: {{index}}"
   },
+  "settings": {
+    "title": "Settings"
+  },
   "notifications": {
     "settings": {
       "title": "Notification settings",

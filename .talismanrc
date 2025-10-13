@@ -1,4 +1,8 @@
 fileignoreconfig:
+- filename: .env
+  checksum: 7b25e7344534b55e4c0cdafc42919ed9c2e91220e23ebe8eea793d37ce34d1b0
+- filename: GoogleService-Info.plist
+  checksum: 22c84b930063573632c9eececb8eebf5c47ce3ac25a2bd33878e1abf68698f66
 - filename: app/(tabs)/chatbot.tsx
   checksum: 9a94390c0a75516f2cd602d505a356de46f631e4554f3ca58b471358a4fbf1fd
 - filename: app/(tabs)/index.tsx
@@ -10,11 +14,13 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: 3e25620234e7664c4abaf51d9fbacdc3561e7e8b0db3f6212b39e72fb5ec764c
+  checksum: fd5f39e537ec6a6bdb4238562c15e204b08b2e5b1bc4ac37e62519d511bdc64a
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
   checksum: 961982f5ae796103c8adc1a568d315ecd23500bfd66cbf07cb96b3e8103c9857
+- filename: google-services.json
+  checksum: 182fcbf829b61c9d2aef998ebed8eb0042ea681ef0ddb1ab9fd3b75e9924488b
 - filename: hooks/useKeyboardHeight.ts
   checksum: 163415d1945fe46fa690a1d9e13505e96fc2acae2808404b1539aed9c507f48b
 - filename: hooks/useKeyboardVisibility.ts
@@ -46,7 +52,7 @@ fileignoreconfig:
 - filename: src/components/partials/TimetableView.tsx
   checksum: 63e467f1a117c0661b5116832253a91f4926602239bedbc30d0ddc2e92c6d32c
 - filename: src/lib/firebase.ts
-  checksum: e19e6f1e2e4cf3a9aee39fa4a7a64adc73abb4985ccba42296bf864be52fd626
+  checksum: 329444f689c77a764b833e29851f2597c6c2de7644b7f033430518d95279b700
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 - filename: src/lib/i18n/index.ts

@@ -19,12 +19,20 @@ import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { THEME } from "@/lib/theme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { isDevelopmentBuild } from "expo-dev-client";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useNavigation } from "expo-router";
-import { Mail, MapPin, Newspaper, Phone, UserIcon } from "lucide-react-native";
+import {
+  Mail,
+  MapPin,
+  Newspaper,
+  Phone,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View } from "react-native";
+import { Linking, ScrollView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
@@ -47,7 +55,7 @@ export default function HomeScreen() {
           size="icon"
           onPress={() => setShowProfileModal(true)}>
           <Icon
-            as={UserIcon}
+            as={isDevelopmentBuild() ? UserIcon : SettingsIcon}
             className="text-primary-foreground"
             size={24}
           />
@@ -156,7 +164,12 @@ export default function HomeScreen() {
                   }
                   title={t("home.news.title")}
                 />
-                <SectionButton title={t("common.all")} />
+                <SectionButton
+                  title={t("common.all")}
+                  onPress={() => {
+                    Linking.openURL("https://fsre.sum.ba/novosti/");
+                  }}
+                />
               </SectionHeader>
               <SectionContent>
                 <NewsSection />
@@ -217,7 +230,7 @@ export default function HomeScreen() {
                       }
                       title={t("home.contact.phone")}
                     />
-                    <Text className="ml-3 text-sm text-fsre-gradient-foreground/85">
+                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
                       Za opće upite:
                     </Text>
                     <ContactItem
@@ -231,7 +244,7 @@ export default function HomeScreen() {
                       }
                       title={"fsre@sum.ba"}
                     />
-                    <Text className="ml-3 text-sm text-fsre-gradient-foreground/85">
+                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
                       Za studentska pitanja:
                     </Text>
                     <ContactItem

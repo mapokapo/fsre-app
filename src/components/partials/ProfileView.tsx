@@ -1,17 +1,19 @@
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import MockData from "@/lib/const/mockData";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
+import Profile from "@/lib/types/Profile";
 import { LinearGradient } from "expo-linear-gradient";
 import { UserIcon } from "lucide-react-native";
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-export default function ProfileView() {
+export type ProfileViewProps = {
+  profile: Profile;
+};
+
+export default function ProfileView({ profile }: ProfileViewProps) {
   const { colorScheme } = useColorScheme();
-  const profile = useMemo(() => MockData.getProfile(), []);
   const { t } = useTranslation();
 
   return (

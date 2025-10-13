@@ -3,6 +3,7 @@ import Notification from "@/lib/types/Notification";
 import Profile from "@/lib/types/Profile";
 import Stat from "@/lib/types/Stat";
 import { addDays, addHours } from "date-fns";
+import { isDevelopmentBuild } from "expo-dev-client";
 import { Award, TrendingUp, Users } from "lucide-react-native";
 
 const now = new Date();
@@ -32,11 +33,11 @@ const mockStats: Stat[] = [
 ];
 
 const mockProfileData: Profile = {
-  name: "Marko Petrović",
-  indexNumber: "R-2021/0123",
+  name: "Testni Korisnik",
+  indexNumber: "12345",
   year: "THIRD",
   department: "COMPUTER_SCIENCE",
-  email: "marko.petrovic@student.sum.ba",
+  email: "test@fsre.sum.ba",
 };
 
 const mockNotifications: Notification[] = [
@@ -78,9 +79,9 @@ export default class MockData {
     return mockStats;
   }
 
-  static getProfile() {
+  static getProfile(): Profile | undefined {
     console.warn("You are using mock data: mockProfileData");
-    return mockProfileData;
+    return isDevelopmentBuild() ? mockProfileData : undefined;
   }
 
   static getNotifications() {

@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
+import MockData from "@/lib/const/mockData";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,6 +21,7 @@ import {
   LogOut,
   Paintbrush,
 } from "lucide-react-native";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
@@ -36,6 +38,7 @@ export default function ProfileModal({
 }: ProfileModalProps) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const { t } = useTranslation();
+  const profile = useMemo(() => MockData.getProfile(), []);
 
   return (
     <Dialog
@@ -54,9 +57,11 @@ export default function ProfileModal({
           end={{ x: 0, y: 1 }}
           className="p-6">
           <DialogHeader>
-            <DialogTitle>{t("profile.title")}</DialogTitle>
+            <DialogTitle>
+              {t(profile !== undefined ? "profile.title" : "settings.title")}
+            </DialogTitle>
           </DialogHeader>
-          <ProfileView />
+          {profile && <ProfileView profile={profile} />}
           <DialogFooter className="mt-6 !flex-col gap-3">
             <ModalActionButton
               onPress={() => onItemPress("notificationSettings")}
@@ -113,19 +118,21 @@ export default function ProfileModal({
               }
               text={t("common.help")}
             />
-            <ModalActionButton
-              onPress={() => onItemPress("logout")}
-              destructive
-              icon={
-                <Icon
-                  as={LogOut}
-                  color={THEME[colorScheme].fsreGradientForeground}
-                  size={20}
-                  strokeWidth={2.5}
-                />
-              }
-              text={t("common.logout")}
-            />
+            {profile && (
+              <ModalActionButton
+                onPress={() => onItemPress("logout")}
+                destructive
+                icon={
+                  <Icon
+                    as={LogOut}
+                    color={THEME[colorScheme].fsreGradientForeground}
+                    size={20}
+                    strokeWidth={2.5}
+                  />
+                }
+                text={t("common.logout")}
+              />
+            )}
           </DialogFooter>
         </LinearGradient>
       </DialogContent>
