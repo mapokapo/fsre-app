@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.1",
     "@expo/vector-icons": "^14.1.0",
+    "@google/generative-ai": "^0.24.1",
     "@gorhom/bottom-sheet": "^5.2.3",
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-native-firebase/app": "^23.2.0",
@@ -63,6 +64,7 @@
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
+    "react-native-worklets-core": "^1.6.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.7"

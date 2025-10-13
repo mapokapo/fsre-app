@@ -7,26 +7,14 @@ import { Input } from "@/components/ui/input";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
+import { generateGeminiResponse } from "@/lib/services/gemini";
 import Message from "@/lib/types/Message";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import Animated from "react-native-reanimated";
-
-const predefinedKeywords = {
-  schedule: ["raspored", "schedule"],
-  exams: ["ispiti", "exams"],
-  labs: ["laboratoriji", "laboratorij", "labs", "lab"],
-  scholarships: ["stipendije", "stipendija", "scholarships"],
-  enrollment: ["upis", "enrollment"],
-  contact: ["kontakt", "contact"],
-  ebooks: ["ebook", "udžbenik", "ebooks", "books"],
-  wifi: ["wifi", "wi-fi", "wi fi"],
-  thanks: ["hvala", "thanks", "thank you"],
-  greeting: ["pozdrav", "bok", "hello", "hi"],
-} as const;
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
@@ -41,6 +29,7 @@ export default function ChatbotScreen() {
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [bottomContainerHeight, setBottomContainerHeight] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const navigation = useNavigation();
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
@@ -52,7 +41,14 @@ export default function ChatbotScreen() {
     });
   }, [isTyping, navigation]);
 
-  const handleSend = () => {
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, [messages]);
+
+  const handleSend = async () => {
     if (inputText.trim() === "" || isTyping) return;
 
     const userMessage: Message = {
@@ -62,6 +58,7 @@ export default function ChatbotScreen() {
       timestamp: new Date(),
     };
 
+    const userQuestion = inputText.trim();
     setMessages(prev => [...prev, userMessage]);
     setInputText("");
     setIsTyping(true);
@@ -79,9 +76,9 @@ export default function ChatbotScreen() {
       setMessages(prev => [...prev, typingMessage]);
     }, 500);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = getBotResponse(inputText.toLowerCase());
+    // Get AI response from Gemini
+    try {
+      const botResponse = await generateGeminiResponse(userQuestion);
       const botMessage: Message = {
         id: `bot-${Date.now()}`,
         text: botResponse,
@@ -90,43 +87,18 @@ export default function ChatbotScreen() {
       };
 
       setMessages(prev => prev.filter(msg => !msg.typing).concat([botMessage]));
+    } catch (error) {
+      console.error("Error getting chatbot response:", error);
+      const errorMessage: Message = {
+        id: `bot-${Date.now()}`,
+        text: t("chatbot.responses.unknown"),
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages(prev => prev.filter(msg => !msg.typing).concat([errorMessage]));
+    } finally {
       setIsTyping(false);
-    }, 2000);
-  };
-
-  const getBotResponse = (input: string): string => {
-    // keyword categories
-    if (predefinedKeywords.schedule.some(k => input.includes(k))) {
-      return t("chatbot.responses.schedule");
     }
-    if (predefinedKeywords.exams.some(k => input.includes(k))) {
-      return t("chatbot.responses.exams");
-    }
-    if (predefinedKeywords.labs.some(k => input.includes(k))) {
-      return t("chatbot.responses.labs");
-    }
-    if (predefinedKeywords.scholarships.some(k => input.includes(k))) {
-      return t("chatbot.responses.scholarships");
-    }
-    if (predefinedKeywords.enrollment.some(k => input.includes(k))) {
-      return t("chatbot.responses.enrollment");
-    }
-    if (predefinedKeywords.contact.some(k => input.includes(k))) {
-      return t("chatbot.responses.contact");
-    }
-    if (predefinedKeywords.ebooks.some(k => input.includes(k))) {
-      return t("chatbot.responses.ebooks");
-    }
-    if (predefinedKeywords.wifi.some(k => input.includes(k))) {
-      return t("chatbot.responses.wifi");
-    }
-    if (predefinedKeywords.thanks.some(k => input.includes(k))) {
-      return t("chatbot.responses.thanks");
-    }
-    if (predefinedKeywords.greeting.some(k => input.includes(k))) {
-      return t("chatbot.responses.greeting");
-    }
-    return t("chatbot.responses.unknown");
   };
 
   const handleQuickQuestion = (question: string) => {
@@ -136,6 +108,7 @@ export default function ChatbotScreen() {
   return (
     <View className="flex-1 bg-background">
       <Animated.ScrollView
+        ref={scrollViewRef}
         contentContainerClassName="p-4 gap-4"
         contentContainerStyle={{
           paddingBottom:
