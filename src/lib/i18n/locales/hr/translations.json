@@ -141,6 +141,9 @@
     "lightMode": "Svijetli način",
     "indexNumber": "Broj indeksa: {{index}}"
   },
+  "settings": {
+    "title": "Postavke"
+  },
   "notifications": {
     "settings": {
       "title": "Postavke obavijesti",

@@ -3,18 +3,18 @@ import { getMessaging } from "@react-native-firebase/messaging";
 import { Platform } from "react-native";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBl7SKSrU1u8QQwIgiaSpS8J70d7sET_TI",
-  authDomain: "fsre-timetable-notify.firebaseapp.com",
-  projectId: "fsre-timetable-notify",
-  storageBucket: "fsre-timetable-notify.firebasestorage.app",
-  messagingSenderId: "236658525220",
-  appId: "1:236658525220:web:c04d689f7a7fe52edac4b1",
-  measurementId: "G-46Q0F88MKK",
-  databaseURL:
-    "https://fsre-timetable-notify-default-rtdb.europe-west1.firebasedatabase.app",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "",
+  measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
+  databaseURL: process.env.EXPO_PUBLIC_FIREBASE_DATABASE_URL || "",
 };
 
-if (Platform.OS === "web" && getApps().length === 0) {
+const apps = getApps() ?? [];
+if (Platform.OS === "web" && apps.length === 0) {
   initializeApp(firebaseConfig);
 }
 
