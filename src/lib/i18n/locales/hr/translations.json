@@ -77,10 +77,7 @@
       "title": "Brzi pristup"
     },
     "contact": {
-      "title": "Kontakt",
-      "address": "Matice hrvatske bb, 88000 Mostar",
-      "phone": "+387 36 355 025",
-      "email": "info@fsre.sum.ba"
+      "title": "Kontakt"
     }
   },
   "news": {
@@ -121,19 +118,7 @@
         "description": "Informacije o laboratorijskim vježbama"
       }
     },
-    "responses": {
-      "schedule": "Možete pronaći raspored sati u dijelu \"Raspored\" aplikacije. Možete filtrirati prema godini studija i smjeru. 📅",
-      "exams": "Prijava za ispite se vrši putem Studomat sustava. Prijave za zimski ispitni rok su trenutno otvorene do 15. siječnja. 📝",
-      "labs": "FSRE ima moderne laboratorije za strojarstvo, računarstvo i elektrotehniku. Za rezervaciju laboratorija, kontaktirajte odgovarajuće asistente. 🔬",
-      "scholarships": "Informacije o stipendijama možete pronaći na službenoj web stranici fakulteta ili kontaktirati studentsku službu. 💰",
-      "enrollment": "Upis za novu akademsku godinu počinje u lipnju. Detaljan raspored i uvjeti bit će dostupni na web stranici fakulteta. 🎓",
-      "contact": "Fakultet se nalazi na adresi Matice hrvatske bb, 88000 Mostar. Telefon: +387 36 355 025, Email: info@fsre.sum.ba 📍",
-      "ebooks": "Elektronički udžbenici dostupni su putem eLearning platforme. Prijavite se sa svojim studentskim podacima. 📚",
-      "wifi": "FSRE WiFi mreža dostupna je studentima. Podatci za prijavu su dostupni u studentskoj referadi. 📶",
-      "thanks": "Nema na čemu! 😊 Ako imate još pitanja, slobodno pitajte.",
-      "greeting": "Pozdrav! 👋 Kako vam mogu pomoći?",
-      "unknown": "Izvinjavam se, ali nisam siguran kako da odgovorim na to pitanje. 🤔 Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama, upisu ili kontakt informacijama. Također možete kontaktirati studentsku službu za detaljnije informacije."
-    }
+    "error": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu."
   },
   "profile": {
     "title": "Profil",

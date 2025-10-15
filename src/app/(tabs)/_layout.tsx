@@ -106,8 +106,8 @@ export default function TabLayout() {
             },
             tabBarStyle: {
               height: 60,
-              boxShadow: "0px -5px 15px rgba(10, 73, 119, 0.1)",
-              elevation: 20,
+              boxShadow: "0px -10px 15px rgba(10, 73, 119, 0.1)",
+              elevation: 0,
               backgroundColor: NAV_THEME[colorScheme].colors.card,
             },
             tabBarActiveTintColor: THEME[colorScheme].fsreGradient3,
@@ -165,6 +165,7 @@ export default function TabLayout() {
                       borderRadius: 9999,
                       padding: 0,
                       boxShadow: "0 3px 10px 1px rgba(0, 0, 0, 0.35",
+                      elevation: 5,
                     }}>
                     <LinearGradient
                       colors={[

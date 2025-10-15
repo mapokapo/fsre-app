@@ -1,6 +1,6 @@
 fileignoreconfig:
 - filename: .env
-  checksum: 7b25e7344534b55e4c0cdafc42919ed9c2e91220e23ebe8eea793d37ce34d1b0
+  checksum: fafa099607f569b235e6e4d8e1dca0125e93149182a11f11f2f0f07d8abcf1df
 - filename: GoogleService-Info.plist
   checksum: 22c84b930063573632c9eececb8eebf5c47ce3ac25a2bd33878e1abf68698f66
 - filename: app/(tabs)/chatbot.tsx
@@ -14,7 +14,7 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: fd5f39e537ec6a6bdb4238562c15e204b08b2e5b1bc4ac37e62519d511bdc64a
+  checksum: ee21922b26d692a9cd388980d72d2198e42c4d9cd58b0410f6a0e106e2f68a0b
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
@@ -57,6 +57,8 @@ fileignoreconfig:
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 - filename: src/lib/i18n/index.ts
   checksum: e2a2ca9b750c1834cd83b732fbde82057f988081a1c86e086f058a56bd24cbb1
+- filename: src/lib/services/gemini.ts
+  checksum: 2e73be925ae74f98e5b570bef2d325b63b9d0a7e3ddd0ec79ca34a41cd46cc8b
 - filename: src/lib/state/timetableSubscriptionStore.ts
   checksum: af4ea50273d7020935b7b7756f77d385b98c8c40544e078480a38b3cccab9449
 - filename: yarn.lock

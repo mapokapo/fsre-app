@@ -7,26 +7,14 @@ import { Input } from "@/components/ui/input";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
+import { generateGeminiResponse } from "@/lib/services/gemini";
 import Message from "@/lib/types/Message";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import Animated from "react-native-reanimated";
-
-const predefinedKeywords = {
-  schedule: ["raspored", "schedule"],
-  exams: ["ispiti", "exams"],
-  labs: ["laboratoriji", "laboratorij", "labs", "lab"],
-  scholarships: ["stipendije", "stipendija", "scholarships"],
-  enrollment: ["upis", "enrollment"],
-  contact: ["kontakt", "contact"],
-  ebooks: ["ebook", "udžbenik", "ebooks", "books"],
-  wifi: ["wifi", "wi-fi", "wi fi"],
-  thanks: ["hvala", "thanks", "thank you"],
-  greeting: ["pozdrav", "bok", "hello", "hi"],
-} as const;
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
@@ -39,8 +27,9 @@ export default function ChatbotScreen() {
     },
   ]);
   const [inputText, setInputText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [bottomContainerHeight, setBottomContainerHeight] = useState(0);
+  const scrollViewRef = useRef<Animated.ScrollView>(null);
 
   const navigation = useNavigation();
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
@@ -48,12 +37,21 @@ export default function ChatbotScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Dots isAnimating={isTyping} />,
+      headerRight: () => <Dots isAnimating={isLoading} />,
     });
-  }, [isTyping, navigation]);
+  }, [isLoading, navigation]);
 
-  const handleSend = () => {
-    if (inputText.trim() === "" || isTyping) return;
+  useEffect(() => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (inputText.trim() === "" || isLoading) return;
+
+    setIsLoading(true);
+    setInputText("");
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -61,72 +59,32 @@ export default function ChatbotScreen() {
       isUser: true,
       timestamp: new Date(),
     };
-
     setMessages(prev => [...prev, userMessage]);
-    setInputText("");
-    setIsTyping(true);
 
-    // Add typing indicator
-    const typingMessage: Message = {
-      id: `typing-${Date.now()}`,
-      text: "",
-      isUser: false,
-      timestamp: new Date(),
-      typing: true,
-    };
+    const botResponse = await generateGeminiResponse(inputText.trim());
 
-    setTimeout(() => {
-      setMessages(prev => [...prev, typingMessage]);
-    }, 500);
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = getBotResponse(inputText.toLowerCase());
-      const botMessage: Message = {
+    if (!botResponse.isSuccess) {
+      const errorMessage: Message = {
         id: `bot-${Date.now()}`,
-        text: botResponse,
+        text: t("chatbot.error"),
         isUser: false,
         timestamp: new Date(),
       };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+      return;
+    }
 
-      setMessages(prev => prev.filter(msg => !msg.typing).concat([botMessage]));
-      setIsTyping(false);
-    }, 2000);
-  };
+    const botText = botResponse.response;
+    const botMessage: Message = {
+      id: `bot-${Date.now()}`,
+      text: botText,
+      isUser: false,
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, botMessage]);
 
-  const getBotResponse = (input: string): string => {
-    // keyword categories
-    if (predefinedKeywords.schedule.some(k => input.includes(k))) {
-      return t("chatbot.responses.schedule");
-    }
-    if (predefinedKeywords.exams.some(k => input.includes(k))) {
-      return t("chatbot.responses.exams");
-    }
-    if (predefinedKeywords.labs.some(k => input.includes(k))) {
-      return t("chatbot.responses.labs");
-    }
-    if (predefinedKeywords.scholarships.some(k => input.includes(k))) {
-      return t("chatbot.responses.scholarships");
-    }
-    if (predefinedKeywords.enrollment.some(k => input.includes(k))) {
-      return t("chatbot.responses.enrollment");
-    }
-    if (predefinedKeywords.contact.some(k => input.includes(k))) {
-      return t("chatbot.responses.contact");
-    }
-    if (predefinedKeywords.ebooks.some(k => input.includes(k))) {
-      return t("chatbot.responses.ebooks");
-    }
-    if (predefinedKeywords.wifi.some(k => input.includes(k))) {
-      return t("chatbot.responses.wifi");
-    }
-    if (predefinedKeywords.thanks.some(k => input.includes(k))) {
-      return t("chatbot.responses.thanks");
-    }
-    if (predefinedKeywords.greeting.some(k => input.includes(k))) {
-      return t("chatbot.responses.greeting");
-    }
-    return t("chatbot.responses.unknown");
+    setIsLoading(false);
   };
 
   const handleQuickQuestion = (question: string) => {
@@ -136,12 +94,26 @@ export default function ChatbotScreen() {
   return (
     <View className="flex-1 bg-background">
       <Animated.ScrollView
+        ref={scrollViewRef}
         contentContainerClassName="p-4 gap-4"
         contentContainerStyle={{
           paddingBottom:
             bottomContainerHeight + Math.max(keyboardHeight - 80, 0),
         }}>
-        {messages.map(message => (
+        {[
+          ...messages,
+          ...(isLoading
+            ? [
+                {
+                  id: "typing-indicator",
+                  text: "",
+                  isUser: false,
+                  timestamp: new Date(),
+                  typing: true,
+                },
+              ]
+            : []),
+        ].map(message => (
           <MessageItem
             key={message.id}
             message={message}
@@ -154,7 +126,7 @@ export default function ChatbotScreen() {
         className="absolute bottom-8 left-0 right-0"
         keyboardVerticalOffset={175}
         onLayout={e =>
-          setBottomContainerHeight(e.nativeEvent.layout.height + 48)
+          setBottomContainerHeight(e.nativeEvent.layout.height + 80)
         }>
         {messages.length === 1 && (
           <ScrollView
@@ -183,7 +155,7 @@ export default function ChatbotScreen() {
             size="icon"
             className="mr-2 h-12 w-12 overflow-hidden rounded-full"
             onPress={handleSend}
-            disabled={inputText.trim() === "" || isTyping}>
+            disabled={inputText.trim() === "" || isLoading}>
             <Icon
               as={Send}
               className="text-fsre-gradient-foreground"
