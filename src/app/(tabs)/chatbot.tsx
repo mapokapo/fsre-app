@@ -7,12 +7,8 @@ import { Input } from "@/components/ui/input";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
-import {
-  createGeminiChat,
-  generateGeminiResponse,
-} from "@/lib/services/gemini";
+import { generateGeminiResponse } from "@/lib/services/gemini";
 import Message from "@/lib/types/Message";
-import { Chat } from "@google/genai";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -22,7 +18,6 @@ import Animated from "react-native-reanimated";
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
-  const [geminiChat, setGeminiChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "initial-message",
@@ -52,21 +47,8 @@ export default function ChatbotScreen() {
     }, 100);
   }, [messages]);
 
-  useEffect(() => {
-    async function initChat() {
-      try {
-        const chat = await createGeminiChat();
-        setGeminiChat(chat);
-      } catch (error) {
-        console.error("Error initializing Gemini chat:", error);
-      }
-    }
-
-    initChat();
-  }, []);
-
   const handleSend = async () => {
-    if (inputText.trim() === "" || isLoading || !geminiChat) return;
+    if (inputText.trim() === "" || isLoading) return;
 
     setIsLoading(true);
     setInputText("");
@@ -79,10 +61,7 @@ export default function ChatbotScreen() {
     };
     setMessages(prev => [...prev, userMessage]);
 
-    const botResponse = await generateGeminiResponse(
-      geminiChat,
-      inputText.trim()
-    );
+    const botResponse = await generateGeminiResponse(inputText.trim());
 
     if (!botResponse.isSuccess) {
       const errorMessage: Message = {
@@ -147,7 +126,7 @@ export default function ChatbotScreen() {
         className="absolute bottom-8 left-0 right-0"
         keyboardVerticalOffset={175}
         onLayout={e =>
-          setBottomContainerHeight(e.nativeEvent.layout.height + 48)
+          setBottomContainerHeight(e.nativeEvent.layout.height + 80)
         }>
         {messages.length === 1 && (
           <ScrollView
