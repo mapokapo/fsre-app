@@ -38,7 +38,7 @@ fileignoreconfig:
 - filename: src/app/(tabs)/schedule.tsx
   checksum: 4b25acd1f450e866c1fbe5e36c1caa701f8b50e2fca467455abe500e07575182
 - filename: src/app/(tabs)/timetable.tsx
-  checksum: a6c8e76c34d97f83537bc396b1204e9c85510c1cfa2587fa7ff0af768ee8aae5
+  checksum: 2a05b1f2095e22b08b6ab91b96c2247b126ccc490a8519c8ff6e3a95d44f420f
 - filename: src/components/partials/NewsSection.tsx
   checksum: c3d4e8b398cb3ff93ff556ecc91b3de26522932c39d5245a8069e00f374b70d1
 - filename: src/components/partials/ScheduleFilterButtonList.tsx

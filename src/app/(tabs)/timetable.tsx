@@ -15,7 +15,6 @@ import { $api } from "@/lib/api/client";
 import { gradients } from "@/lib/const/gradients";
 import { days, departments, years } from "@/lib/const/timetableFilters";
 import { messaging } from "@/lib/firebase";
-import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
@@ -35,18 +34,22 @@ export default function TimetableScreen() {
   const [currentIsoWeek, setCurrentIsoWeek] = useState(
     `${getYear(new Date())}-W${getWeek(new Date())}`
   );
+  const { subscriptionKey, setSubscriptionKey } =
+    useTimetableSubscriptionStore();
   const [selectedDay, setSelectedDay] = useState(days[0]!);
-  const [selectedYear, setSelectedYear] = useState(years[0]!);
-  const [selectedDepartment, setSelectedDepartment] = useState(departments[0]!);
+  const [selectedYear, setSelectedYear] = useState(
+    years.find(y => y.value === subscriptionKey?.year) ?? years[0]!
+  );
+  const [selectedDepartment, setSelectedDepartment] = useState(
+    departments.find(d => d.value === subscriptionKey?.department) ??
+      departments[0]!
+  );
   const [selectedDirection, setSelectedDirection] = useState<string | null>(
-    null
+    subscriptionKey?.direction ?? null
   );
   const [showFilters, setShowFilters] = useState(false);
 
   const { t } = useTranslation();
-  const { colorScheme } = useColorScheme();
-  const { subscriptionKey, setSubscriptionKey } =
-    useTimetableSubscriptionStore();
   const { mutateAsync: subscribeToTimetable } = $api.useMutation(
     "post",
     "/messaging/subscribe"
@@ -157,6 +160,7 @@ export default function TimetableScreen() {
           },
         });
         setSubscriptionKey({
+          direction: selectedDirection,
           department: selectedDepartment.value,
           year: selectedYear.value,
           studyProgramId,

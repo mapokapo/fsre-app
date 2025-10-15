@@ -57,13 +57,13 @@ export function getTimetableEvents(
   timetable: Timetable
 ): { day: Day; events: TimetableEvent[] }[] {
   return [
-    { day: 1, events: timetable.monday },
-    { day: 2, events: timetable.tuesday },
-    { day: 3, events: timetable.wednesday },
-    { day: 4, events: timetable.thursday },
-    { day: 5, events: timetable.friday },
-    { day: 6, events: timetable.saturday },
-    { day: 0, events: timetable.sunday },
+    { day: 0, events: timetable.monday },
+    { day: 1, events: timetable.tuesday },
+    { day: 2, events: timetable.wednesday },
+    { day: 3, events: timetable.thursday },
+    { day: 4, events: timetable.friday },
+    { day: 5, events: timetable.saturday },
+    { day: 6, events: timetable.sunday },
   ];
 }
 
