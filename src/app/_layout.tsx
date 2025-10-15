@@ -113,7 +113,7 @@ export default function RootLayout() {
             <Stack.Screen name="login" />
             <Stack.Screen name="+not-found" />
           </Stack>
-          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+          <StatusBar style="light" />
         </SafeAreaProvider>
         <PortalHost />
       </ThemeProvider>

@@ -3,7 +3,7 @@ import createClient from "openapi-react-query";
 import type { components, paths } from "./v1";
 
 export const fetchClient = createFetchClient<paths>({
-  baseUrl: "http://mapokapo.zapto.org:5000",
+  baseUrl: process.env.EXPO_PUBLIC_API_BASE_URL || "",
 });
 
 export const $api = createClient(fetchClient);
