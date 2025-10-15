@@ -77,9 +77,7 @@
       "title": "Quick access"
     },
     "contact": {
-      "title": "Contact",
-      "address": "Matice hrvatske bb, 88000 Mostar",
-      "phone": "+387 36 355 025"
+      "title": "Contact"
     }
   },
   "news": {
@@ -120,25 +118,16 @@
         "description": "Information about lab exercises"
       }
     },
-    "responses": {
-      "schedule": "You can find the timetable in the application's \"Timetable\" section. You can filter by study year and department. 📅",
-      "exams": "Exam registration is done through the Studomat system. Registration for the winter exam period is currently open until January 15. 📝",
-      "labs": "FSRE has modern laboratories for mechanical engineering, computer science, and electrical engineering. To book a lab, contact the appropriate assistants. 🔬",
-      "scholarships": "You can find information about scholarships on the official faculty website or by contacting the student office. 💰",
-      "enrollment": "Enrollment for the new academic year begins in June. A detailed schedule and requirements will be available on the faculty website. 🎓",
-      "contact": "The faculty is located at Matice hrvatske bb, 88000 Mostar. Phone: +387 36 355 025, Email: info@fsre.sum.ba 📍",
-      "ebooks": "Electronic textbooks are available via the eLearning platform. Log in with your student credentials. 📚",
-      "wifi": "The FSRE WiFi network is available to students. Login details are available at the student office. 📶",
-      "thanks": "You're welcome! 😊 If you have more questions, feel free to ask.",
-      "greeting": "Hello! 👋 How can I help you?",
-      "unknown": "Sorry, I'm not sure how to answer that. 🤔 You can ask me about the timetable, exams, labs, scholarships, enrollment, or contact information. You can also contact the student office for more details."
-    }
+    "error": "Sorry, an error occurred. Please try again or contact the student services."
   },
   "profile": {
     "title": "Profile",
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
     "indexNumber": "Index number: {{index}}"
+  },
+  "settings": {
+    "title": "Settings"
   },
   "notifications": {
     "settings": {

@@ -1,16 +1,16 @@
 {
   "expo": {
     "name": "FSRE App",
-    "slug": "fsre-app",
+    "slug": "fsre",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
-    "scheme": "fsreapp",
+    "scheme": "fsre",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fsre.mobileapp",
+      "bundleIdentifier": "ba.sum.fsre.app",
       "infoPlist": {
         "LSApplicationQueriesSchemes": ["https", "http"],
         "UIBackgroundModes": ["remote-notification"]
@@ -21,7 +21,7 @@
       }
     },
     "android": {
-      "package": "com.fsre.mobileapp",
+      "package": "ba.sum.fsre.app",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/icon.png",
         "backgroundColor": "#0A4977"
@@ -61,7 +61,13 @@
         "expo-build-properties",
         {
           "ios": {
-            "useFrameworks": "static"
+            "useFrameworks": "static",
+            "infoPlist": {
+              "NSAppTransportSecurity": { "NSAllowsArbitraryLoads": true }
+            }
+          },
+          "android": {
+            "usesCleartextTraffic": true
           }
         }
       ],
@@ -69,6 +75,27 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/621ebfd2-1f62-49a6-a434-7e45176170ad"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "extra": {
+      "router": {},
+      "expo-navigation-bar": {
+        "position": "relative",
+        "visibility": "hidden",
+        "behavior": "inset-swipe"
+      },
+      "eas": {
+        "projectId": "621ebfd2-1f62-49a6-a434-7e45176170ad"
+      }
+    },
+    "owner": "mapokapo"
   }
 }

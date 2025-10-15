@@ -1,4 +1,8 @@
 fileignoreconfig:
+- filename: .env
+  checksum: fafa099607f569b235e6e4d8e1dca0125e93149182a11f11f2f0f07d8abcf1df
+- filename: GoogleService-Info.plist
+  checksum: 22c84b930063573632c9eececb8eebf5c47ce3ac25a2bd33878e1abf68698f66
 - filename: app/(tabs)/chatbot.tsx
   checksum: 9a94390c0a75516f2cd602d505a356de46f631e4554f3ca58b471358a4fbf1fd
 - filename: app/(tabs)/index.tsx
@@ -10,11 +14,13 @@ fileignoreconfig:
 - filename: app/login.tsx
   checksum: 314d3df5968b4aa265d0ff97d8111a581392e81224344e11775d1d3b7ceec6a7
 - filename: bun.lock
-  checksum: 3e25620234e7664c4abaf51d9fbacdc3561e7e8b0db3f6212b39e72fb5ec764c
+  checksum: ee21922b26d692a9cd388980d72d2198e42c4d9cd58b0410f6a0e106e2f68a0b
 - filename: components/NotificationItem.tsx
   checksum: f294bbd884565bb9f8b57f5aa692a6646d05727f131534fbc772c8f5b8a54b14
 - filename: components/partials/NotificationSettingsModal.tsx
   checksum: 961982f5ae796103c8adc1a568d315ecd23500bfd66cbf07cb96b3e8103c9857
+- filename: google-services.json
+  checksum: 182fcbf829b61c9d2aef998ebed8eb0042ea681ef0ddb1ab9fd3b75e9924488b
 - filename: hooks/useKeyboardHeight.ts
   checksum: 163415d1945fe46fa690a1d9e13505e96fc2acae2808404b1539aed9c507f48b
 - filename: hooks/useKeyboardVisibility.ts
@@ -46,11 +52,13 @@ fileignoreconfig:
 - filename: src/components/partials/TimetableView.tsx
   checksum: 63e467f1a117c0661b5116832253a91f4926602239bedbc30d0ddc2e92c6d32c
 - filename: src/lib/firebase.ts
-  checksum: e19e6f1e2e4cf3a9aee39fa4a7a64adc73abb4985ccba42296bf864be52fd626
+  checksum: 329444f689c77a764b833e29851f2597c6c2de7644b7f033430518d95279b700
 - filename: src/lib/hooks/useKeyboardHeight.ts
   checksum: 7e054674a907b3b51ded752f75066a77631ebd754634050bd8dd9513e1d1b851
 - filename: src/lib/i18n/index.ts
   checksum: e2a2ca9b750c1834cd83b732fbde82057f988081a1c86e086f058a56bd24cbb1
+- filename: src/lib/services/gemini.ts
+  checksum: 2e73be925ae74f98e5b570bef2d325b63b9d0a7e3ddd0ec79ca34a41cd46cc8b
 - filename: src/lib/state/timetableSubscriptionStore.ts
   checksum: af4ea50273d7020935b7b7756f77d385b98c8c40544e078480a38b3cccab9449
 - filename: yarn.lock

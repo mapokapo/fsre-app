@@ -7,8 +7,12 @@ import { Input } from "@/components/ui/input";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
-import { generateGeminiResponse } from "@/lib/services/gemini";
+import {
+  createGeminiChat,
+  generateGeminiResponse,
+} from "@/lib/services/gemini";
 import Message from "@/lib/types/Message";
+import { Chat } from "@google/genai";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -18,6 +22,7 @@ import Animated from "react-native-reanimated";
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
+  const [geminiChat, setGeminiChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "initial-message",
@@ -27,9 +32,9 @@ export default function ChatbotScreen() {
     },
   ]);
   const [inputText, setInputText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [bottomContainerHeight, setBottomContainerHeight] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<Animated.ScrollView>(null);
 
   const navigation = useNavigation();
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
@@ -37,19 +42,34 @@ export default function ChatbotScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <Dots isAnimating={isTyping} />,
+      headerRight: () => <Dots isAnimating={isLoading} />,
     });
-  }, [isTyping, navigation]);
+  }, [isLoading, navigation]);
 
-  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   }, [messages]);
 
+  useEffect(() => {
+    async function initChat() {
+      try {
+        const chat = await createGeminiChat();
+        setGeminiChat(chat);
+      } catch (error) {
+        console.error("Error initializing Gemini chat:", error);
+      }
+    }
+
+    initChat();
+  }, []);
+
   const handleSend = async () => {
-    if (inputText.trim() === "" || isTyping) return;
+    if (inputText.trim() === "" || isLoading || !geminiChat) return;
+
+    setIsLoading(true);
+    setInputText("");
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -57,48 +77,35 @@ export default function ChatbotScreen() {
       isUser: true,
       timestamp: new Date(),
     };
-
-    const userQuestion = inputText.trim();
     setMessages(prev => [...prev, userMessage]);
-    setInputText("");
-    setIsTyping(true);
 
-    // Add typing indicator
-    const typingMessage: Message = {
-      id: `typing-${Date.now()}`,
-      text: "",
-      isUser: false,
-      timestamp: new Date(),
-      typing: true,
-    };
+    const botResponse = await generateGeminiResponse(
+      geminiChat,
+      inputText.trim()
+    );
 
-    setTimeout(() => {
-      setMessages(prev => [...prev, typingMessage]);
-    }, 500);
-
-    // Get AI response from Gemini
-    try {
-      const botResponse = await generateGeminiResponse(userQuestion);
-      const botMessage: Message = {
-        id: `bot-${Date.now()}`,
-        text: botResponse,
-        isUser: false,
-        timestamp: new Date(),
-      };
-
-      setMessages(prev => prev.filter(msg => !msg.typing).concat([botMessage]));
-    } catch (error) {
-      console.error("Error getting chatbot response:", error);
+    if (!botResponse.isSuccess) {
       const errorMessage: Message = {
         id: `bot-${Date.now()}`,
-        text: t("chatbot.responses.unknown"),
+        text: t("chatbot.error"),
         isUser: false,
         timestamp: new Date(),
       };
-      setMessages(prev => prev.filter(msg => !msg.typing).concat([errorMessage]));
-    } finally {
-      setIsTyping(false);
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+      return;
     }
+
+    const botText = botResponse.response;
+    const botMessage: Message = {
+      id: `bot-${Date.now()}`,
+      text: botText,
+      isUser: false,
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, botMessage]);
+
+    setIsLoading(false);
   };
 
   const handleQuickQuestion = (question: string) => {
@@ -114,7 +121,20 @@ export default function ChatbotScreen() {
           paddingBottom:
             bottomContainerHeight + Math.max(keyboardHeight - 80, 0),
         }}>
-        {messages.map(message => (
+        {[
+          ...messages,
+          ...(isLoading
+            ? [
+                {
+                  id: "typing-indicator",
+                  text: "",
+                  isUser: false,
+                  timestamp: new Date(),
+                  typing: true,
+                },
+              ]
+            : []),
+        ].map(message => (
           <MessageItem
             key={message.id}
             message={message}
@@ -156,7 +176,7 @@ export default function ChatbotScreen() {
             size="icon"
             className="mr-2 h-12 w-12 overflow-hidden rounded-full"
             onPress={handleSend}
-            disabled={inputText.trim() === "" || isTyping}>
+            disabled={inputText.trim() === "" || isLoading}>
             <Icon
               as={Send}
               className="text-fsre-gradient-foreground"

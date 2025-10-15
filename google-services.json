@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "236658525220",
+    "firebase_url": "https://fsre-timetable-notify-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fsre-timetable-notify",
+    "storage_bucket": "fsre-timetable-notify.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236658525220:android:91145558543aace0dac4b1",
+        "android_client_info": {
+          "package_name": "ba.sum.fsre.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwXoFpLxaBcBw40bcg81av--SfHHmkIG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

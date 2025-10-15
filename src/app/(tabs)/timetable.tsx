@@ -17,7 +17,6 @@ import { days, departments, years } from "@/lib/const/timetableFilters";
 import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
-import { THEME } from "@/lib/theme";
 import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
 import { getWeek, getYear, parse } from "date-fns";
@@ -319,8 +318,8 @@ export default function TimetableScreen() {
             previous.setDate(current.getDate() - 7);
             setCurrentIsoWeek(`${getYear(previous)}-W${getWeek(previous)}`);
           }}>
-          <ChevronLeft
-            color={THEME[colorScheme].primaryForeground}
+          <Icon
+            as={ChevronLeft}
             size={20}
           />
         </Button>
@@ -342,8 +341,8 @@ export default function TimetableScreen() {
                   `${getYear(new Date())}-W${getWeek(new Date())}`
                 );
               }}>
-              <RefreshCw
-                color={THEME[colorScheme].primaryForeground}
+              <Icon
+                as={RefreshCw}
                 size={16}
               />
             </Button>
@@ -357,8 +356,8 @@ export default function TimetableScreen() {
             next.setDate(current.getDate() + 7);
             setCurrentIsoWeek(`${getYear(next)}-W${getWeek(next)}`);
           }}>
-          <ChevronRight
-            color={THEME[colorScheme].primaryForeground}
+          <Icon
+            as={ChevronRight}
             size={20}
           />
         </Button>
