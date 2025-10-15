@@ -312,6 +312,7 @@ export default function TimetableScreen() {
       <View className="flex-row items-center justify-between px-5 py-3">
         <Button
           className="rounded-xl p-4"
+          variant="outline"
           onPress={() => {
             const current = parse(currentIsoWeek, "R-'W'I", new Date());
             const previous = new Date(current);
@@ -350,6 +351,7 @@ export default function TimetableScreen() {
         </View>
         <Button
           className="rounded-xl p-4"
+          variant="outline"
           onPress={() => {
             const current = parse(currentIsoWeek, "R-'W'I", new Date());
             const next = new Date(current);
