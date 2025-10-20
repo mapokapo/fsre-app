@@ -2,6 +2,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import "@/global.css";
 import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import "@/lib/i18n";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
