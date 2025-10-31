@@ -20,12 +20,7 @@ import { filterTimetable } from "@/lib/utils";
 import { getToken } from "@react-native-firebase/messaging";
 import { getWeek, getYear, parse } from "date-fns";
 import { useNavigation } from "expo-router";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  RefreshCw,
-} from "lucide-react-native";
+import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Platform, View } from "react-native";
@@ -34,8 +29,10 @@ export default function TimetableScreen() {
   const [currentIsoWeek, setCurrentIsoWeek] = useState(
     `${getYear(new Date())}-W${getWeek(new Date())}`
   );
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { subscriptionKey, setSubscriptionKey } =
     useTimetableSubscriptionStore();
+
   const [selectedDay, setSelectedDay] = useState(days[0]!);
   const [selectedYear, setSelectedYear] = useState(
     years.find(y => y.value === subscriptionKey?.year) ?? years[0]!
@@ -288,6 +285,11 @@ export default function TimetableScreen() {
 
           {directions.length > 0 && (
             <Select
+              value={
+                selectedDirection
+                  ? { label: selectedDirection, value: selectedDirection }
+                  : undefined
+              }
               onValueChange={newValue => {
                 setSelectedDirection(newValue?.value ?? null);
               }}>
@@ -347,7 +349,7 @@ export default function TimetableScreen() {
                 );
               }}>
               <Icon
-                as={RefreshCw}
+                as={X}
                 size={16}
               />
             </Button>
@@ -370,6 +372,16 @@ export default function TimetableScreen() {
       </View>
       <TimetableView
         timetable={filteredTimetable}
+        isRefreshing={isRefreshing}
+        onRefresh={() => {
+          setIsRefreshing(true);
+
+          Promise.all([refetchTimetableDatabase(), refetchTimetable()]).then(
+            () => {
+              setIsRefreshing(false);
+            }
+          );
+        }}
         gradients={gradients}
       />
     </View>

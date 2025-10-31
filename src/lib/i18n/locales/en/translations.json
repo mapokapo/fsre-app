@@ -1,202 +1,208 @@
 {
-  "common": {
-    "welcomeTo": "Welcome to",
-    "all": "All",
-    "save": "Save",
-    "saveSettings": "Save settings",
-    "help": "Help",
-    "logout": "Log out",
-    "error": "Error",
-    "refresh": "Refresh",
-    "weekDays": {
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday",
-      "sunday": "Sunday"
+  "auth": {
+    "help": {
+      "contact": "Contact the student office at\n{{email}} or {{phone}}",
+      "title": "Need help?"
     },
-    "studyYear": "Year {{count}}",
-    "studyYearEnum": {
-      "FIRST": "First year",
-      "SECOND": "Second year",
-      "THIRD": "Third year",
-      "FOURTH": "Fourth year",
-      "FIFTH": "Fifth year"
+    "login": {
+      "accessCodeLabel": "Access code",
+      "accessCodePlaceholder": "Enter access code",
+      "description": "Enter the access code you received from the administration",
+      "errors": {
+        "empty": "Please enter the access code",
+        "invalid": "Invalid access code. Please contact the administration.",
+        "minLength": "The access code must be at least 6 characters"
+      },
+      "submit": "Sign in",
+      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering",
+      "title": "Welcome to FSRE",
+      "validating": "Validating..."
+    },
+    "securityNotice": "Your data is safe and protected"
+  },
+  "chatbot": {
+    "error": "Sorry, an error occurred. Please try again or contact the student services.",
+    "input": {
+      "placeholder": "Enter your question..."
+    },
+    "intro": "Hello! 👋 I am the FSRE AI assistant. How can I help you today? You can ask me about the timetable, exams, labs, scholarships, or anything else related to the faculty.",
+    "quickQuestions": {
+      "contact": {
+        "description": "Faculty address, phone, and email",
+        "text": "Contact information"
+      },
+      "exams": {
+        "description": "Information about exam registration",
+        "text": "How to register for exams?"
+      },
+      "labs": {
+        "description": "Information about lab exercises",
+        "text": "About laboratories"
+      },
+      "schedule": {
+        "description": "Find lecture and exercise schedules",
+        "text": "Where can I see the timetable?"
+      }
+    }
+  },
+  "common": {
+    "all": "All",
+    "chooseLanguage": "Choose language",
+    "departmentEnum": {
+      "COMPUTER_SCIENCE": "Computer Science",
+      "ELECTRICAL_ENGINEERING": "Electrical Engineering",
+      "MECHANICAL_ENGINEERING": "Mechanical Engineering"
     },
     "departments": {
       "computerScience": "Computer Science",
       "electricalEngineering": "Electrical Engineering",
       "mechanicalEngineering": "Mechanical Engineering"
     },
-    "departmentEnum": {
-      "COMPUTER_SCIENCE": "Computer Science",
-      "ELECTRICAL_ENGINEERING": "Electrical Engineering",
-      "MECHANICAL_ENGINEERING": "Mechanical Engineering"
-    },
+    "error": "Error",
+    "help": "Help",
     "language": "Language",
-    "chooseLanguage": "Choose language",
     "languages": {
-      "hr": "Croatian",
-      "en": "English"
-    }
-  },
-  "notFound": {
-    "title": "Not found",
-    "message": "This page does not exist.",
-    "linkText": "Back to homepage"
-  },
-  "navigation": {
-    "home": "Home",
-    "chatbot": "Chatbot",
-    "timetable": "Timetable"
+      "en": "English",
+      "hr": "Croatian"
+    },
+    "logout": "Log out",
+    "refresh": "Refresh",
+    "save": "Save",
+    "saveSettings": "Save settings",
+    "studyYear": "Year {{count}}",
+    "studyYearEnum": {
+      "FIFTH": "Fifth year",
+      "FIRST": "First year",
+      "FOURTH": "Fourth year",
+      "SECOND": "Second year",
+      "THIRD": "Third year"
+    },
+    "weekDays": {
+      "friday": "Friday",
+      "monday": "Monday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "thursday": "Thursday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday"
+    },
+    "welcomeTo": "Welcome to"
   },
   "header": {
-    "home": {
-      "title": "FSRE",
-      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering"
-    },
     "chatbot": {
-      "title": "FSRE AI Assistant",
-      "subtitle": "Always here to help"
+      "subtitle": "Always here to help",
+      "title": "FSRE AI Assistant"
+    },
+    "home": {
+      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering",
+      "title": "FSRE"
     },
     "timetable": {
-      "title": "Timetable",
-      "subtitle": "Lectures and exercises"
+      "subtitle": "Lectures and exercises",
+      "title": "Timetable"
     }
   },
   "home": {
-    "notifications": {
-      "title": "Notifications"
+    "contact": {
+      "title": "Contact"
     },
     "news": {
       "title": "News"
     },
+    "notifications": {
+      "title": "Notifications"
+    },
     "quickAccess": {
       "title": "Quick access"
-    },
-    "contact": {
-      "title": "Contact"
     }
+  },
+  "navigation": {
+    "chatbot": "Chatbot",
+    "home": "Home",
+    "timetable": "Timetable"
   },
   "news": {
     "categories": {
-      "global": "Global",
-      "mechanicalEngineering": "Mechanical Engineering",
       "computerScience": "Computer Science",
+      "default": "News",
       "electricalEngineering": "Electrical Engineering",
-      "default": "News"
+      "global": "Global",
+      "mechanicalEngineering": "Mechanical Engineering"
     }
   },
-  "quickLinks": {
-    "studomat": "Studomat",
-    "eLearning": "eLearning",
-    "news": "News",
-    "schedule": "Timetable"
+  "notFound": {
+    "linkText": "Back to homepage",
+    "message": "This page does not exist.",
+    "title": "Not found"
   },
-  "chatbot": {
-    "intro": "Hello! 👋 I am the FSRE AI assistant. How can I help you today? You can ask me about the timetable, exams, labs, scholarships, or anything else related to the faculty.",
-    "input": {
-      "placeholder": "Enter your question..."
-    },
-    "quickQuestions": {
-      "schedule": {
-        "text": "Where can I see the timetable?",
-        "description": "Find lecture and exercise schedules"
-      },
+  "notifications": {
+    "categories": {
       "exams": {
-        "text": "How to register for exams?",
-        "description": "Information about exam registration"
+        "description": "Notifications about exam periods",
+        "title": "Exams"
       },
-      "contact": {
-        "text": "Contact information",
-        "description": "Faculty address, phone, and email"
+      "exercises": {
+        "description": "Notifications before exercises start",
+        "title": "Exercises"
       },
       "labs": {
-        "text": "About laboratories",
-        "description": "Information about lab exercises"
+        "description": "Notifications before lab exercises start",
+        "title": "Laboratory exercises"
+      },
+      "lectures": {
+        "description": "Notifications before lectures start",
+        "title": "Lectures"
+      },
+      "news": {
+        "description": "Notifications about faculty news",
+        "title": "News"
       }
     },
-    "error": "Sorry, an error occurred. Please try again or contact the student services."
+    "settings": {
+      "description": "Choose which activities you want to receive notifications for. You will receive notifications 15 minutes before the start.",
+      "save": "Save settings",
+      "title": "Notification settings"
+    }
   },
   "profile": {
-    "title": "Profile",
     "darkMode": "Dark mode",
+    "indexNumber": "Index number: {{index}}",
     "lightMode": "Light mode",
-    "indexNumber": "Index number: {{index}}"
+    "title": "Profile"
+  },
+  "quickLinks": {
+    "eLearning": "eLearning",
+    "news": "News",
+    "schedule": "Timetable",
+    "studomat": "Studomat"
   },
   "settings": {
     "title": "Settings"
   },
-  "notifications": {
-    "settings": {
-      "title": "Notification settings",
-      "description": "Choose which activities you want to receive notifications for. You will receive notifications 15 minutes before the start.",
-      "save": "Save settings"
+  "stats": {
+    "activeStudents": {
+      "label": "Active students"
     },
-    "categories": {
-      "lectures": {
-        "title": "Lectures",
-        "description": "Notifications before lectures start"
-      },
-      "exercises": {
-        "title": "Exercises",
-        "description": "Notifications before exercises start"
-      },
-      "labs": {
-        "title": "Laboratory exercises",
-        "description": "Notifications before lab exercises start"
-      },
-      "exams": {
-        "title": "Exams",
-        "description": "Notifications about exam periods"
-      },
-      "news": {
-        "title": "News",
-        "description": "Notifications about faculty news"
-      }
+    "completedProjects": {
+      "label": "Completed projects"
+    },
+    "successRate": {
+      "label": "Success rate"
     }
   },
   "timetable": {
     "filters": {
-      "day": "Day",
-      "studyYear": "Year",
-      "department": "Program",
-      "direction": "Track",
-      "chooseDirection": "Choose track",
+      "chooseDirection": "Choose direction",
       "currentWeek": "Current week",
+      "day": "Day",
+      "department": "Program",
+      "direction": "Direction",
+      "studyYear": "Year",
       "week": "Week {{week}}"
     },
     "noClasses": {
-      "title": "No classes",
-      "description": "No timetable for the selected filters"
+      "description": "No timetable for the selected filters",
+      "title": "No classes"
     }
-  },
-  "auth": {
-    "login": {
-      "title": "Welcome to FSRE",
-      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering",
-      "description": "Enter the access code you received from the administration",
-      "accessCodeLabel": "Access code",
-      "accessCodePlaceholder": "Enter access code",
-      "validating": "Validating...",
-      "submit": "Sign in",
-      "errors": {
-        "empty": "Please enter the access code",
-        "minLength": "The access code must be at least 6 characters",
-        "invalid": "Invalid access code. Please contact the administration."
-      }
-    },
-    "help": {
-      "title": "Need help?",
-      "contact": "Contact the student office at\n{{email}} or {{phone}}"
-    },
-    "securityNotice": "Your data is safe and protected"
-  },
-  "stats": {
-    "activeStudents": { "label": "Active students" },
-    "completedProjects": { "label": "Completed projects" },
-    "successRate": { "label": "Success rate" }
   }
 }

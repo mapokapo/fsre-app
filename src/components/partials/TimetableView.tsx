@@ -9,15 +9,19 @@ import { compareAsc } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
-import { ColorValue, ScrollView, View } from "react-native";
+import { ColorValue, RefreshControl, ScrollView, View } from "react-native";
 
 export type TimetableViewProps = {
   timetable: Timetable;
+  isRefreshing: boolean;
+  onRefresh: () => void;
   gradients: [ColorValue, ColorValue][];
 };
 
 export default function TimetableView({
   timetable,
+  isRefreshing,
+  onRefresh,
   gradients,
 }: TimetableViewProps) {
   const { colorScheme } = useColorScheme();
@@ -39,7 +43,13 @@ export default function TimetableView({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerClassName="p-4 grow">
+      contentContainerClassName="p-4 grow"
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
+        />
+      }>
       {getTimetableEvents(timetable)
         .map(e => e.events)
         .flat().length === 0 ? (
