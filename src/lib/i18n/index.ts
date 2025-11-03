@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "@/lib/const/storage";
 import * as Localization from "expo-localization";
 import * as i18n from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -21,7 +21,7 @@ export const LANGUAGE_KEY = "@app_language";
 const initI18n = async () => {
   try {
     // Try to get saved language preference
-    const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+    const savedLanguage = storage.getString(LANGUAGE_KEY);
 
     // Determine which language to use
     let selectedLanguage = savedLanguage;
@@ -71,7 +71,7 @@ const initI18n = async () => {
 
     // Save the selected language
     if (!savedLanguage) {
-      await AsyncStorage.setItem(LANGUAGE_KEY, selectedLanguage);
+      storage.set(LANGUAGE_KEY, selectedLanguage);
     }
   } catch (error) {
     console.error("Error initializing i18n:", error);

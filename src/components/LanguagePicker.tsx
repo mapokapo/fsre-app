@@ -6,12 +6,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
+import { storage } from "@/lib/const/storage";
 import {
   LANGUAGE_KEY,
   SupportedLanguage,
   supportedLanguages,
 } from "@/lib/i18n";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 
 export default function LanguagePicker() {
@@ -19,7 +19,7 @@ export default function LanguagePicker() {
 
   const changeLanguage = async (lang: SupportedLanguage) => {
     await i18n.changeLanguage(lang);
-    await AsyncStorage.setItem(LANGUAGE_KEY, lang);
+    storage.set(LANGUAGE_KEY, lang);
   };
 
   return (

@@ -39,7 +39,6 @@ export default function NotificationSettingsModal({
   };
 
   const handleSaveNotificationSettings = () => {
-    // Here you would typically save to AsyncStorage or API
     console.log("Saving notification settings:", notificationSettings);
     onClose();
   };
