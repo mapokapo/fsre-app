@@ -15,10 +15,10 @@ import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-//import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
-//import { useNotificationsStore } from "@/lib/state/notificationsStore";
 import { THEME } from "@/lib/theme";
+import { chunkArray } from "@/lib/utils";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { useQueryClient } from "@tanstack/react-query";
 import { isDevelopmentBuild } from "expo-dev-client";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useNavigation } from "expo-router";
@@ -32,20 +32,19 @@ import {
 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Linking, ScrollView, View } from "react-native";
+import { Linking, RefreshControl, ScrollView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
-  //const { notifications } = useNotificationsStore();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const navigation = useNavigation();
+  const { colorScheme } = useColorScheme();
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
-
-  const navigation = useNavigation();
-  //const { introAnimatedStyle } = useIntroAnimation();
-  const { colorScheme } = useColorScheme();
 
   useEffect(() => {
     navigation.setOptions({
@@ -67,14 +66,13 @@ export default function HomeScreen() {
   const handleLogout = () => {
     setShowProfileModal(false);
     setShowNotificationSettings(false);
-    // Navigate to login screen
     router.replace("/login");
   };
 
   const handleHelp = () => {
     setShowProfileModal(false);
     setShowNotificationSettings(false);
-    // Implement help logic here
+    // TODO: implement help action
     console.log("Help pressed");
   };
 
@@ -86,6 +84,14 @@ export default function HomeScreen() {
   const handleBackToProfile = () => {
     setShowNotificationSettings(false);
     setShowProfileModal(true);
+  };
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+
+    await queryClient.invalidateQueries({ queryKey: ["newsArticles"] });
+
+    setIsRefreshing(false);
   };
 
   return (
@@ -111,7 +117,14 @@ export default function HomeScreen() {
             onClose={handleBackToProfile}
           />
 
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+              />
+            }>
             {/* Stats */}
             {/*
             <Section>
@@ -182,12 +195,18 @@ export default function HomeScreen() {
                 <SectionTitle title={t("home.quickAccess.title")} />
               </SectionHeader>
               <SectionContent>
-                <View className="flex-row flex-wrap justify-between gap-4 web:grid web:grid-cols-2">
-                  {quickLinks.map(link => (
-                    <QuickLinkItem
-                      key={link.label(t)}
-                      link={link}
-                    />
+                <View className="gap-4">
+                  {chunkArray(quickLinks, 2).map(chunk => (
+                    <View
+                      key={`${chunk[0]!.label(t)}-${chunk[1]!.label(t)}`}
+                      className="flex-row flex-wrap justify-between gap-4">
+                      {chunk.map(link => (
+                        <QuickLinkItem
+                          key={link.label(t)}
+                          link={link}
+                        />
+                      ))}
+                    </View>
                   ))}
                 </View>
               </SectionContent>

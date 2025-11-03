@@ -55,9 +55,10 @@ export default function NotificationSettingsModal({
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={Platform.select({
-        native: ["100%", "50%"],
+        native: ["85%", "50%"],
         web: ["100%"],
       })}
+      maxDynamicContentSize={400}
       containerStyle={{
         marginTop: -40,
         backgroundColor: "rgba(0, 0, 0, 0.5)",

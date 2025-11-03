@@ -6,7 +6,7 @@ import { parse } from "date-fns";
 import { ActivityIndicator, View } from "react-native";
 
 export default function NewsSection() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isFetching, error } = useQuery({
     queryKey: ["newsArticles"],
     queryFn: async () =>
       fetch("https://web-admin.sum.ba/api/web/objave", {
@@ -52,7 +52,7 @@ export default function NewsSection() {
         ),
   });
 
-  if (isLoading)
+  if (isFetching)
     return (
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator
