@@ -96,3 +96,7 @@ export function chunkArray<T>(array: T[], chunkSize: number): T[][] {
   }
   return chunks;
 }
+
+export function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

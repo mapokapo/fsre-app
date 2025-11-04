@@ -1,4 +1,13 @@
+import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import MockData from "@/lib/const/mockData";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
+import { useAuth } from "@/lib/state/authStore";
+import { THEME } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
@@ -11,15 +20,7 @@ import {
 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -29,6 +30,9 @@ import Animated, {
 
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const { colorScheme } = useColorScheme();
+  const { setSession } = useAuth();
+
   const [accessCode, setAccessCode] = useState("");
   const [showCode, setShowCode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +79,8 @@ export default function LoginScreen() {
       const validCodes = ["FSRE2024", "STUDENT123", "DEMO2024"];
 
       if (validCodes.includes(accessCode.toUpperCase())) {
-        // Success - navigate to main app
+        // Success - create user session
+        setSession({ profile: MockData.getProfile(), token: "mock-token" });
         router.replace("/(tabs)");
       } else {
         setError(t("auth.login.errors.invalid"));
@@ -95,180 +100,219 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      style={styles.container}>
+      className="flex-1 bg-primary">
       <ScrollView
-        contentContainerStyle={styles.scrollContainer}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        {/* Background Gradient */}
         <LinearGradient
-          colors={["#0A4977", "#1E5A8A", "#3B82F6"]}
+          className="absolute bottom-0 left-0 right-0 top-0"
+          colors={[
+            THEME[colorScheme].fsreGradient1,
+            THEME[colorScheme].fsreGradient2,
+            THEME[colorScheme].fsreGradient3,
+          ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.backgroundGradient}
         />
-
-        {/* Decorative Elements */}
-        <View style={styles.decorativeElements}>
-          <View style={[styles.circle, styles.circle1]} />
-          <View style={[styles.circle, styles.circle2]} />
-          <View style={[styles.circle, styles.circle3]} />
+        <View className="absolute bottom-0 left-0 right-0 top-0">
+          <View
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: 200,
+              height: 200,
+              top: -100,
+              right: -100,
+            }}
+          />
+          <View
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: 200,
+              height: 200,
+              top: -100,
+              right: -100,
+            }}
+          />
+          <View
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: 100,
+              height: 100,
+              left: -50,
+            }}
+          />
         </View>
 
-        <Animated.View style={[styles.content, introAnimatedStyle]}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
+        <Animated.View
+          className="flex-1 justify-center px-6 pb-16 pt-20"
+          style={introAnimatedStyle}>
+          <View className="mb-10 items-center">
+            <View className="mb-6">
               <LinearGradient
+                className="elevation-xl h-32 w-32 items-center justify-center overflow-hidden rounded-full web:shadow-md"
                 colors={[
-                  "rgba(255, 255, 255, 0.2)",
-                  "rgba(255, 255, 255, 0.1)",
+                  THEME[colorScheme].fsreGradient3,
+                  THEME[colorScheme].fsreGradient1,
                 ]}
                 start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.logoGradient}>
-                <Text style={styles.logoText}>FSRE</Text>
+                end={{ x: 1, y: 1 }}>
+                <Text className="text-4xl font-extrabold tracking-widest text-white">
+                  FSRE
+                </Text>
               </LinearGradient>
             </View>
 
-            <Text style={styles.title}>{t("auth.login.title")}</Text>
-            <Text style={styles.subtitle}>{t("auth.login.subtitle")}</Text>
-            <Text style={styles.description}>
+            <Text className="mb-2 text-center text-3xl font-bold text-fsre-gradient-foreground">
+              {t("auth.login.title")}
+            </Text>
+            <Text className="mb-4 text-center text-fsre-gradient-foreground">
+              {t("auth.login.subtitle")}
+            </Text>
+            <Text className="text-center text-sm leading-5 text-fsre-gradient-foreground/70">
               {t("auth.login.description")}
             </Text>
           </View>
 
-          {/* Login Form */}
-          <Animated.View style={[styles.formContainer, shakeAnimatedStyle]}>
+          <Animated.View
+            className="mb-8"
+            style={shakeAnimatedStyle}>
             <LinearGradient
+              className="elevation-xl overflow-hidden rounded-3xl p-8 web:shadow-xl"
               colors={[
                 "rgba(255, 255, 255, 0.95)",
                 "rgba(248, 250, 252, 0.95)",
               ]}
               start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.formGradient}>
-              {/* Access Code Input */}
-              <View style={styles.inputSection}>
-                <Text style={styles.inputLabel}>
+              end={{ x: 0, y: 1 }}>
+              <View className="mb-6">
+                <Text className="mb-3 font-semibold text-neutral-900">
                   {t("auth.login.accessCodeLabel")}
                 </Text>
 
                 <View
-                  style={[styles.inputContainer, error && styles.inputError]}>
-                  <View style={styles.inputIcon}>
-                    <Key
-                      color="#0A4977"
+                  className={cn(
+                    "flex-row items-center rounded-2xl border-2 border-border/60 px-4 py-1",
+                    error && "border-destructive bg-destructive/10"
+                  )}>
+                  <View className="mr-3">
+                    <Icon
+                      as={Key}
+                      className="stroke-fsre-gradient-3"
                       size={20}
                       strokeWidth={2.5}
                     />
                   </View>
 
-                  <TextInput
-                    style={styles.textInput}
+                  <Input
+                    className="flex-1 !border-transparent !bg-transparent text-neutral-900 !outline-none placeholder:text-neutral-400"
                     placeholder={t("auth.login.accessCodePlaceholder")}
-                    placeholderTextColor="#94A3B8"
                     value={accessCode}
                     onChangeText={handleCodeChange}
                     onSubmitEditing={handleLogin}
                     secureTextEntry={!showCode}
-                    autoCapitalize="characters"
                     autoCorrect={false}
                     maxLength={20}
                   />
 
-                  <TouchableOpacity
-                    style={styles.eyeButton}
-                    onPress={() => setShowCode(!showCode)}
-                    activeOpacity={0.7}>
+                  <Button
+                    className="ml-2 p-2"
+                    variant="ghost"
+                    onPress={() => setShowCode(!showCode)}>
                     {showCode ? (
-                      <EyeOff
-                        color="#64748B"
+                      <Icon
+                        className="stroke-neutral-600"
+                        as={EyeOff}
                         size={20}
                         strokeWidth={2.5}
                       />
                     ) : (
-                      <Eye
-                        color="#64748B"
+                      <Icon
+                        className="stroke-neutral-600"
+                        as={Eye}
                         size={20}
                         strokeWidth={2.5}
                       />
                     )}
-                  </TouchableOpacity>
+                  </Button>
                 </View>
 
-                {/* Error Message */}
-                {error ? (
-                  <View style={styles.errorContainer}>
-                    <AlertCircle
-                      color="#DC2626"
+                {error && (
+                  <View className="mt-2 flex-row items-center px-1">
+                    <Icon
+                      as={AlertCircle}
+                      className="stroke-destructive"
                       size={16}
                       strokeWidth={2.5}
                     />
-                    <Text style={styles.errorText}>{error}</Text>
+                    <Text className="ml-1.5 flex-1 text-xs text-destructive">
+                      {error}
+                    </Text>
                   </View>
-                ) : null}
+                )}
               </View>
 
-              {/* Login Button */}
-              <TouchableOpacity
-                style={[
-                  styles.loginButton,
-                  isLoading && styles.loginButtonDisabled,
-                ]}
-                onPress={handleLogin}
+              <Button
+                className="mb-5 min-h-12 p-0 disabled:opacity-70"
+                variant="ghost"
                 disabled={isLoading}
-                activeOpacity={0.8}>
+                onPress={handleLogin}>
                 <LinearGradient
-                  colors={
-                    isLoading ? ["#94A3B8", "#94A3B8"] : ["#0A4977", "#1E5A8A"]
-                  }
+                  colors={[
+                    THEME[colorScheme].fsreGradient1,
+                    THEME[colorScheme].fsreGradient2,
+                    THEME[colorScheme].fsreGradient3,
+                  ]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
-                  style={styles.loginButtonGradient}>
+                  className="h-full w-full items-center justify-center overflow-hidden rounded-lg">
                   {isLoading ? (
-                    <View style={styles.loadingContainer}>
-                      <View style={styles.loadingDot} />
-                      <Text style={styles.loginButtonText}>
+                    <View className="flex-row items-center justify-center">
+                      <View className="mr-2 h-1.5 w-1.5 rounded-full bg-fsre-gradient-foreground" />
+                      <Text className="mr-2 text-lg font-bold !text-fsre-gradient-foreground">
                         {t("auth.login.validating")}
                       </Text>
                     </View>
                   ) : (
-                    <View style={styles.buttonContent}>
-                      <Text style={styles.loginButtonText}>
+                    <View className="flex-row items-center justify-center">
+                      <Text className="mr-2 text-lg font-bold !text-fsre-gradient-foreground">
                         {t("auth.login.submit")}
                       </Text>
-                      <ArrowRight
-                        color="#ffffff"
+                      <Icon
+                        className="stroke-fsre-gradient-foreground"
+                        as={ArrowRight}
                         size={20}
                         strokeWidth={2.5}
                       />
                     </View>
                   )}
                 </LinearGradient>
-              </TouchableOpacity>
+              </Button>
 
-              {/* Security Notice */}
-              <View style={styles.securityNotice}>
-                <Shield
-                  color="#059669"
+              <View className="flex-row items-center justify-center border-t border-t-card-gradient-1 pt-4">
+                <Icon
+                  as={Shield}
+                  className="stroke-green-600/80"
                   size={16}
                   strokeWidth={2.5}
                 />
-                <Text style={styles.securityText}>
+                <Text className="ml-1.5 text-sm text-green-600/80">
                   {t("auth.securityNotice")}
                 </Text>
               </View>
             </LinearGradient>
           </Animated.View>
 
-          {/* Help Section */}
-          <View style={styles.helpSection}>
-            <Text style={styles.helpTitle}>{t("auth.help.title")}</Text>
-            <Text style={styles.helpText}>
+          <View className="items-center">
+            <Text className="mb-2 font-semibold text-fsre-gradient-foreground">
+              {t("auth.help.title")}
+            </Text>
+            <Text className="text-center text-sm leading-4 text-fsre-gradient-foreground">
               {t("auth.help.contact", {
-                email: "info@fsre.sum.ba",
-                phone: "+387 36 355 025",
+                email: "referada@fsre.sum.ba",
+                phone: "+387 36 337 003",
               })}
             </Text>
           </View>
@@ -277,232 +321,3 @@ export default function LoginScreen() {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0A4977",
-  },
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  backgroundGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  decorativeElements: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  circle: {
-    position: "absolute",
-    borderRadius: 1000,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-  },
-  circle1: {
-    width: 200,
-    height: 200,
-    top: -100,
-    right: -100,
-  },
-  circle2: {
-    width: 150,
-    height: 150,
-    bottom: -75,
-    left: -75,
-  },
-  circle3: {
-    width: 100,
-    height: 100,
-    left: -50,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 64,
-    justifyContent: "center",
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  logoContainer: {
-    marginBottom: 24,
-  },
-  logoGradient: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
-    elevation: 12,
-  },
-  logoText: {
-    fontSize: 36,
-    fontFamily: "Inter-ExtraBold",
-    color: "#ffffff",
-    letterSpacing: 3,
-    textShadowColor: "rgba(0, 0, 0, 0.3)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  title: {
-    fontSize: 28,
-    fontFamily: "Inter-Bold",
-    color: "#ffffff",
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: "Inter-Medium",
-    color: "rgba(255, 255, 255, 0.8)",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 14,
-    fontFamily: "Inter-Regular",
-    color: "rgba(255, 255, 255, 0.7)",
-    textAlign: "center",
-    lineHeight: 20,
-  },
-  formContainer: {
-    marginBottom: 32,
-  },
-  formGradient: {
-    borderRadius: 24,
-    padding: 28,
-    boxShadow: "0px 12px 20px rgba(10, 73, 119, 0.3)",
-    elevation: 15,
-  },
-  inputSection: {
-    marginBottom: 24,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontFamily: "Inter-SemiBold",
-    color: "#1A1A1A",
-    marginBottom: 12,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F8FAFC",
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: "#E2E8F0",
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-    minHeight: 56,
-  },
-  inputError: {
-    borderColor: "#DC2626",
-    backgroundColor: "#FEF2F2",
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 16,
-    fontFamily: "Inter-Medium",
-    color: "#1A1A1A",
-    paddingVertical: 16,
-  },
-  eyeButton: {
-    padding: 8,
-    marginLeft: 8,
-  },
-  errorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 8,
-    paddingHorizontal: 4,
-  },
-  errorText: {
-    fontSize: 13,
-    fontFamily: "Inter-Medium",
-    color: "#DC2626",
-    marginLeft: 6,
-    flex: 1,
-  },
-  loginButton: {
-    marginBottom: 20,
-  },
-  loginButtonDisabled: {
-    opacity: 0.7,
-  },
-  loginButtonGradient: {
-    borderRadius: 16,
-    paddingVertical: 18,
-    paddingHorizontal: 24,
-    minHeight: 56,
-    justifyContent: "center",
-  },
-  buttonContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loginButtonText: {
-    fontSize: 16,
-    fontFamily: "Inter-Bold",
-    color: "#ffffff",
-    marginRight: 8,
-  },
-  loadingContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#ffffff",
-    marginRight: 8,
-  },
-  securityNotice: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#F1F5F9",
-  },
-  securityText: {
-    fontSize: 12,
-    fontFamily: "Inter-Medium",
-    color: "#059669",
-    marginLeft: 6,
-  },
-  helpSection: {
-    alignItems: "center",
-  },
-  helpTitle: {
-    fontSize: 16,
-    fontFamily: "Inter-SemiBold",
-    color: "rgba(255, 255, 255, 0.9)",
-    marginBottom: 8,
-  },
-  helpText: {
-    fontSize: 13,
-    fontFamily: "Inter-Regular",
-    color: "rgba(255, 255, 255, 0.7)",
-    textAlign: "center",
-    lineHeight: 18,
-  },
-  helpContact: {
-    fontFamily: "Inter-SemiBold",
-    color: "rgba(255, 255, 255, 0.9)",
-  },
-});

@@ -3,6 +3,7 @@ import "@/global.css";
 import { messaging } from "@/lib/firebase";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import "@/lib/i18n";
+import { useAuth } from "@/lib/state/authStore";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
@@ -58,6 +59,7 @@ const useIsomorphicLayoutEffect =
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  const { session } = useAuth();
   const { isDarkColorScheme } = useColorScheme();
 
   const [fontsLoaded, fontError] = useFonts({
@@ -110,7 +112,9 @@ export default function RootLayout() {
         value={isDarkColorScheme ? NAV_THEME.dark : NAV_THEME.light}>
         <SafeAreaProvider>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
+            <Stack.Protected guard={session !== null}>
+              <Stack.Screen name="(tabs)" />
+            </Stack.Protected>
             <Stack.Screen name="login" />
             <Stack.Screen name="+not-found" />
           </Stack>

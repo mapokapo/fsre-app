@@ -1,8 +1,8 @@
 import ContactItem from "@/components/partials/ContactItem";
 import NewsSection from "@/components/partials/NewsSection";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
-import ProfileModal from "@/components/partials/ProfileModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
+import SettingsModal from "@/components/partials/SettingsModal";
 import {
   Section,
   SectionButton,
@@ -15,20 +15,19 @@ import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { useAuth } from "@/lib/state/authStore";
 import { THEME } from "@/lib/theme";
 import { chunkArray } from "@/lib/utils";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useQueryClient } from "@tanstack/react-query";
-import { isDevelopmentBuild } from "expo-dev-client";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import {
   Mail,
   MapPin,
   Newspaper,
   Phone,
   SettingsIcon,
-  UserIcon,
 } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,6 +39,7 @@ export default function HomeScreen() {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
+  const { setSession } = useAuth();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -54,7 +54,7 @@ export default function HomeScreen() {
           size="icon"
           onPress={() => setShowProfileModal(true)}>
           <Icon
-            as={isDevelopmentBuild() ? UserIcon : SettingsIcon}
+            as={SettingsIcon}
             className="text-primary-foreground"
             size={24}
           />
@@ -66,7 +66,7 @@ export default function HomeScreen() {
   const handleLogout = () => {
     setShowProfileModal(false);
     setShowNotificationSettings(false);
-    router.replace("/login");
+    setSession(null);
   };
 
   const handleHelp = () => {
@@ -98,7 +98,7 @@ export default function HomeScreen() {
     <View className="flex-1 bg-background">
       <GestureHandlerRootView>
         <BottomSheetModalProvider>
-          <ProfileModal
+          <SettingsModal
             isVisible={showProfileModal && !showNotificationSettings}
             onClose={() => setShowProfileModal(false)}
             onItemPress={item => {
@@ -227,6 +227,9 @@ export default function HomeScreen() {
                     ]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}>
+                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
+                      Za opće upite:
+                    </Text>
                     <ContactItem
                       icon={
                         <Icon
@@ -249,9 +252,6 @@ export default function HomeScreen() {
                       }
                       title="+387 36 337-001"
                     />
-                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
-                      Za opće upite:
-                    </Text>
                     <ContactItem
                       icon={
                         <Icon
@@ -266,6 +266,17 @@ export default function HomeScreen() {
                     <Text className="ml-3 text-sm text-card-gradient-foreground/85">
                       Za studentska pitanja:
                     </Text>
+                    <ContactItem
+                      icon={
+                        <Icon
+                          as={Phone}
+                          color={THEME[colorScheme].fsreGradient3}
+                          size={20}
+                          strokeWidth={2.5}
+                        />
+                      }
+                      title="+387 36 337-003"
+                    />
                     <ContactItem
                       icon={
                         <Icon

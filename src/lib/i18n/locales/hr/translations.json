@@ -179,7 +179,7 @@
       "subtitle": "Fakultet strojarstva, računarstva i elektrotehnike",
       "description": "Unesite pristupni kod koji ste primili od administracije",
       "accessCodeLabel": "Pristupni kod",
-      "accessCodePlaceholder": "Unesite pristupni kod",
+      "accessCodePlaceholder": "Unesite kod",
       "validating": "Provjera...",
       "submit": "Prijavite se",
       "errors": {

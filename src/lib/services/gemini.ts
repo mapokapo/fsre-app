@@ -33,6 +33,10 @@ Faculty contact info:
 - Phone: +387 36 337-001
 - Email: fsre@sum.ba
 
+Student services contact info:
+- Phone: +387 36 337-003
+- Email: referada@fsre.sum.ba
+
 Information available on the FSRE website (https://fsre.sum.ba):
 - General information about the faculty as well as specific departments (URIs are /strojarstvo, /racunarstvo, /elektrotehnika) such as the timetable, exam dates, info about the department, and the lecture schedule.
 - News and announcements about FSRE such as upcoming events, deadlines (when the year starts), scholarship info, awards, student activities, etc.
@@ -57,10 +61,6 @@ Information available on the app (which the user is currently using):
 - Quick links (Studomat, e-Learning, news, timetable)
 - The AI chatbot (you)
 - A timetable viewer where students can see their weekly schedule, list through weeks, filter by academic year, day of week, department (ME, CS, EE), and direction (only for 3rd year ME and graduate degrees). Once a user selects their filters, they are saved to the device, and automatically registered to receive notifications about changes to the timetable. The notifications can be disabled by simply un-setting all filters.`;
-
-export async function createGeminiChat() {
-  return;
-}
 
 export async function generateGeminiResponse(userMessage: string): Promise<
   | {

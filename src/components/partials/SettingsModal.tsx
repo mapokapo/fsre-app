@@ -1,6 +1,5 @@
 import LanguagePicker from "@/components/LanguagePicker";
 import { ModalActionButton } from "@/components/modal";
-import ProfileView from "@/components/partials/ProfileView";
 import ThemeToggle from "@/components/ThemeToggle";
 import {
   Dialog,
@@ -10,8 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import MockData from "@/lib/const/mockData";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { useAuth } from "@/lib/state/authStore";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -21,24 +20,23 @@ import {
   LogOut,
   Paintbrush,
 } from "lucide-react-native";
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-export type ProfileModalProps = {
+export type SettingsModalProps = {
   isVisible: boolean;
   onClose: () => void;
   onItemPress: (item: string) => void;
 };
 
-export default function ProfileModal({
+export default function SettingsModal({
   isVisible,
   onClose,
   onItemPress,
-}: ProfileModalProps) {
+}: SettingsModalProps) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const { t } = useTranslation();
-  const profile = useMemo(() => MockData.getProfile(), []);
+  const { session } = useAuth();
 
   return (
     <Dialog
@@ -57,11 +55,8 @@ export default function ProfileModal({
           end={{ x: 0, y: 1 }}
           className="p-6">
           <DialogHeader>
-            <DialogTitle>
-              {t(profile !== undefined ? "profile.title" : "settings.title")}
-            </DialogTitle>
+            <DialogTitle>{t("settings.title")}</DialogTitle>
           </DialogHeader>
-          {profile && <ProfileView profile={profile} />}
           <DialogFooter className="mt-6 !flex-col gap-3">
             <ModalActionButton
               onPress={() => onItemPress("notificationSettings")}
@@ -118,7 +113,7 @@ export default function ProfileModal({
               }
               text={t("common.help")}
             />
-            {profile && (
+            {session && (
               <ModalActionButton
                 onPress={() => onItemPress("logout")}
                 destructive
