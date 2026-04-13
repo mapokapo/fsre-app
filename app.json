@@ -10,15 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ba.sum.fsre.app",
+      "bundleIdentifier": "com.fsre.mobileapp",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "https",
-          "http"
-        ],
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "LSApplicationQueriesSchemes": ["https", "http"],
+        "UIBackgroundModes": ["remote-notification"]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
@@ -26,14 +21,12 @@
       }
     },
     "android": {
-      "package": "ba.sum.fsre.app",
+      "package": "com.fsre.mobileapp",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/icon.png",
         "backgroundColor": "#0A4977"
       },
-      "permissions": [
-        "android.permission.INTERNET"
-      ],
+      "permissions": ["android.permission.INTERNET"],
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
