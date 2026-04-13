@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "FSRE App",
-    "slug": "fsre",
+    "slug": "fsre-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
@@ -12,8 +12,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "ba.sum.fsre.app",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["https", "http"],
-        "UIBackgroundModes": ["remote-notification"]
+        "LSApplicationQueriesSchemes": [
+          "https",
+          "http"
+        ],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
@@ -26,7 +31,9 @@
         "foregroundImage": "./src/assets/images/icon.png",
         "backgroundColor": "#0A4977"
       },
-      "permissions": ["android.permission.INTERNET"],
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true
     },
@@ -63,7 +70,9 @@
           "ios": {
             "useFrameworks": "static",
             "infoPlist": {
-              "NSAppTransportSecurity": { "NSAllowsArbitraryLoads": true }
+              "NSAppTransportSecurity": {
+                "NSAllowsArbitraryLoads": true
+              }
             }
           },
           "android": {
@@ -93,9 +102,9 @@
         "behavior": "inset-swipe"
       },
       "eas": {
-        "projectId": "621ebfd2-1f62-49a6-a434-7e45176170ad"
+        "projectId": "01bc83d3-7af7-4a5f-8bc9-1b543abc5883"
       }
     },
-    "owner": "mapokapo"
+    "owner": "fsresumba"
   }
 }
