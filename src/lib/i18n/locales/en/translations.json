@@ -1,25 +1,4 @@
 {
-  "auth": {
-    "help": {
-      "contact": "Contact the student office at\n{{email}} or {{phone}}",
-      "title": "Need help?"
-    },
-    "login": {
-      "accessCodeLabel": "Access code",
-      "accessCodePlaceholder": "Enter access code",
-      "description": "Enter the access code you received from the administration",
-      "errors": {
-        "empty": "Please enter the access code",
-        "invalid": "Invalid access code. Please contact the administration.",
-        "minLength": "The access code must be at least 6 characters"
-      },
-      "submit": "Sign in",
-      "subtitle": "Faculty of Mechanical Engineering, Computing and Electrical Engineering",
-      "title": "Welcome to FSRE",
-      "validating": "Validating..."
-    },
-    "securityNotice": "Your data is safe and protected"
-  },
   "chatbot": {
     "error": "Sorry, an error occurred. Please try again or contact the student services.",
     "input": {

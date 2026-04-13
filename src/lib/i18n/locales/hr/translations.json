@@ -173,27 +173,6 @@
       "description": "Nema rasporeda za odabrane filtere"
     }
   },
-  "auth": {
-    "login": {
-      "title": "Dobrodošli na FSRE",
-      "subtitle": "Fakultet strojarstva, računarstva i elektrotehnike",
-      "description": "Unesite pristupni kod koji ste primili od administracije",
-      "accessCodeLabel": "Pristupni kod",
-      "accessCodePlaceholder": "Unesite kod",
-      "validating": "Provjera...",
-      "submit": "Prijavite se",
-      "errors": {
-        "empty": "Molimo unesite pristupni kod",
-        "minLength": "Pristupni kod mora imati najmanje 6 znakova",
-        "invalid": "Nevažeći pristupni kod. Molimo kontaktirajte administraciju."
-      }
-    },
-    "help": {
-      "title": "Trebate pomoć?",
-      "contact": "Kontaktirajte studentsku službu na\n{{email}} ili {{phone}}"
-    },
-    "securityNotice": "Vaši podaci su sigurni i zaštićeni"
-  },
   "stats": {
     "activeStudents": { "label": "Aktivnih studenata" },
     "completedProjects": { "label": "Završenih projekata" },
