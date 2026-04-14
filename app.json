@@ -11,7 +11,7 @@
     "android": {
       "package": "com.fsre.mobileapp",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/logo.png",
+        "foregroundImage": "./src/assets/images/icon_foreground.png",
         "backgroundImage": "./src/assets/images/icon_background.png"
       },
       "permissions": [
