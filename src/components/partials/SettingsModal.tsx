@@ -10,16 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import { useAuth } from "@/lib/state/authStore";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  Bell,
-  HelpCircle,
-  Languages,
-  LogOut,
-  Paintbrush,
-} from "lucide-react-native";
+import { Bell, HelpCircle, Languages, Paintbrush } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
@@ -36,7 +29,6 @@ export default function SettingsModal({
 }: SettingsModalProps) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const { t } = useTranslation();
-  const { session } = useAuth();
 
   return (
     <Dialog
@@ -82,8 +74,8 @@ export default function SettingsModal({
               }
               text={
                 isDarkColorScheme
-                  ? t("profile.darkMode")
-                  : t("profile.lightMode")
+                  ? t("settings.darkMode")
+                  : t("settings.lightMode")
               }>
               <ThemeToggle />
             </ModalActionButton>
@@ -113,21 +105,6 @@ export default function SettingsModal({
               }
               text={t("common.help")}
             />
-            {session && (
-              <ModalActionButton
-                onPress={() => onItemPress("logout")}
-                destructive
-                icon={
-                  <Icon
-                    as={LogOut}
-                    color={THEME[colorScheme].fsreGradientForeground}
-                    size={20}
-                    strokeWidth={2.5}
-                  />
-                }
-                text={t("common.logout")}
-              />
-            )}
           </DialogFooter>
         </LinearGradient>
       </DialogContent>

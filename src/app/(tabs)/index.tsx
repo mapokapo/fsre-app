@@ -15,7 +15,6 @@ import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import { useAuth } from "@/lib/state/authStore";
 import { THEME } from "@/lib/theme";
 import { chunkArray } from "@/lib/utils";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -39,10 +38,9 @@ export default function HomeScreen() {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
   const { colorScheme } = useColorScheme();
-  const { setSession } = useAuth();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
 
@@ -52,7 +50,7 @@ export default function HomeScreen() {
         <Button
           className="rounded-full bg-white/20 p-6"
           size="icon"
-          onPress={() => setShowProfileModal(true)}>
+          onPress={() => setShowSettingsModal(true)}>
           <Icon
             as={SettingsIcon}
             className="text-primary-foreground"
@@ -63,27 +61,21 @@ export default function HomeScreen() {
     });
   }, [navigation]);
 
-  const handleLogout = () => {
-    setShowProfileModal(false);
-    setShowNotificationSettings(false);
-    setSession(null);
-  };
-
-  const handleHelp = () => {
-    setShowProfileModal(false);
+  const handleOpenHelp = () => {
+    setShowSettingsModal(false);
     setShowNotificationSettings(false);
     // TODO: implement help action
     console.log("Help pressed");
   };
 
-  const handleNotificationSettings = () => {
-    setShowProfileModal(false);
+  const handleOpenNotificationSettingsModal = () => {
+    setShowSettingsModal(false);
     setShowNotificationSettings(true);
   };
 
-  const handleBackToProfile = () => {
+  const handleCloseNotificationSettingsModal = () => {
     setShowNotificationSettings(false);
-    setShowProfileModal(true);
+    setShowSettingsModal(true);
   };
 
   const onRefresh = async () => {
@@ -99,22 +91,20 @@ export default function HomeScreen() {
       <GestureHandlerRootView>
         <BottomSheetModalProvider>
           <SettingsModal
-            isVisible={showProfileModal && !showNotificationSettings}
-            onClose={() => setShowProfileModal(false)}
+            isVisible={showSettingsModal && !showNotificationSettings}
+            onClose={() => setShowSettingsModal(false)}
             onItemPress={item => {
-              if (item === "logout") {
-                handleLogout();
-              } else if (item === "help") {
-                handleHelp();
+              if (item === "help") {
+                handleOpenHelp();
               } else if (item === "notificationSettings") {
-                handleNotificationSettings();
+                handleOpenNotificationSettingsModal();
               }
             }}
           />
 
           <NotificationSettingsModal
             isVisible={showNotificationSettings}
-            onClose={handleBackToProfile}
+            onClose={handleCloseNotificationSettingsModal}
           />
 
           <ScrollView
@@ -125,44 +115,6 @@ export default function HomeScreen() {
                 onRefresh={onRefresh}
               />
             }>
-            {/* Stats */}
-            {/*
-            <Section>
-              <SectionContent>
-                <StatsSection introAnimatedStyle={introAnimatedStyle} />
-              </SectionContent>
-            </Section>
-            */}
-
-            {/* Notifications */}
-            {/*
-            <Section>
-              <SectionHeader style={introAnimatedStyle}>
-                <SectionTitle
-                  icon={
-                    <Icon
-                      as={Bell}
-                      color={THEME[colorScheme].fsreGradient3}
-                      size={24}
-                      strokeWidth={2.5}
-                    />
-                  }
-                  title={t("home.notifications.title")}
-                />
-                <SectionButton title={t("common.all")} />
-              </SectionHeader>
-              <SectionContent>
-                {notifications.map(notification => (
-                  <NotificationItem
-                    key={notification.id}
-                    notification={notification}
-                    style={introAnimatedStyle}
-                  />
-                ))}
-              </SectionContent>
-            </Section>
-            */}
-
             {/* News */}
             <Section className="mt-8">
               <SectionHeader>
@@ -228,7 +180,7 @@ export default function HomeScreen() {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}>
                     <Text className="ml-3 text-sm text-card-gradient-foreground/85">
-                      Za opće upite:
+                      {t("home.contact.generalInquiries")}:
                     </Text>
                     <ContactItem
                       icon={
@@ -264,7 +216,7 @@ export default function HomeScreen() {
                       title="fsre@sum.ba"
                     />
                     <Text className="ml-3 text-sm text-card-gradient-foreground/85">
-                      Za studentska pitanja:
+                      {t("home.contact.studentInquiries")}:
                     </Text>
                     <ContactItem
                       icon={

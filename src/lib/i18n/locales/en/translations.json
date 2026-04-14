@@ -83,7 +83,9 @@
   },
   "home": {
     "contact": {
-      "title": "Contact"
+      "title": "Contact",
+      "generalInquiries": "General inquiries",
+      "studentInquiries": "Student inquiries"
     },
     "news": {
       "title": "News"
@@ -143,12 +145,6 @@
       "title": "Notification settings"
     }
   },
-  "profile": {
-    "darkMode": "Dark mode",
-    "indexNumber": "Index number: {{index}}",
-    "lightMode": "Light mode",
-    "title": "Profile"
-  },
   "quickLinks": {
     "eLearning": "eLearning",
     "news": "News",
@@ -156,7 +152,9 @@
     "studomat": "Studomat"
   },
   "settings": {
-    "title": "Settings"
+    "title": "Settings",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode"
   },
   "stats": {
     "activeStudents": {

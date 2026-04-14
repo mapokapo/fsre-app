@@ -7,28 +7,18 @@
     "icon": "./src/assets/images/icon.png",
     "scheme": "fsre",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.fsre.mobileapp",
-      "infoPlist": {
-        "LSApplicationQueriesSchemes": ["https", "http"],
-        "UIBackgroundModes": ["remote-notification"]
-      },
-      "googleServicesFile": "./GoogleService-Info.plist",
-      "entitlements": {
-        "aps-environment": "production"
-      }
-    },
+    "ios": {},
     "android": {
       "package": "com.fsre.mobileapp",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/icon.png",
-        "backgroundColor": "#0A4977"
+        "foregroundImage": "./src/assets/images/logo.png",
+        "backgroundImage": "./src/assets/images/icon_background.png"
       },
-      "permissions": ["android.permission.INTERNET"],
-      "googleServicesFile": "./google-services.json",
-      "edgeToEdgeEnabled": true
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.INTERNET"
+      ],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -40,18 +30,16 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/icon.png",
+          "image": "./src/assets/images/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#1e5a8a"
         }
       ],
       [
         "expo-navigation-bar",
         {
-          "position": "relative",
-          "visibility": "hidden",
-          "behavior": "inset-swipe"
+          "visibility": "visible"
         }
       ],
       "expo-font",
@@ -73,7 +61,8 @@
           }
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
@@ -82,7 +71,7 @@
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/621ebfd2-1f62-49a6-a434-7e45176170ad"
+      "url": "https://u.expo.dev/01bc83d3-7af7-4a5f-8bc9-1b543abc5883"
     },
     "runtimeVersion": {
       "policy": "appVersion"

@@ -77,7 +77,9 @@
       "title": "Brzi pristup"
     },
     "contact": {
-      "title": "Kontakt"
+      "title": "Kontakt",
+      "generalInquiries": "Za opće upite",
+      "studentInquiries": "Za studentska pitanja"
     }
   },
   "news": {
@@ -120,14 +122,10 @@
     },
     "error": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu."
   },
-  "profile": {
-    "title": "Profil",
-    "darkMode": "Tamni način",
-    "lightMode": "Svijetli način",
-    "indexNumber": "Broj indeksa: {{index}}"
-  },
   "settings": {
-    "title": "Postavke"
+    "title": "Postavke",
+    "darkMode": "Tamni način",
+    "lightMode": "Svijetli način"
   },
   "notifications": {
     "settings": {

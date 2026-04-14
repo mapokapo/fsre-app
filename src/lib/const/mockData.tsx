@@ -1,6 +1,5 @@
 import Color from "@/lib/types/Color";
 import Notification from "@/lib/types/Notification";
-import Profile from "@/lib/types/Profile";
 import Stat from "@/lib/types/Stat";
 import { addDays, addHours } from "date-fns";
 import { Award, TrendingUp, Users } from "lucide-react-native";
@@ -30,14 +29,6 @@ const mockStats: Stat[] = [
     color: Color.fromHex("#45B7D1"),
   },
 ];
-
-const mockProfileData: Profile = {
-  name: "Testni Korisnik",
-  indexNumber: "12345",
-  year: "THIRD",
-  department: "COMPUTER_SCIENCE",
-  email: "test@fsre.sum.ba",
-};
 
 const mockNotifications: Notification[] = [
   {
@@ -76,11 +67,6 @@ export default class MockData {
   static getStats() {
     console.warn("You are using mock data: mockStats");
     return mockStats;
-  }
-
-  static getProfile(): Profile {
-    console.warn("You are using mock data: mockProfileData");
-    return mockProfileData;
   }
 
   static getNotifications() {
