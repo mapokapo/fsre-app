@@ -10,7 +10,7 @@ import {
   ChevronUpIcon,
 } from "lucide-react-native";
 import * as React from "react";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import { FullWindowOverlay as RNFullWindowOverlay } from "react-native-screens";
 
@@ -24,10 +24,9 @@ function SelectValue({
   ref,
   className,
   ...props
-}: SelectPrimitive.ValueProps &
-  React.RefAttributes<SelectPrimitive.ValueRef> & {
-    className?: string;
-  }) {
+}: React.ComponentProps<typeof SelectPrimitive.Value> & {
+  className?: string;
+}) {
   const { value } = SelectPrimitive.useRootContext();
   return (
     <SelectPrimitive.Value
@@ -48,11 +47,10 @@ function SelectTrigger({
   children,
   size = "default",
   ...props
-}: SelectPrimitive.TriggerProps &
-  React.RefAttributes<SelectPrimitive.TriggerRef> & {
-    children?: React.ReactNode;
-    size?: "default" | "sm";
-  }) {
+}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+  children?: React.ReactNode;
+  size?: "default" | "sm";
+}) {
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -85,11 +83,10 @@ function SelectContent({
   position = "popper",
   portalHost,
   ...props
-}: SelectPrimitive.ContentProps &
-  React.RefAttributes<SelectPrimitive.ContentRef> & {
-    className?: string;
-    portalHost?: string;
-  }) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+  className?: string;
+  portalHost?: string;
+}) {
   return (
     <SelectPrimitive.Portal hostName={portalHost}>
       <FullWindowOverlay>
@@ -149,7 +146,7 @@ function SelectContent({
 function SelectLabel({
   className,
   ...props
-}: SelectPrimitive.LabelProps & React.RefAttributes<SelectPrimitive.LabelRef>) {
+}: React.ComponentProps<typeof SelectPrimitive.Label>) {
   return (
     <SelectPrimitive.Label
       className={cn(
@@ -165,7 +162,7 @@ function SelectItem({
   className,
   children,
   ...props
-}: SelectPrimitive.ItemProps & React.RefAttributes<SelectPrimitive.ItemRef>) {
+}: React.ComponentProps<typeof SelectPrimitive.Item>) {
   return (
     <SelectPrimitive.Item
       className={cn(
@@ -193,8 +190,7 @@ function SelectItem({
 function SelectSeparator({
   className,
   ...props
-}: SelectPrimitive.SeparatorProps &
-  React.RefAttributes<SelectPrimitive.SeparatorRef>) {
+}: React.ComponentProps<typeof SelectPrimitive.Separator>) {
   return (
     <SelectPrimitive.Separator
       className={cn(
@@ -259,27 +255,7 @@ function SelectScrollDownButton({
   );
 }
 
-/**
- * @platform Native only
- * Returns the children on the web
- */
-function NativeSelectScrollView({
-  className,
-  ...props
-}: React.ComponentProps<typeof ScrollView>) {
-  if (Platform.OS === "web") {
-    return <>{props.children}</>;
-  }
-  return (
-    <ScrollView
-      className={cn("max-h-52", className)}
-      {...props}
-    />
-  );
-}
-
 export {
-  NativeSelectScrollView,
   Select,
   SelectContent,
   SelectGroup,

@@ -4,7 +4,6 @@ import { hr } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
 import { Timetable, TimetableEvent } from "@/lib/api/client";
-import { NAV_THEME } from "@/lib/theme";
 import StudyYear from "@/lib/types/StudyYear";
 import * as NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
@@ -29,11 +28,6 @@ export function getDistanceTo(date: Date, now = new Date()): string {
 export async function setAndroidNavigationBar(theme: "light" | "dark") {
   if (Platform.OS !== "android") return;
   await NavigationBar.setButtonStyleAsync(theme === "dark" ? "light" : "dark");
-  await NavigationBar.setBackgroundColorAsync(
-    theme === "dark"
-      ? NAV_THEME.dark.colors.background
-      : NAV_THEME.light.colors.background
-  );
 }
 
 export function filterTimetable(
