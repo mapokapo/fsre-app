@@ -2,6 +2,17 @@
   "name": "fsre-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "author": {
+    "name": "Leo Petrović",
+    "email": "leo.petrovic@fsre.sum.ba",
+    "url": "https://leopetrovic.vercel.app"
+  },
+  "contributors": [
+    {
+      "name": "Vedran Marić",
+      "email": "vedran.maric@fsre.sum.ba"
+    }
+  ],
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",

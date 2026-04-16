@@ -39,6 +39,7 @@
     },
     "error": "Error",
     "help": "Help",
+    "credits": "Credits",
     "language": "Language",
     "languages": {
       "en": "English",

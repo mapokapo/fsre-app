@@ -101,3 +101,8 @@ src/                                      - contains the app source code
     ├── theme.ts                          - various files may be places here (eg. configuration)
     └── utils.ts                          - contains utility functions
 ```
+
+## Contributors
+
+- [Leo Petrović](https://github.com/mapokapo)
+- [Vedran Marić](https://github.com/vedran-maric)

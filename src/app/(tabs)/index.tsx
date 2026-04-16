@@ -1,4 +1,5 @@
 import ContactItem from "@/components/partials/ContactItem";
+import CreditsModal from "@/components/partials/CreditsModal";
 import NewsSection from "@/components/partials/NewsSection";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
@@ -43,6 +44,7 @@ export default function HomeScreen() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
+  const [showCredits, setShowCredits] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -78,6 +80,14 @@ export default function HomeScreen() {
     setShowSettingsModal(true);
   };
 
+  const handleOpenCredits = () => {
+    setShowCredits(true);
+  };
+
+  const handleCloseCredits = () => {
+    setShowCredits(false);
+  };
+
   const onRefresh = async () => {
     setIsRefreshing(true);
 
@@ -92,14 +102,27 @@ export default function HomeScreen() {
         <BottomSheetModalProvider>
           <SettingsModal
             isVisible={showSettingsModal && !showNotificationSettings}
-            onClose={() => setShowSettingsModal(false)}
+            onClose={() => {
+              setShowSettingsModal(false);
+              setShowNotificationSettings(false);
+            }}
             onItemPress={item => {
-              if (item === "help") {
-                handleOpenHelp();
-              } else if (item === "notificationSettings") {
-                handleOpenNotificationSettingsModal();
+              switch (item) {
+                case "help":
+                  handleOpenHelp();
+                  break;
+                case "notificationSettings":
+                  handleOpenNotificationSettingsModal();
+                  break;
+                case "credits":
+                  handleOpenCredits();
+                  break;
               }
             }}
+          />
+          <CreditsModal
+            isVisible={showCredits}
+            onClose={handleCloseCredits}
           />
 
           <NotificationSettingsModal

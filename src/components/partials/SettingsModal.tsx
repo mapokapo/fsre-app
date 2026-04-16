@@ -12,7 +12,13 @@ import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
-import { Bell, HelpCircle, Languages, Paintbrush } from "lucide-react-native";
+import {
+  Bell,
+  Copyright,
+  HelpCircle,
+  Languages,
+  Paintbrush,
+} from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
@@ -26,7 +32,7 @@ export default function SettingsModal({
   isVisible,
   onClose,
   onItemPress,
-}: SettingsModalProps) {
+}: Readonly<SettingsModalProps>) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const { t } = useTranslation();
 
@@ -104,6 +110,18 @@ export default function SettingsModal({
                 />
               }
               text={t("common.help")}
+            />
+            <ModalActionButton
+              onPress={() => onItemPress("credits")}
+              icon={
+                <Icon
+                  as={Copyright}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={20}
+                  strokeWidth={2.5}
+                />
+              }
+              text={t("common.credits")}
             />
           </DialogFooter>
         </LinearGradient>

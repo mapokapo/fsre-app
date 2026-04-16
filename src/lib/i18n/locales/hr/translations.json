@@ -5,6 +5,7 @@
     "save": "Spremi",
     "saveSettings": "Spremi postavke",
     "help": "Pomoć",
+    "credits": "Zasluge",
     "logout": "Odjavi se",
     "error": "Greška",
     "refresh": "Osvježi",
@@ -172,8 +173,14 @@
     }
   },
   "stats": {
-    "activeStudents": { "label": "Aktivnih studenata" },
-    "completedProjects": { "label": "Završenih projekata" },
-    "successRate": { "label": "Uspješnost" }
+    "activeStudents": {
+      "label": "Aktivnih studenata"
+    },
+    "completedProjects": {
+      "label": "Završenih projekata"
+    },
+    "successRate": {
+      "label": "Uspješnost"
+    }
   }
 }
