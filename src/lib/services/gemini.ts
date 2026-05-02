@@ -74,7 +74,7 @@ export async function generateGeminiResponse(userMessage: string): Promise<
 > {
   try {
     const result = await genAI.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-3.1-flash-lite-preview",
       contents: userMessage,
       config: {
         systemInstruction: SYSTEM_PROMPT,
