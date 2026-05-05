@@ -66,7 +66,10 @@ export default function ChatbotScreen() {
     if (!botResponse.isSuccess) {
       const errorMessage: Message = {
         id: `bot-${Date.now()}`,
-        text: t("chatbot.error"),
+        text:
+          botResponse.errorType === "busy"
+            ? t("chatbot.error.busy")
+            : t("chatbot.error.generic"),
         isUser: false,
         timestamp: new Date(),
       };

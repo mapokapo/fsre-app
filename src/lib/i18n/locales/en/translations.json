@@ -1,6 +1,9 @@
 {
   "chatbot": {
-    "error": "Sorry, an error occurred. Please try again or contact the student services.",
+    "error": {
+      "busy": "Sorry, the AI assistant is busy right now. Please try again in a moment.",
+      "generic": "Sorry, an error occurred. Please try again or contact the student services."
+    },
     "input": {
       "placeholder": "Enter your question..."
     },

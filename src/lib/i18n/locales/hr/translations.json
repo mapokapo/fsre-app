@@ -121,7 +121,10 @@
         "description": "Informacije o laboratorijskim vježbama"
       }
     },
-    "error": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu."
+    "error": {
+      "busy": "Izvinjavam se, AI asistent je trenutno zauzet. Molimo pokušajte ponovo za nekoliko trenutaka.",
+      "generic": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu."
+    }
   },
   "settings": {
     "title": "Postavke",

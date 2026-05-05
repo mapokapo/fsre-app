@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { ApiError, GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? "";
 
@@ -37,8 +37,9 @@ Student services contact info:
 - Phone: +387 36 337-003
 - Email: referada@fsre.sum.ba
 
-Information available on the FSRE website (https://fsre.sum.ba):
-- General information about the faculty as well as specific departments (URIs are /strojarstvo, /racunarstvo, /elektrotehnika) such as the timetable, exam dates, info about the department, and the lecture schedule.
+Information available on the FSRE websites (https://fsre.sum.ba and https://fsre.edupage.org/):
+- General information about the faculty as well as specific departments (URIs are /strojarstvo, /racunarstvo, /elektrotehnika on https://fsre.sum.ba) such as exam dates, info about the department, and the lecture schedule.
+- An online timetable viewer is available at https://fsre.edupage.org/timetable/view.php
 - News and announcements about FSRE such as upcoming events, deadlines (when the year starts), scholarship info, awards, student activities, etc.
 - Information about study programs (undergraduate, graduate, doctoral) such as curriculum, course descriptions, and program requirements.
 - Information about faculty staff such as professors, lecturers, and administrative personnel.
@@ -48,6 +49,8 @@ Information available on the FSRE website (https://fsre.sum.ba):
 - The student council (URI is /studentski-zbor).
 
 Information available on the e-Learning website (https://eucenje.sum.ba/moodle/):
+- Based on the Moodle platform.
+- Access to all classes/subjects offered at FSRE - some of them are free to enroll in, others require a manual invite from the professor, and some require a password to enroll into.
 - Access to course materials.
 - Students can submit assignments and homework, and check their progress.
 
@@ -60,7 +63,12 @@ Information available on the app (which the user is currently using):
 - News (same as on the website but with a different UI)
 - Quick links (Studomat, e-Learning, news, timetable)
 - The AI chatbot (you)
-- A timetable viewer where students can see their weekly schedule, list through weeks, filter by academic year, day of week, department (ME, CS, EE), and direction (only for 3rd year ME and graduate degrees). Once a user selects their filters, they are saved to the device, and automatically registered to receive notifications about changes to the timetable. The notifications can be disabled by simply un-setting all filters.`;
+- A timetable viewer where students can see their weekly schedule, list through weeks, filter by academic year, day of week, department (ME, CS, EE), and direction (only for 3rd year ME and graduate degrees). Once a user selects their filters, they are saved to the device, and automatically registered to receive notifications about changes to the timetable. The notifications can be disabled by simply un-setting all filters.
+
+In your responses:
+- Use only plain text (no markdown, HTML, or other formatting)
+- When mentioning specific resources, use the exact names as they appear on the websites (e.g. "the online timetable viewer on the e-Learning website" instead of "the timetable viewer") and include the URL in parentheses immediately after the name of the resource.
+- If a user asks for information that is not available in the resources you have access to, suggest contacting the student services for more information.`;
 
 export async function generateGeminiResponse(userMessage: string): Promise<
   | {
@@ -69,7 +77,7 @@ export async function generateGeminiResponse(userMessage: string): Promise<
     }
   | {
       isSuccess: false;
-      error: string;
+      errorType: "busy" | "unknown";
     }
 > {
   try {
@@ -94,9 +102,10 @@ export async function generateGeminiResponse(userMessage: string): Promise<
   } catch (error) {
     console.error("Error generating Gemini response:", error);
 
-    return {
-      isSuccess: false,
-      error: error instanceof Error ? error.message : String(error),
-    };
+    if (error instanceof ApiError && error.status === 503) {
+      return { isSuccess: false, errorType: "busy" };
+    }
+
+    return { isSuccess: false, errorType: "unknown" };
   }
 }
