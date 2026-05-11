@@ -4,7 +4,7 @@ import { Text } from "@/components/ui/text";
 import { TimetableEvent } from "@/lib/api/client";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
-import { studyYearToInt } from "@/lib/utils";
+import { cn, studyYearToInt } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -18,6 +18,7 @@ import {
   Users,
   Zap,
 } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ColorValue, View } from "react-native";
 
@@ -63,6 +64,17 @@ export default function TimetableEventCard({
   const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
 
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const start = new Date(event.startDateTime).getTime();
+  const end = new Date(event.endDateTime).getTime();
+  const isOngoing = now >= start && now <= end;
+  const startsSoon = !isOngoing && start > now && start - now <= 30 * 60_000;
+
   const getGradientByType = (
     event: TimetableEvent
   ): [ColorValue, ColorValue] => {
@@ -73,7 +85,11 @@ export default function TimetableEventCard({
   return (
     <Button
       variant="ghost"
-      className="mb-4 h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md web:!h-auto">
+      className={cn(
+        "mb-4 h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md web:!h-auto",
+        isOngoing && "animate-pulse border-2 border-destructive",
+        startsSoon && "border-2 border-fsre-gradient-3"
+      )}>
       <LinearGradient
         colors={[
           THEME[colorScheme].cardGradient1,
@@ -119,6 +135,12 @@ export default function TimetableEventCard({
             <Text className="text-sm text-muted-foreground">
               {formatDate(event.startDateTime, "HH:mm")} -{" "}
               {formatDate(event.endDateTime, "HH:mm")}
+              {startsSoon && (
+                <Text className="text-xs text-fsre-gradient-3">
+                  {" · "}
+                  {t("timetable.startsSoon")}
+                </Text>
+              )}
             </Text>
           </View>
           <View className="flex-row items-center">

@@ -184,6 +184,7 @@
     "noClasses": {
       "description": "No timetable for the selected filters",
       "title": "No classes"
-    }
+    },
+    "startsSoon": "Starts soon"
   }
 }

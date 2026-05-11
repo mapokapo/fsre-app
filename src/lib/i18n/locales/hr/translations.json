@@ -173,7 +173,8 @@
     "noClasses": {
       "title": "Nema predavanja",
       "description": "Nema rasporeda za odabrane filtere"
-    }
+    },
+    "startsSoon": "Počinje uskoro"
   },
   "stats": {
     "activeStudents": {
