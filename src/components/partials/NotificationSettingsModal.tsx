@@ -39,7 +39,6 @@ export default function NotificationSettingsModal({
   };
 
   const handleSaveNotificationSettings = () => {
-    console.log("Saving notification settings:", notificationSettings);
     onClose();
   };
 

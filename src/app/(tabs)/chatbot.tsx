@@ -1,19 +1,16 @@
-import Dots from "@/components/Dots";
-import MessageItem from "@/components/partials/MessageItem";
-import QuickQuestionItem from "@/components/partials/QuickQuestionItem";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
+import ChatbotComposer from "@/components/partials/ChatbotComposer";
+import ChatbotHeaderRight from "@/components/partials/ChatbotHeaderRight";
+import ChatbotMessageList from "@/components/partials/ChatbotMessageList";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
+import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import { generateGeminiResponse } from "@/lib/services/gemini";
 import Message from "@/lib/types/Message";
 import { useNavigation } from "expo-router";
-import { Send } from "lucide-react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, ScrollView, View } from "react-native";
+import { LayoutChangeEvent, View } from "react-native";
 import Animated from "react-native-reanimated";
 
 export default function ChatbotScreen() {
@@ -35,17 +32,27 @@ export default function ChatbotScreen() {
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
   const { keyboardHeight } = useKeyboard();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <Dots isAnimating={isLoading} />,
-    });
-  }, [isLoading, navigation]);
+  useNavigationHeaderRight(navigation, ChatbotHeaderRight, {
+    isAnimating: isLoading,
+  });
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
+
+    return () => clearTimeout(timer);
   }, [messages]);
+
+  useEffect(() => {
+    setMessages(prev =>
+      prev.map(message =>
+        message.id === "initial-message"
+          ? { ...message, text: t("chatbot.intro") }
+          : message
+      )
+    );
+  }, [t]);
 
   const handleSend = async () => {
     if (inputText.trim() === "" || isLoading) return;
@@ -90,84 +97,36 @@ export default function ChatbotScreen() {
     setIsLoading(false);
   };
 
-  const handleQuickQuestion = (question: string) => {
+  const handleQuickQuestion = useCallback((question: string) => {
     setInputText(question);
-  };
+  }, []);
+
+  const handleComposerLayout = useCallback((event: LayoutChangeEvent) => {
+    setBottomContainerHeight(event.nativeEvent.layout.height + 80);
+  }, []);
 
   return (
     <View className="flex-1 bg-background">
-      <Animated.ScrollView
-        ref={scrollViewRef}
-        contentContainerClassName="p-4 gap-4"
-        contentContainerStyle={{
-          paddingBottom:
-            bottomContainerHeight + Math.max(keyboardHeight - 80, 0),
-        }}>
-        {[
-          ...messages,
-          ...(isLoading
-            ? [
-                {
-                  id: "typing-indicator",
-                  text: "",
-                  isUser: false,
-                  timestamp: new Date(),
-                  typing: true,
-                },
-              ]
-            : []),
-        ].map(message => (
-          <MessageItem
-            key={message.id}
-            message={message}
-            style={introAnimatedOpacityStyle}
-          />
-        ))}
-      </Animated.ScrollView>
-      <KeyboardAvoidingView
-        behavior="position"
-        className="absolute bottom-8 left-0 right-0"
-        keyboardVerticalOffset={175}
-        onLayout={e =>
-          setBottomContainerHeight(e.nativeEvent.layout.height + 80)
-        }>
-        {messages.length === 1 && (
-          <ScrollView
-            horizontal
-            contentContainerClassName="mt-auto pb-3 justify-center gap-3 min-w-full px-4">
-            {quickQuestions.map((question, index) => (
-              <QuickQuestionItem
-                key={index}
-                question={question}
-                onPress={() => handleQuickQuestion(question.text(t))}
-                style={introAnimatedStyle}
-              />
-            ))}
-          </ScrollView>
-        )}
-        <View className="mx-4 flex-row items-center rounded-full bg-secondary shadow-md shadow-black/35">
-          <Input
-            className="h-auto flex-1 rounded-full border-transparent bg-transparent px-4 py-5"
-            placeholder={t("chatbot.input.placeholder")}
-            value={inputText}
-            onChangeText={setInputText}
-            maxLength={500}
-            onSubmitEditing={handleSend}
-          />
-          <Button
-            size="icon"
-            className="mr-2 h-12 w-12 overflow-hidden rounded-full"
-            onPress={handleSend}
-            disabled={inputText.trim() === "" || isLoading}>
-            <Icon
-              as={Send}
-              className="text-fsre-gradient-foreground"
-              size={22}
-              strokeWidth={2.5}
-            />
-          </Button>
-        </View>
-      </KeyboardAvoidingView>
+      <ChatbotMessageList
+        messages={messages}
+        isLoading={isLoading}
+        introAnimatedOpacityStyle={introAnimatedOpacityStyle}
+        scrollViewRef={scrollViewRef}
+        bottomContainerHeight={bottomContainerHeight}
+        keyboardHeight={keyboardHeight}
+      />
+      <ChatbotComposer
+        t={t}
+        inputText={inputText}
+        isLoading={isLoading}
+        showQuickQuestions={messages.length === 1}
+        quickQuestions={quickQuestions}
+        introAnimatedStyle={introAnimatedStyle}
+        onInputChange={setInputText}
+        onSend={handleSend}
+        onQuickQuestion={handleQuickQuestion}
+        onLayout={handleComposerLayout}
+      />
     </View>
   );
 }

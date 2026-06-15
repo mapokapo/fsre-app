@@ -42,9 +42,9 @@ export default function TabLayout() {
             headerBackground: () => (
               <LinearGradient
                 colors={[
-                  THEME["light"]["fsreGradient1"],
-                  THEME["light"]["fsreGradient2"],
-                  THEME["light"]["fsreGradient3"],
+                  THEME[colorScheme].fsreGradient1,
+                  THEME[colorScheme].fsreGradient2,
+                  THEME[colorScheme].fsreGradient3,
                 ]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}

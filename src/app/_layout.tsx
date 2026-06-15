@@ -78,16 +78,23 @@ export default function RootLayout() {
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
-      const statusIos = await requestPermission(messaging!);
-      const statusAndroid = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-      );
+      if (!messaging) return;
 
-      if (
-        statusIos !== AuthorizationStatus.AUTHORIZED ||
-        statusAndroid !== "granted"
-      ) {
-        console.warn("User denied notifications");
+      if (Platform.OS === "ios") {
+        const status = await requestPermission(messaging);
+        if (status !== AuthorizationStatus.AUTHORIZED) {
+          console.warn("User denied notifications");
+        }
+        return;
+      }
+
+      if (Platform.OS === "android") {
+        const status = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+        if (status !== PermissionsAndroid.RESULTS.GRANTED) {
+          console.warn("User denied notifications");
+        }
       }
     };
 

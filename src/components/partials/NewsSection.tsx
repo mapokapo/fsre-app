@@ -5,11 +5,37 @@ import { useQuery } from "@tanstack/react-query";
 import { parse } from "date-fns";
 import { ActivityIndicator, View } from "react-native";
 
+type NewsArticleApiResponse = {
+  id: number;
+  title: string;
+  subtitle: string | null;
+  views: number;
+  content: string;
+  alias: string;
+  created_at: string;
+  image: string;
+  categories: NewsArticle["categories"];
+};
+
+function mapNewsArticle(article: NewsArticleApiResponse): NewsArticle {
+  return {
+    id: article.id,
+    title: article.title,
+    subtitle: article.subtitle,
+    views: article.views,
+    content: article.content,
+    link: `https://fsre.sum.ba/novosti/${article.alias}`,
+    datetime: parse(article.created_at, "dd.MM.yyyy HH:mm:ss", new Date()),
+    imageUrl: article.image,
+    categories: article.categories,
+  };
+}
+
 export default function NewsSection() {
   const { data, isFetching, error } = useQuery({
     queryKey: ["newsArticles"],
-    queryFn: async () =>
-      fetch("https://web-admin.sum.ba/api/web/objave", {
+    queryFn: async () => {
+      const res = await fetch("https://web-admin.sum.ba/api/web/objave", {
         method: "POST",
         body: JSON.stringify({
           page: 1,
@@ -27,29 +53,15 @@ export default function NewsSection() {
           "Content-Type": "application/json",
           language: "hr",
         },
-      })
-        .then(res => res.json())
-        .then(
-          res =>
-            res.map(
-              (a: any) =>
-                ({
-                  id: a.id,
-                  title: a.title,
-                  subtitle: a.subtitle,
-                  views: a.views,
-                  content: a.content,
-                  link: `https://fsre.sum.ba/novosti/${a.alias}`,
-                  datetime: parse(
-                    a.created_at,
-                    "dd.MM.yyyy HH:mm:ss",
-                    new Date()
-                  ),
-                  imageUrl: a.image,
-                  categories: a.categories,
-                }) satisfies NewsArticle
-            ) as NewsArticle[]
-        ),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch news articles (${res.status})`);
+      }
+
+      const articles = (await res.json()) as NewsArticleApiResponse[];
+      return articles.map(mapNewsArticle);
+    },
   });
 
   if (isFetching)

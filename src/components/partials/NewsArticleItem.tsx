@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { gradients } from "@/lib/const/gradients";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import i18n from "@/lib/i18n";
 import { THEME } from "@/lib/theme";
 import NewsArticle from "@/lib/types/NewsArticle";
 import { getDistanceTo } from "@/lib/utils";
@@ -34,12 +33,12 @@ const getIndexByCategory = (article: NewsArticle) => {
   }
 };
 
-const categoryNameToLabel = {
-  "FSRE web - Globalne objave": i18n.t("news.categories.global"),
-  "FSRE web - Strojarstvo": i18n.t("news.categories.mechanicalEngineering"),
-  "FSRE web - Računarstvo": i18n.t("news.categories.computerScience"),
-  "FSRE web - Elektrotehnika": i18n.t("news.categories.electricalEngineering"),
-};
+const categoryKeys = {
+  "FSRE web - Globalne objave": "news.categories.global",
+  "FSRE web - Strojarstvo": "news.categories.mechanicalEngineering",
+  "FSRE web - Računarstvo": "news.categories.computerScience",
+  "FSRE web - Elektrotehnika": "news.categories.electricalEngineering",
+} as const;
 
 export default function NewsArticleItem({
   article,
@@ -48,6 +47,19 @@ export default function NewsArticleItem({
 }: NewsArticleItemProps) {
   const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
+
+  const gradientIndex = getIndexByCategory(article) % gradients.length;
+  const categoryGradient = gradients[gradientIndex]!;
+  const preview = htmlToText(article.content).replace(/\n{2,}/g, "");
+  const excerpt =
+    preview.length > 100 ? `${preview.slice(0, 100)}...` : preview;
+  const category = article.categories[0];
+  const categoryLabel =
+    category === undefined
+      ? t("news.categories.default")
+      : category in categoryKeys
+        ? t(categoryKeys[category])
+        : t("news.categories.default");
 
   return (
     <Animated.View {...props}>
@@ -72,18 +84,12 @@ export default function NewsArticleItem({
             className="aspect-video h-auto w-full"
           />
           <LinearGradient
-            colors={[
-              gradients[getIndexByCategory(article) % gradients.length]![0],
-              gradients[getIndexByCategory(article) % gradients.length]![1],
-            ]}
+            colors={[categoryGradient[0], categoryGradient[1]]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             className="absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2">
             <Text className="text-sm uppercase !text-primary-foreground">
-              {article.categories[0] === undefined
-                ? t("news.categories.default")
-                : (categoryNameToLabel[article.categories[0]] ??
-                  t("news.categories.default"))}
+              {categoryLabel}
             </Text>
           </LinearGradient>
           <View className="p-5">
@@ -91,10 +97,7 @@ export default function NewsArticleItem({
               {article.title}
             </Text>
             <Text className="mb-4 text-sm text-muted-foreground">
-              {htmlToText(article.content)
-                .replace(/\n{2,}/g, "")
-                .slice(0, 100)}
-              ...
+              {excerpt}
             </Text>
             <Text className="text-sm text-muted-foreground">
               {getDistanceTo(article.datetime)}

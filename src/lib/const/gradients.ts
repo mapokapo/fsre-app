@@ -6,5 +6,5 @@ export const gradients: [ColorValue, ColorValue][] = [
   ["#4facfe", "#00f2fe"],
   ["#43e97b", "#38f9d7"],
   ["#f093fb", "#f5576c"],
-  ["#f093fb", "#f5576c"],
+  ["#fa709a", "#fee140"],
 ];

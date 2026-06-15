@@ -21,16 +21,25 @@ export default class Color {
   /**
    * Creates a Color instance from a hex color string. If alpha value is not provided, defaults to fully opaque (1).
    *
-   * @param hex - The hex color string (e.g., "#RRGGBB" or "#RRGGBBAA").
+   * @param hex - The hex color string (e.g., "#RGB" 6-digit or 8-digit with alpha).
    * @returns A new Color instance.
    */
   static fromHex(hex: string): Color {
-    const bigint = parseInt(hex.slice(1), 16);
+    const normalized = hex.replace("#", "");
+    if (normalized.length === 8) {
+      const bigint = Number.parseInt(normalized, 16);
+      const red = (bigint >> 24) & 255;
+      const green = (bigint >> 16) & 255;
+      const blue = (bigint >> 8) & 255;
+      const alpha = bigint & 255;
+      return new Color(red, green, blue, alpha);
+    }
+
+    const bigint = Number.parseInt(normalized, 16);
     const red = (bigint >> 16) & 255;
     const green = (bigint >> 8) & 255;
     const blue = bigint & 255;
-    const alpha = hex.length === 9 ? (bigint >> 24) & 255 : 255;
-    return new Color(red, green, blue, alpha);
+    return new Color(red, green, blue, 255);
   }
 
   static denormalizeValue(value: number): number {

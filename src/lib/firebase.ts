@@ -13,7 +13,7 @@ export const firebaseConfig = {
   databaseURL: process.env.EXPO_PUBLIC_FIREBASE_DATABASE_URL || "",
 };
 
-const apps = getApps() ?? [];
+const apps = getApps();
 if (Platform.OS === "web" && apps.length === 0) {
   initializeApp(firebaseConfig);
 }

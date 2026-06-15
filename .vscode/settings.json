@@ -7,7 +7,7 @@
   "files.associations": {
     "**/*.css": "tailwindcss"
   },
-  "cSpell.words": ["gorhom", "studomat", "webmail"],
+  "cSpell.words": ["gorhom", "RRGGBB", "RRGGBBAA", "studomat", "webmail"],
   "i18n-ally.localesPaths": ["src/lib/i18n/locales"],
   "i18n-ally.enabledParsers": ["json", "js"],
   "i18n-ally.sortKeys": true,

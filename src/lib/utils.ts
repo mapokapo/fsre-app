@@ -49,7 +49,7 @@ export function filterTimetable(
 
 export function getTimetableEvents(
   timetable: Timetable
-): { day: Day; events: TimetableEvent[] }[] {
+): { day: number; events: TimetableEvent[] }[] {
   return [
     { day: 0, events: timetable.monday },
     { day: 1, events: timetable.tuesday },
@@ -89,8 +89,4 @@ export function chunkArray<T>(array: T[], chunkSize: number): T[][] {
     chunks.push(array.slice(i, i + chunkSize));
   }
   return chunks;
-}
-
-export function timeout(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }

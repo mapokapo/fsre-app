@@ -8,6 +8,7 @@ import { getTimetableEvents } from "@/lib/utils";
 import { compareAsc } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ColorValue, RefreshControl, ScrollView, View } from "react-native";
 
@@ -23,9 +24,15 @@ export default function TimetableView({
   isRefreshing,
   onRefresh,
   gradients,
-}: TimetableViewProps) {
+}: Readonly<TimetableViewProps>) {
   const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
+
+  const timetableDays = useMemo(
+    () =>
+      getTimetableEvents(timetable).filter(({ events }) => events.length > 0),
+    [timetable]
+  );
 
   const getWeekDayFromIndex = (index: number) => {
     const weekDays = [
@@ -50,9 +57,7 @@ export default function TimetableView({
           onRefresh={onRefresh}
         />
       }>
-      {getTimetableEvents(timetable)
-        .map(e => e.events)
-        .flat().length === 0 ? (
+      {timetableDays.length === 0 ? (
         <View className="flex-1 items-center justify-center">
           <LinearGradient
             colors={[
@@ -75,7 +80,7 @@ export default function TimetableView({
           </Text>
         </View>
       ) : (
-        getTimetableEvents(timetable).map(({ events, day }) => (
+        timetableDays.map(({ events, day }) => (
           <View
             key={day}
             className="mb-8">
@@ -97,8 +102,8 @@ export default function TimetableView({
               </LinearGradient>
             </View>
 
-            {events
-              .sort((a, b) => compareAsc(a.startDateTime, b.endDateTime))
+            {[...events]
+              .sort((a, b) => compareAsc(a.startDateTime, b.startDateTime))
               .map(event => {
                 return (
                   <TimetableEventCard

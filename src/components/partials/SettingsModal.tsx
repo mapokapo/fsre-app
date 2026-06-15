@@ -22,10 +22,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+export type SettingsMenuItem = "help" | "notificationSettings" | "credits";
+
 export type SettingsModalProps = {
   isVisible: boolean;
   onClose: () => void;
-  onItemPress: (item: string) => void;
+  onItemPress: (item: SettingsMenuItem) => void;
 };
 
 export default function SettingsModal({

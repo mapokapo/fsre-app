@@ -4,6 +4,7 @@ import NewsSection from "@/components/partials/NewsSection";
 import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
 import SettingsModal from "@/components/partials/SettingsModal";
+import SettingsHeaderButton from "@/components/partials/SettingsHeaderButton";
 import {
   Section,
   SectionButton,
@@ -11,25 +12,19 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/section";
-import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { quickLinks } from "@/lib/const/quickLinks";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import { THEME } from "@/lib/theme";
 import { chunkArray } from "@/lib/utils";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useQueryClient } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "expo-router";
-import {
-  Mail,
-  MapPin,
-  Newspaper,
-  Phone,
-  SettingsIcon,
-} from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import { router, useNavigation } from "expo-router";
+import { Mail, MapPin, Newspaper, Phone } from "lucide-react-native";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Linking, RefreshControl, ScrollView, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -46,28 +41,18 @@ export default function HomeScreen() {
     useState(false);
   const [showCredits, setShowCredits] = useState(false);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          className="rounded-full bg-white/20 p-6"
-          size="icon"
-          onPress={() => setShowSettingsModal(true)}>
-          <Icon
-            as={SettingsIcon}
-            className="text-primary-foreground"
-            size={24}
-          />
-        </Button>
-      ),
-    });
-  }, [navigation]);
+  const handleOpenSettings = useCallback(() => {
+    setShowSettingsModal(true);
+  }, []);
+
+  useNavigationHeaderRight(navigation, SettingsHeaderButton, {
+    onPress: handleOpenSettings,
+  });
 
   const handleOpenHelp = () => {
     setShowSettingsModal(false);
     setShowNotificationSettings(false);
-    // TODO: implement help action
-    console.log("Help pressed");
+    router.push("/chatbot");
   };
 
   const handleOpenNotificationSettingsModal = () => {
@@ -173,7 +158,7 @@ export default function HomeScreen() {
                 <View className="gap-4">
                   {chunkArray(quickLinks, 2).map(chunk => (
                     <View
-                      key={`${chunk[0]!.label(t)}-${chunk[1]!.label(t)}`}
+                      key={chunk.map(link => link.label(t)).join("-")}
                       className="flex-row flex-wrap justify-between gap-4">
                       {chunk.map(link => (
                         <QuickLinkItem
@@ -215,6 +200,10 @@ export default function HomeScreen() {
                         />
                       }
                       title="Matice hrvatske bb, 88000, Mostar"
+                      action={{
+                        type: "address",
+                        value: "Matice hrvatske bb, 88000, Mostar",
+                      }}
                     />
                     <ContactItem
                       icon={
@@ -226,6 +215,7 @@ export default function HomeScreen() {
                         />
                       }
                       title="+387 36 337-001"
+                      action={{ type: "phone", value: "+38736337001" }}
                     />
                     <ContactItem
                       icon={
@@ -237,6 +227,7 @@ export default function HomeScreen() {
                         />
                       }
                       title="fsre@sum.ba"
+                      action={{ type: "email", value: "fsre@sum.ba" }}
                     />
                     <Text className="ml-3 text-sm text-card-gradient-foreground/85">
                       {t("home.contact.studentInquiries")}:
@@ -251,6 +242,7 @@ export default function HomeScreen() {
                         />
                       }
                       title="+387 36 337-003"
+                      action={{ type: "phone", value: "+38736337003" }}
                     />
                     <ContactItem
                       icon={
@@ -262,6 +254,7 @@ export default function HomeScreen() {
                         />
                       }
                       title={"referada@fsre.sum.ba"}
+                      action={{ type: "email", value: "referada@fsre.sum.ba" }}
                     />
                   </LinearGradient>
                 </View>

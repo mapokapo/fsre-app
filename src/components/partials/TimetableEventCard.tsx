@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { TimetableEvent } from "@/lib/api/client";
@@ -60,7 +59,7 @@ const getIconByType = (event: TimetableEvent): LucideIcon => {
 export default function TimetableEventCard({
   event,
   gradients,
-}: TimetableEventCardProps) {
+}: Readonly<TimetableEventCardProps>) {
   const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
 
@@ -83,8 +82,7 @@ export default function TimetableEventCard({
   };
 
   return (
-    <Button
-      variant="ghost"
+    <View
       className={cn(
         "mb-4 h-auto justify-stretch overflow-hidden rounded-2xl p-0 shadow-md web:!h-auto",
         isOngoing && "animate-pulse border-2 border-destructive",
@@ -148,7 +146,7 @@ export default function TimetableEventCard({
               <Icon as={MapPin} />
             </View>
             <Text className="text-sm text-muted-foreground">
-              {event.classRoomNames[0]}
+              {event.classRoomNames[0] ?? ""}
             </Text>
           </View>
           <View className="flex-row items-center">
@@ -156,11 +154,11 @@ export default function TimetableEventCard({
               <Icon as={User} />
             </View>
             <Text className="text-sm text-muted-foreground">
-              {event.teacherNames[0]}
+              {event.teacherNames[0] ?? ""}
             </Text>
           </View>
         </View>
       </LinearGradient>
-    </Button>
+    </View>
   );
 }

@@ -1,5 +1,6 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import TimetableFilterButtonList from "@/components/partials/TimetableFilterButtonList";
+import TimetableFilterHeaderButton from "@/components/partials/TimetableFilterHeaderButton";
 import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -13,33 +14,40 @@ import {
 import { Text } from "@/components/ui/text";
 import { $api } from "@/lib/api/client";
 import { gradients } from "@/lib/const/gradients";
-import { days, departments, years } from "@/lib/const/timetableFilters";
-import { messaging } from "@/lib/firebase";
+import {
+  days,
+  departments,
+  getDefaultFilter,
+  years,
+} from "@/lib/const/timetableFilters";
+import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
+import { useTimetableSubscription } from "@/lib/hooks/useTimetableSubscription";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import { filterTimetable } from "@/lib/utils";
-import { getToken } from "@react-native-firebase/messaging";
-import { getWeek, getYear, parse } from "date-fns";
+import { addWeeks, format, parse, subWeeks } from "date-fns";
 import { useNavigation } from "expo-router";
-import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react-native";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Platform, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 export default function TimetableScreen() {
-  const [currentIsoWeek, setCurrentIsoWeek] = useState(
-    `${getYear(new Date())}-W${getWeek(new Date())}`
+  const [currentIsoWeek, setCurrentIsoWeek] = useState(() =>
+    format(new Date(), "RRRR-'W'II")
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { subscriptionKey, setSubscriptionKey } =
-    useTimetableSubscriptionStore();
+  const { subscriptionKey } = useTimetableSubscriptionStore();
 
-  const [selectedDay, setSelectedDay] = useState(days[0]!);
+  const [selectedDay, setSelectedDay] = useState(() => getDefaultFilter(days));
   const [selectedYear, setSelectedYear] = useState(
-    years.find(y => y.value === subscriptionKey?.year) ?? years[0]!
+    () =>
+      years.find(y => y.value === subscriptionKey?.year) ??
+      getDefaultFilter(years)
   );
   const [selectedDepartment, setSelectedDepartment] = useState(
-    departments.find(d => d.value === subscriptionKey?.department) ??
-      departments[0]!
+    () =>
+      departments.find(d => d.value === subscriptionKey?.department) ??
+      getDefaultFilter(departments)
   );
   const [selectedDirection, setSelectedDirection] = useState<string | null>(
     subscriptionKey?.direction ?? null
@@ -89,92 +97,22 @@ export default function TimetableScreen() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          className="rounded-full bg-white/20 p-6"
-          size="icon"
-          onPress={() => setShowFilters(!showFilters)}>
-          <Icon
-            as={Filter}
-            className="text-fsre-gradient-foreground"
-            size={24}
-          />
-        </Button>
-      ),
-    });
-  }, [navigation, showFilters]);
+  const toggleFilters = useCallback(() => {
+    setShowFilters(current => !current);
+  }, []);
 
-  useEffect(() => {
-    const main = async () => {
-      const studyProgramId =
-        selectedYear.value === null || selectedDepartment.value === null
-          ? null
-          : (timetableDatabase?.studyPrograms.find(
-              program =>
-                program.studyYear === selectedYear.value &&
-                program.department === selectedDepartment.value &&
-                program.direction === selectedDirection
-            )?.id ?? null);
+  useNavigationHeaderRight(navigation, TimetableFilterHeaderButton, {
+    onPress: toggleFilters,
+  });
 
-      // avoid unnecessary subscriptions
-      if (subscriptionKey?.studyProgramId === studyProgramId) return;
-
-      // if the user has not chosen a specific study program
-      if (studyProgramId === null) {
-        // avoid unsubscribing if not subscribed
-        if (subscriptionKey === null) return;
-
-        unsubscribeFromTimetable({
-          body: {
-            studyProgramId: subscriptionKey.studyProgramId,
-            fcmToken: await getToken(messaging!),
-          },
-        });
-        setSubscriptionKey(null);
-      } else {
-        // avoid resubscribing if already subscribed
-        if (subscriptionKey?.studyProgramId === studyProgramId) return;
-
-        // unsubscribe from previous study program if different
-        if (
-          subscriptionKey !== null &&
-          subscriptionKey.studyProgramId !== studyProgramId
-        ) {
-          unsubscribeFromTimetable({
-            body: {
-              studyProgramId: subscriptionKey.studyProgramId,
-              fcmToken: await getToken(messaging!),
-            },
-          });
-        }
-
-        subscribeToTimetable({
-          body: {
-            studyProgramId,
-            fcmToken: await getToken(messaging!),
-          },
-        });
-        setSubscriptionKey({
-          direction: selectedDirection,
-          department: selectedDepartment.value,
-          year: selectedYear.value,
-          studyProgramId,
-        });
-      }
-    };
-    if (Platform.OS !== "web") main();
-  }, [
-    selectedDepartment.value,
+  useTimetableSubscription({
+    selectedYear: selectedYear.value,
+    selectedDepartment: selectedDepartment.value,
     selectedDirection,
-    selectedYear.value,
-    setSubscriptionKey,
+    studyPrograms: timetableDatabase?.studyPrograms,
     subscribeToTimetable,
-    subscriptionKey,
-    timetableDatabase?.studyPrograms,
     unsubscribeFromTimetable,
-  ]);
+  });
 
   const filteredTimetable = useMemo(
     () =>
@@ -190,7 +128,8 @@ export default function TimetableScreen() {
           }
         : filterTimetable(timetable, ({ event, day }) => {
             const dayMatch =
-              selectedDay.value === null || day === parseInt(selectedDay.value);
+              selectedDay.value === null ||
+              day === Number.parseInt(selectedDay.value, 10);
             const yearMatch =
               selectedYear.value === null || event.year === selectedYear.value;
             const departmentMatch =
@@ -213,8 +152,9 @@ export default function TimetableScreen() {
 
   const directions = useMemo(
     () =>
-      timetableDatabase !== undefined
-        ? [
+      timetableDatabase === undefined
+        ? []
+        : [
             ...new Set(
               timetableDatabase.studyPrograms
                 .filter(
@@ -225,10 +165,18 @@ export default function TimetableScreen() {
                 .map(sp => sp.direction)
                 .filter(d => d !== null)
             ),
-          ]
-        : [],
+          ],
     [selectedDepartment.value, selectedYear.value, timetableDatabase]
   );
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([refetchTimetableDatabase(), refetchTimetable()]);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetchTimetable, refetchTimetableDatabase]);
 
   if (timetableError || timetableDatabaseError) {
     return (
@@ -320,10 +268,8 @@ export default function TimetableScreen() {
           className="rounded-xl p-4"
           variant="outline"
           onPress={() => {
-            const current = parse(currentIsoWeek, "R-'W'I", new Date());
-            const previous = new Date(current);
-            previous.setDate(current.getDate() - 7);
-            setCurrentIsoWeek(`${getYear(previous)}-W${getWeek(previous)}`);
+            const current = parse(currentIsoWeek, "RRRR-'W'II", new Date());
+            setCurrentIsoWeek(format(subWeeks(current, 1), "RRRR-'W'II"));
           }}>
           <Icon
             as={ChevronLeft}
@@ -332,21 +278,18 @@ export default function TimetableScreen() {
         </Button>
         <View className="flex-row items-center">
           <Text className="text-lg font-semibold">
-            {currentIsoWeek === `${getYear(new Date())}-W${getWeek(new Date())}`
+            {currentIsoWeek === format(new Date(), "RRRR-'W'II")
               ? t("timetable.filters.currentWeek")
               : t("timetable.filters.week", {
                   week: currentIsoWeek.split("-W")[1],
                 })}
           </Text>
-          {currentIsoWeek !==
-            `${getYear(new Date())}-W${getWeek(new Date())}` && (
+          {currentIsoWeek !== format(new Date(), "RRRR-'W'II") && (
             <Button
               size="icon"
               variant="ghost"
               onPress={() => {
-                setCurrentIsoWeek(
-                  `${getYear(new Date())}-W${getWeek(new Date())}`
-                );
+                setCurrentIsoWeek(format(new Date(), "RRRR-'W'II"));
               }}>
               <Icon
                 as={X}
@@ -359,10 +302,8 @@ export default function TimetableScreen() {
           className="rounded-xl p-4"
           variant="outline"
           onPress={() => {
-            const current = parse(currentIsoWeek, "R-'W'I", new Date());
-            const next = new Date(current);
-            next.setDate(current.getDate() + 7);
-            setCurrentIsoWeek(`${getYear(next)}-W${getWeek(next)}`);
+            const current = parse(currentIsoWeek, "RRRR-'W'II", new Date());
+            setCurrentIsoWeek(format(addWeeks(current, 1), "RRRR-'W'II"));
           }}>
           <Icon
             as={ChevronRight}
@@ -373,15 +314,7 @@ export default function TimetableScreen() {
       <TimetableView
         timetable={filteredTimetable}
         isRefreshing={isRefreshing}
-        onRefresh={() => {
-          setIsRefreshing(true);
-
-          Promise.all([refetchTimetableDatabase(), refetchTimetable()]).then(
-            () => {
-              setIsRefreshing(false);
-            }
-          );
-        }}
+        onRefresh={handleRefresh}
         gradients={gradients}
       />
     </View>

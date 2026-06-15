@@ -39,3 +39,13 @@ export const departments: TimetableFilter<Department>[] = [
     label: t => t("common.departments.mechanicalEngineering"),
   },
 ];
+
+export function getDefaultFilter<T>(
+  filters: readonly TimetableFilter<T>[]
+): TimetableFilter<T> {
+  const [first] = filters;
+  if (first === undefined) {
+    throw new Error("Expected a non-empty filter list");
+  }
+  return first;
+}
