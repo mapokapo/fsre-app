@@ -26,28 +26,39 @@ function DialogOverlay({
 }: Omit<React.ComponentProps<typeof DialogPrimitive.Overlay>, "asChild"> & {
   children?: React.ReactNode;
 }) {
+  const overlayClassName = cn(
+    "absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/50 p-2",
+    Platform.select({
+      web: "fixed cursor-default animate-in fade-in-0 [&>*]:cursor-auto",
+    }),
+    className
+  );
+
   return (
     <FullWindowOverlay>
-      <DialogPrimitive.Overlay
-        className={cn(
-          "absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/50 p-2",
-          Platform.select({
-            web: "fixed cursor-default animate-in fade-in-0 [&>*]:cursor-auto",
-          }),
-          className
-        )}
-        {...props}
-        asChild={Platform.OS !== "web"}>
-        <NativeOnlyAnimatedView
-          entering={FadeIn.duration(200)}
-          exiting={FadeOut.duration(150)}>
+      {Platform.OS === "web" ? (
+        <DialogPrimitive.Overlay
+          className={overlayClassName}
+          {...props}
+          asChild>
           <NativeOnlyAnimatedView
-            entering={FadeIn.delay(50)}
+            entering={FadeIn.duration(200)}
             exiting={FadeOut.duration(150)}>
-            <>{children}</>
+            <NativeOnlyAnimatedView
+              entering={FadeIn.delay(50)}
+              exiting={FadeOut.duration(150)}>
+              <>{children}</>
+            </NativeOnlyAnimatedView>
           </NativeOnlyAnimatedView>
-        </NativeOnlyAnimatedView>
-      </DialogPrimitive.Overlay>
+        </DialogPrimitive.Overlay>
+      ) : (
+        <DialogPrimitive.Overlay
+          className={overlayClassName}
+          closeOnPress
+          {...props}>
+          {children}
+        </DialogPrimitive.Overlay>
+      )}
     </FullWindowOverlay>
   );
 }
