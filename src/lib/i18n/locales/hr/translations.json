@@ -123,6 +123,11 @@
         "text": "O laboratorijima",
         "description": "Informacije o laboratorijskim vježbama",
         "response": "Laboratorijske vježbe su dio vašeg tjednog rasporeda i prikazuju se u kartici Raspored u ovoj aplikaciji. Bit ćete automatski obaviješteni o promjenama rasporeda u aplikaciji. Materijali i zadaci za laboratorijske vježbe obično su dostupni na e-Učenju (https://eucenje.sum.ba/moodle/). Za specifična pitanja o laboratoriju, obratite se profesoru ili studentskoj službi."
+      },
+      "privacy": {
+        "text": "Kako se postupa s mojim podacima?",
+        "description": "Privatnost AI-a i zadržavanje podataka",
+        "response": "Ovaj chatbot pokreće Google AI Studio (https://aistudio.google.com/). Kada pošaljete poruku, ona ide s vašeg uređaja izravno na Google Gemini API koristeći model Gemini 3.1 Flash Lite. Razvojni tim FSRE aplikacije ne vodi vlastite AI poslužitelje i ne pohranjuje vaše chat poruke niti povijest razgovora na FSRE/SUM poslužiteljima. Vaš razgovor postoji samo u ovoj sesiji aplikacije na vašem uređaju. Aplikacija može lokalno na uređaju spremiti postavke koje nisu chat, poput teme, jezika i filtera rasporeda. Google obrađuje API zahtjeve prema svojim Pravilima privatnosti (https://policies.google.com/privacy) i Gemini API uvjetima (https://ai.google.dev/gemini-api/terms). Za detalje o tome kako Google postupa s API podacima, pogledajte te Google resurse."
       }
     },
     "error": {

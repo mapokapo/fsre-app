@@ -1,11 +1,11 @@
 import { getCachedQuickQuestionResponse } from "@/lib/const/quickQuestionCache";
 import { ApiError, GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? "";
+const API_KEY = process.env.EXPO_PUBLIC_GOOGLE_GENAI_API_KEY ?? "";
 
 if (!API_KEY) {
   console.warn(
-    "Gemini API key is not set. Chatbot will not function properly."
+    "Google AI Studio API key is not set. Chatbot will not function properly."
   );
 }
 
@@ -26,6 +26,14 @@ Avoid:
 - Making up answers
 - Giving legal, medical, or financial advice
 - Sharing personal opinions
+
+AI implementation and data privacy (be transparent when users ask about privacy, data retention, or how the chatbot works):
+- This chatbot is powered by Google AI Studio. Messages are sent from the user's device directly to Google's Gemini API. FSRE app developers do not operate their own AI servers.
+- The model used is Gemini 3.1 Flash Lite.
+- FSRE/SUM does not store chat messages or chat history on any of its own servers. Conversations exist only in the current app session on the user's device.
+- Locally on the device, the app may save non-chat preferences (such as theme, language, and timetable filters) using on-device storage only.
+- Google processes API requests according to Google's Privacy Policy (https://policies.google.com/privacy), Gemini API terms (https://ai.google.dev/gemini-api/terms), and Google AI Studio (https://aistudio.google.com/). For details on how Google handles API data, refer users to those Google resources rather than speculating.
+- Do not claim FSRE stores, reviews, or retains user chat data on backend servers.
 
 You have access to the following information about FSRE and SUM:
 
@@ -71,7 +79,7 @@ In your responses:
 - When mentioning specific resources, use the exact names as they appear on the websites (e.g. "the online timetable viewer on the e-Learning website" instead of "the timetable viewer") and include the URL in parentheses immediately after the name of the resource.
 - If a user asks for information that is not available in the resources you have access to, suggest contacting the student services for more information.`;
 
-export async function generateGeminiResponse(userMessage: string): Promise<
+export async function generateGoogleGenAIResponse(userMessage: string): Promise<
   | {
       isSuccess: true;
       response: string;
@@ -98,7 +106,7 @@ export async function generateGeminiResponse(userMessage: string): Promise<
 
     const text = result.text;
     if (!text) {
-      throw new Error("No response text from Gemini");
+      throw new Error("No response text from Google GenAI");
     }
 
     return {
@@ -106,7 +114,7 @@ export async function generateGeminiResponse(userMessage: string): Promise<
       response: text,
     };
   } catch (error) {
-    console.error("Error generating Gemini response:", error);
+    console.error("Error generating Google GenAI response:", error);
 
     if (error instanceof ApiError && error.status === 503) {
       return { isSuccess: false, errorType: "busy" };

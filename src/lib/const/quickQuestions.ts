@@ -1,5 +1,5 @@
 import QuickQuestion from "@/lib/types/QuickQuestion";
-import { MessageSquare, Zap } from "lucide-react-native";
+import { MessageSquare, Shield, Zap } from "lucide-react-native";
 
 export const quickQuestions: QuickQuestion[] = [
   {
@@ -29,5 +29,12 @@ export const quickQuestions: QuickQuestion[] = [
     icon: Zap,
     gradientFrom: "#43e97b",
     gradientTo: "#38f9d7",
+  },
+  {
+    text: t => t("chatbot.quickQuestions.privacy.text"),
+    description: t => t("chatbot.quickQuestions.privacy.description"),
+    icon: Shield,
+    gradientFrom: "#a8edea",
+    gradientTo: "#fed6e3",
   },
 ];

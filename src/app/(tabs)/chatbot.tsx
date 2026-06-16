@@ -5,7 +5,7 @@ import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
-import { generateGeminiResponse } from "@/lib/services/gemini";
+import { generateGoogleGenAIResponse } from "@/lib/services/googleGenAI";
 import Message from "@/lib/types/Message";
 import { useNavigation } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -68,7 +68,7 @@ export default function ChatbotScreen() {
     };
     setMessages(prev => [...prev, userMessage]);
 
-    const botResponse = await generateGeminiResponse(inputText.trim());
+    const botResponse = await generateGoogleGenAIResponse(inputText.trim());
 
     if (!botResponse.isSuccess) {
       const errorMessage: Message = {
