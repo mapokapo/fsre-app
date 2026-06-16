@@ -91,6 +91,7 @@ export async function generateGoogleGenAIResponse(userMessage: string): Promise<
 > {
   const cachedResponse = getCachedQuickQuestionResponse(userMessage);
   if (cachedResponse) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     return { isSuccess: true, response: cachedResponse };
   }
 
