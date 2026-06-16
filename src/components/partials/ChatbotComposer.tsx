@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import QuickQuestion from "@/lib/types/QuickQuestion";
-import { Send } from "lucide-react-native";
 import { TFunction } from "i18next";
+import { Send } from "lucide-react-native";
 import {
   KeyboardAvoidingView,
   LayoutChangeEvent,

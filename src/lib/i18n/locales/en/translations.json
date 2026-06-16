@@ -11,18 +11,22 @@
     "quickQuestions": {
       "contact": {
         "description": "Faculty address, phone, and email",
+        "response": "The faculty is located at Matice hrvatske bb, 88000 Mostar. For general inquiries, call +387 36 337-001 or email fsre@sum.ba. For student-related matters, contact student services at +387 36 337-003 or referada@fsre.sum.ba.",
         "text": "Contact information"
       },
       "exams": {
         "description": "Information about exam registration",
+        "response": "You can register for exams through Studomat (https://studomat.sum.ba/), where you can also view your grades and personal details. The same functionality is available in the e-Indeks mobile app. For questions about exam periods or registration deadlines, check the news on the FSRE website or contact student services at referada@fsre.sum.ba or +387 36 337-003.",
         "text": "How to register for exams?"
       },
       "labs": {
         "description": "Information about lab exercises",
+        "response": "Laboratory exercises are part of your weekly schedule and appear in the Timetable tab of this app. You will be notified of changes to the schedule in the app. Course materials and assignments for lab work are typically available on the e-Learning platform (https://eucenje.sum.ba/moodle/). For specific questions about a lab, contact the professor or student services.",
         "text": "About laboratories"
       },
       "schedule": {
         "description": "Find lecture and exercise schedules",
+        "response": "You can view your timetable in the Timetable tab of this app, where you can filter by academic year, day, department, and receive notifications about schedule changes. There is also an online timetable viewer (https://fsre.edupage.org/timetable/view.php) on the FSRE Edupage website. Department-specific schedules and exam dates are also available on the FSRE website (https://fsre.sum.ba).",
         "text": "Where can I see the timetable?"
       }
     }

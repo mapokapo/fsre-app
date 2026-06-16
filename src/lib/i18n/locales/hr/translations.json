@@ -106,19 +106,23 @@
     "quickQuestions": {
       "schedule": {
         "text": "Gdje mogu vidjeti raspored?",
-        "description": "Pronađite raspored predavanja i vježbi"
+        "description": "Pronađite raspored predavanja i vježbi",
+        "response": "Raspored možete pregledati u kartici Raspored u ovoj aplikaciji, gdje možete filtrirati po godini studija, danu, smjeru i primati obavijesti o promjenama rasporeda. Dostupan je i online preglednik rasporeda (https://fsre.edupage.org/timetable/view.php) na FSRE Edupage stranici. Rasporedi po smjerovima i datumi ispita također su dostupni na web stranici FSRE (https://fsre.sum.ba)."
       },
       "exams": {
         "text": "Kako se registrirati za ispite?",
-        "description": "Informacije o prijavi ispita"
+        "description": "Informacije o prijavi ispita",
+        "response": "Za ispite se možete prijaviti putem Studomata (https://studomat.sum.ba/), gdje možete vidjeti i ocjene te osobne podatke. Ista funkcionalnost dostupna je i u mobilnoj aplikaciji e-Indeks. Za pitanja o ispitnim rokovima ili rokovima prijave, provjerite novosti na web stranici FSRE ili kontaktirajte studentsku službu na referada@fsre.sum.ba ili +387 36 337-003."
       },
       "contact": {
         "text": "Kontakt informacije",
-        "description": "Adresa, telefon i email fakulteta"
+        "description": "Adresa, telefon i email fakulteta",
+        "response": "Fakultet se nalazi na adresi Matice hrvatske bb, 88000 Mostar. Za opće upite nazovite +387 36 337-001 ili pošaljite email na fsre@sum.ba. Za studentska pitanja kontaktirajte studentsku službu na +387 36 337-003 ili referada@fsre.sum.ba."
       },
       "labs": {
         "text": "O laboratorijima",
-        "description": "Informacije o laboratorijskim vježbama"
+        "description": "Informacije o laboratorijskim vježbama",
+        "response": "Laboratorijske vježbe su dio vašeg tjednog rasporeda i prikazuju se u kartici Raspored u ovoj aplikaciji. Bit ćete automatski obaviješteni o promjenama rasporeda u aplikaciji. Materijali i zadaci za laboratorijske vježbe obično su dostupni na e-Učenju (https://eucenje.sum.ba/moodle/). Za specifična pitanja o laboratoriju, obratite se profesoru ili studentskoj službi."
       }
     },
     "error": {

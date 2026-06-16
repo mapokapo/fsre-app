@@ -1,8 +1,8 @@
 import MessageItem from "@/components/partials/MessageItem";
 import Message from "@/lib/types/Message";
 import { RefObject } from "react";
-import Animated from "react-native-reanimated";
 import { ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
 
 const typingIndicator: Message = {
   id: "typing-indicator",

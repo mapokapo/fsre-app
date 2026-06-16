@@ -1,3 +1,4 @@
+import { getCachedQuickQuestionResponse } from "@/lib/const/quickQuestionCache";
 import { ApiError, GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? "";
@@ -80,6 +81,11 @@ export async function generateGeminiResponse(userMessage: string): Promise<
       errorType: "busy" | "unknown";
     }
 > {
+  const cachedResponse = getCachedQuickQuestionResponse(userMessage);
+  if (cachedResponse) {
+    return { isSuccess: true, response: cachedResponse };
+  }
+
   try {
     const result = await genAI.models.generateContent({
       model: "gemini-3.1-flash-lite",

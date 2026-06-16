@@ -3,16 +3,10 @@ import * as Localization from "expo-localization";
 import * as i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
-import translationEn from "./locales/en/translations.json";
-import translationHr from "./locales/hr/translations.json";
+import { defaultLanguage, fallbackLng, resources } from "./resources";
 
-const resources = {
-  en: { translation: translationEn },
-  hr: { translation: translationHr },
-};
-
-export type SupportedLanguage = keyof typeof resources;
-export const supportedLanguages = Object.keys(resources) as SupportedLanguage[];
+export type { SupportedLanguage } from "./resources";
+export { defaultLanguage, fallbackLng, supportedLanguages } from "./resources";
 
 const RTL_LANGUAGES: string[] = [];
 
@@ -29,7 +23,7 @@ const initI18n = async () => {
     if (!selectedLanguage) {
       // If no saved language, use device locale or fallback
       const deviceLocales = Localization.getLocales();
-      const deviceLocale = deviceLocales[0]?.languageTag ?? "hr";
+      const deviceLocale = deviceLocales[0]?.languageTag ?? defaultLanguage;
       const languageCode = deviceLocale.split("-")[0]!;
 
       // Try exact locale match first
@@ -41,7 +35,7 @@ const initI18n = async () => {
       else if (languageCode in resources) {
         selectedLanguage = languageCode;
       } else {
-        selectedLanguage = "hr";
+        selectedLanguage = defaultLanguage;
       }
     }
 
@@ -56,11 +50,7 @@ const initI18n = async () => {
     await i18n.use(initReactI18next).init({
       resources,
       lng: selectedLanguage,
-      fallbackLng: {
-        en: ["en", "hr"],
-        hr: ["hr"],
-        default: ["hr"],
-      },
+      fallbackLng,
       interpolation: {
         escapeValue: false,
       },
@@ -79,8 +69,8 @@ const initI18n = async () => {
     // Initialize with defaults if there's an error
     await i18n.use(initReactI18next).init({
       resources,
-      lng: "hr",
-      fallbackLng: "hr",
+      lng: defaultLanguage,
+      fallbackLng,
       interpolation: {
         escapeValue: false,
       },
