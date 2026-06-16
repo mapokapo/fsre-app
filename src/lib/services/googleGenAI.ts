@@ -1,7 +1,11 @@
 import { getCachedQuickQuestionResponse } from "@/lib/const/quickQuestionCache";
-import { ApiError, GoogleGenAI } from "@google/genai";
+import { ApiError, Content, GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.EXPO_PUBLIC_GOOGLE_GENAI_API_KEY ?? "";
+
+const MODEL = "gemini-3.1-flash-lite";
+const MAX_HISTORY_TURNS = 10;
+const CACHED_RESPONSE_DELAY_MS = 1000;
 
 if (!API_KEY) {
   console.warn(
@@ -79,7 +83,28 @@ In your responses:
 - When mentioning specific resources, use the exact names as they appear on the websites (e.g. "the online timetable viewer on the e-Learning website" instead of "the timetable viewer") and include the URL in parentheses immediately after the name of the resource.
 - If a user asks for information that is not available in the resources you have access to, suggest contacting the student services for more information.`;
 
-export async function generateGoogleGenAIResponse(userMessage: string): Promise<
+export type ConversationMessage = {
+  text: string;
+  role: "user" | "model";
+};
+
+function buildChatHistory(messages: ConversationMessage[]): Content[] {
+  const recentMessages = messages.slice(-MAX_HISTORY_TURNS * 2);
+
+  return recentMessages.map(message => ({
+    role: message.role,
+    parts: [{ text: message.text }],
+  }));
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export async function generateGoogleGenAIResponse(
+  userMessage: string,
+  history: ConversationMessage[] = []
+): Promise<
   | {
       isSuccess: true;
       response: string;
@@ -91,19 +116,21 @@ export async function generateGoogleGenAIResponse(userMessage: string): Promise<
 > {
   const cachedResponse = getCachedQuickQuestionResponse(userMessage);
   if (cachedResponse) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await delay(CACHED_RESPONSE_DELAY_MS);
     return { isSuccess: true, response: cachedResponse };
   }
 
   try {
-    const result = await genAI.models.generateContent({
-      model: "gemini-3.1-flash-lite",
-      contents: userMessage,
+    const chat = genAI.chats.create({
+      model: MODEL,
       config: {
         systemInstruction: SYSTEM_PROMPT,
         maxOutputTokens: 500,
       },
+      history: buildChatHistory(history),
     });
+
+    const result = await chat.sendMessage({ message: userMessage });
 
     const text = result.text;
     if (!text) {

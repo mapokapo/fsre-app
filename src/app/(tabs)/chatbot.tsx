@@ -5,7 +5,10 @@ import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
-import { generateGoogleGenAIResponse } from "@/lib/services/googleGenAI";
+import {
+  generateGoogleGenAIResponse,
+  type ConversationMessage,
+} from "@/lib/services/googleGenAI";
 import Message from "@/lib/types/Message";
 import { useNavigation } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -60,15 +63,24 @@ export default function ChatbotScreen() {
     setIsLoading(true);
     setInputText("");
 
+    const userText = inputText.trim();
+
+    const history: ConversationMessage[] = messages
+      .filter(message => message.id !== "initial-message")
+      .map(message => ({
+        text: message.text,
+        role: message.isUser ? "user" : "model",
+      }));
+
     const userMessage: Message = {
       id: `user-${Date.now()}`,
-      text: inputText.trim(),
+      text: userText,
       isUser: true,
       timestamp: new Date(),
     };
     setMessages(prev => [...prev, userMessage]);
 
-    const botResponse = await generateGoogleGenAIResponse(inputText.trim());
+    const botResponse = await generateGoogleGenAIResponse(userText, history);
 
     if (!botResponse.isSuccess) {
       const errorMessage: Message = {
