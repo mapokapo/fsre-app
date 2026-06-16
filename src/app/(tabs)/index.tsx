@@ -1,7 +1,6 @@
 import ContactItem from "@/components/partials/ContactItem";
 import CreditsModal from "@/components/partials/CreditsModal";
 import NewsSection from "@/components/partials/NewsSection";
-import NotificationSettingsModal from "@/components/partials/NotificationSettingsModal";
 import QuickLinkItem from "@/components/partials/QuickLinkItem";
 import SettingsModal from "@/components/partials/SettingsModal";
 import SettingsHeaderButton from "@/components/partials/SettingsHeaderButton";
@@ -19,7 +18,6 @@ import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import { THEME } from "@/lib/theme";
 import { chunkArray } from "@/lib/utils";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useQueryClient } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useNavigation } from "expo-router";
@@ -27,7 +25,6 @@ import { Mail, MapPin, Newspaper, Phone } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Linking, RefreshControl, ScrollView, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -37,8 +34,6 @@ export default function HomeScreen() {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [showNotificationSettings, setShowNotificationSettings] =
-    useState(false);
   const [showCredits, setShowCredits] = useState(false);
 
   const handleOpenSettings = useCallback(() => {
@@ -51,18 +46,7 @@ export default function HomeScreen() {
 
   const handleOpenHelp = () => {
     setShowSettingsModal(false);
-    setShowNotificationSettings(false);
     router.push("/chatbot");
-  };
-
-  const handleOpenNotificationSettingsModal = () => {
-    setShowSettingsModal(false);
-    setShowNotificationSettings(true);
-  };
-
-  const handleCloseNotificationSettingsModal = () => {
-    setShowNotificationSettings(false);
-    setShowSettingsModal(true);
   };
 
   const handleOpenCredits = () => {
@@ -83,186 +67,173 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <GestureHandlerRootView>
-        <BottomSheetModalProvider>
-          <SettingsModal
-            isVisible={showSettingsModal && !showNotificationSettings}
-            onClose={() => {
-              setShowSettingsModal(false);
-              setShowNotificationSettings(false);
-            }}
-            onItemPress={item => {
-              switch (item) {
-                case "help":
-                  handleOpenHelp();
-                  break;
-                case "notificationSettings":
-                  handleOpenNotificationSettingsModal();
-                  break;
-                case "credits":
-                  handleOpenCredits();
-                  break;
+      <SettingsModal
+        isVisible={showSettingsModal}
+        onClose={() => {
+          setShowSettingsModal(false);
+        }}
+        onItemPress={item => {
+          switch (item) {
+            case "help":
+              handleOpenHelp();
+              break;
+            case "credits":
+              handleOpenCredits();
+              break;
+          }
+        }}
+      />
+      <CreditsModal
+        isVisible={showCredits}
+        onClose={handleCloseCredits}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        {/* News */}
+        <Section className="mt-8">
+          <SectionHeader>
+            <SectionTitle
+              icon={
+                <Icon
+                  as={Newspaper}
+                  color={THEME[colorScheme].fsreGradient3}
+                  size={24}
+                  strokeWidth={2.5}
+                />
               }
-            }}
-          />
-          <CreditsModal
-            isVisible={showCredits}
-            onClose={handleCloseCredits}
-          />
+              title={t("home.news.title")}
+            />
+            <SectionButton
+              title={t("common.all")}
+              onPress={() => {
+                Linking.openURL("https://fsre.sum.ba/novosti/");
+              }}
+            />
+          </SectionHeader>
+          <SectionContent>
+            <NewsSection />
+          </SectionContent>
+        </Section>
 
-          <NotificationSettingsModal
-            isVisible={showNotificationSettings}
-            onClose={handleCloseNotificationSettingsModal}
-          />
+        {/* Quick links */}
+        <Section>
+          <SectionHeader>
+            <SectionTitle title={t("home.quickAccess.title")} />
+          </SectionHeader>
+          <SectionContent>
+            <View className="gap-4">
+              {chunkArray(quickLinks, 2).map(chunk => (
+                <View
+                  key={chunk.map(link => link.label(t)).join("-")}
+                  className="flex-row flex-wrap justify-between gap-4">
+                  {chunk.map(link => (
+                    <QuickLinkItem
+                      key={link.label(t)}
+                      link={link}
+                    />
+                  ))}
+                </View>
+              ))}
+            </View>
+          </SectionContent>
+        </Section>
 
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={onRefresh}
-              />
-            }>
-            {/* News */}
-            <Section className="mt-8">
-              <SectionHeader>
-                <SectionTitle
+        {/* Contact */}
+        <Section>
+          <SectionHeader>
+            <SectionTitle title={t("home.contact.title")} />
+          </SectionHeader>
+          <SectionContent>
+            <View className="overflow-hidden rounded-3xl shadow-md">
+              <LinearGradient
+                className="gap-2 p-4"
+                colors={[
+                  THEME[colorScheme].cardGradient1,
+                  THEME[colorScheme].cardGradient2,
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}>
+                <Text className="ml-3 text-sm text-card-gradient-foreground/85">
+                  {t("home.contact.generalInquiries")}:
+                </Text>
+                <ContactItem
                   icon={
                     <Icon
-                      as={Newspaper}
+                      as={MapPin}
                       color={THEME[colorScheme].fsreGradient3}
-                      size={24}
+                      size={20}
                       strokeWidth={2.5}
                     />
                   }
-                  title={t("home.news.title")}
-                />
-                <SectionButton
-                  title={t("common.all")}
-                  onPress={() => {
-                    Linking.openURL("https://fsre.sum.ba/novosti/");
+                  title="Matice hrvatske bb, 88000, Mostar"
+                  action={{
+                    type: "address",
+                    value: "Matice hrvatske bb, 88000, Mostar",
                   }}
                 />
-              </SectionHeader>
-              <SectionContent>
-                <NewsSection />
-              </SectionContent>
-            </Section>
-
-            {/* Quick links */}
-            <Section>
-              <SectionHeader>
-                <SectionTitle title={t("home.quickAccess.title")} />
-              </SectionHeader>
-              <SectionContent>
-                <View className="gap-4">
-                  {chunkArray(quickLinks, 2).map(chunk => (
-                    <View
-                      key={chunk.map(link => link.label(t)).join("-")}
-                      className="flex-row flex-wrap justify-between gap-4">
-                      {chunk.map(link => (
-                        <QuickLinkItem
-                          key={link.label(t)}
-                          link={link}
-                        />
-                      ))}
-                    </View>
-                  ))}
-                </View>
-              </SectionContent>
-            </Section>
-
-            {/* Contact */}
-            <Section>
-              <SectionHeader>
-                <SectionTitle title={t("home.contact.title")} />
-              </SectionHeader>
-              <SectionContent>
-                <View className="overflow-hidden rounded-3xl shadow-md">
-                  <LinearGradient
-                    className="gap-2 p-4"
-                    colors={[
-                      THEME[colorScheme].cardGradient1,
-                      THEME[colorScheme].cardGradient2,
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}>
-                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
-                      {t("home.contact.generalInquiries")}:
-                    </Text>
-                    <ContactItem
-                      icon={
-                        <Icon
-                          as={MapPin}
-                          color={THEME[colorScheme].fsreGradient3}
-                          size={20}
-                          strokeWidth={2.5}
-                        />
-                      }
-                      title="Matice hrvatske bb, 88000, Mostar"
-                      action={{
-                        type: "address",
-                        value: "Matice hrvatske bb, 88000, Mostar",
-                      }}
+                <ContactItem
+                  icon={
+                    <Icon
+                      as={Phone}
+                      color={THEME[colorScheme].fsreGradient3}
+                      size={20}
+                      strokeWidth={2.5}
                     />
-                    <ContactItem
-                      icon={
-                        <Icon
-                          as={Phone}
-                          color={THEME[colorScheme].fsreGradient3}
-                          size={20}
-                          strokeWidth={2.5}
-                        />
-                      }
-                      title="+387 36 337-001"
-                      action={{ type: "phone", value: "+38736337001" }}
+                  }
+                  title="+387 36 337-001"
+                  action={{ type: "phone", value: "+38736337001" }}
+                />
+                <ContactItem
+                  icon={
+                    <Icon
+                      as={Mail}
+                      color={THEME[colorScheme].fsreGradient3}
+                      size={20}
+                      strokeWidth={2.5}
                     />
-                    <ContactItem
-                      icon={
-                        <Icon
-                          as={Mail}
-                          color={THEME[colorScheme].fsreGradient3}
-                          size={20}
-                          strokeWidth={2.5}
-                        />
-                      }
-                      title="fsre@sum.ba"
-                      action={{ type: "email", value: "fsre@sum.ba" }}
+                  }
+                  title="fsre@sum.ba"
+                  action={{ type: "email", value: "fsre@sum.ba" }}
+                />
+                <Text className="ml-3 text-sm text-card-gradient-foreground/85">
+                  {t("home.contact.studentInquiries")}:
+                </Text>
+                <ContactItem
+                  icon={
+                    <Icon
+                      as={Phone}
+                      color={THEME[colorScheme].fsreGradient3}
+                      size={20}
+                      strokeWidth={2.5}
                     />
-                    <Text className="ml-3 text-sm text-card-gradient-foreground/85">
-                      {t("home.contact.studentInquiries")}:
-                    </Text>
-                    <ContactItem
-                      icon={
-                        <Icon
-                          as={Phone}
-                          color={THEME[colorScheme].fsreGradient3}
-                          size={20}
-                          strokeWidth={2.5}
-                        />
-                      }
-                      title="+387 36 337-003"
-                      action={{ type: "phone", value: "+38736337003" }}
+                  }
+                  title="+387 36 337-003"
+                  action={{ type: "phone", value: "+38736337003" }}
+                />
+                <ContactItem
+                  icon={
+                    <Icon
+                      as={Mail}
+                      color={THEME[colorScheme].fsreGradient3}
+                      size={20}
+                      strokeWidth={2.5}
                     />
-                    <ContactItem
-                      icon={
-                        <Icon
-                          as={Mail}
-                          color={THEME[colorScheme].fsreGradient3}
-                          size={20}
-                          strokeWidth={2.5}
-                        />
-                      }
-                      title={"referada@fsre.sum.ba"}
-                      action={{ type: "email", value: "referada@fsre.sum.ba" }}
-                    />
-                  </LinearGradient>
-                </View>
-              </SectionContent>
-            </Section>
-          </ScrollView>
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
+                  }
+                  title={"referada@fsre.sum.ba"}
+                  action={{ type: "email", value: "referada@fsre.sum.ba" }}
+                />
+              </LinearGradient>
+            </View>
+          </SectionContent>
+        </Section>
+      </ScrollView>
     </View>
   );
 }

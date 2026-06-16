@@ -13,7 +13,6 @@ import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import {
-  Bell,
   Copyright,
   HelpCircle,
   Languages,
@@ -22,7 +21,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-export type SettingsMenuItem = "help" | "notificationSettings" | "credits";
+export type SettingsMenuItem = "help" | "credits";
 
 export type SettingsModalProps = {
   isVisible: boolean;
@@ -58,18 +57,6 @@ export default function SettingsModal({
             <DialogTitle>{t("settings.title")}</DialogTitle>
           </DialogHeader>
           <DialogFooter className="mt-6 !flex-col gap-3">
-            <ModalActionButton
-              onPress={() => onItemPress("notificationSettings")}
-              icon={
-                <Icon
-                  as={Bell}
-                  color={THEME[colorScheme].fsreGradient3}
-                  size={20}
-                  strokeWidth={2.5}
-                />
-              }
-              text={t("notifications.settings.title")}
-            />
             <ModalActionButton
               isButton={false}
               icon={

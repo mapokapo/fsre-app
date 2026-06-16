@@ -1,7 +1,10 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import "@/global.css";
 import { messaging } from "@/lib/firebase";
-import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import {
+  getPersistedColorScheme,
+  useColorScheme,
+} from "@/lib/hooks/useColorScheme";
 import "@/lib/i18n";
 import { NAV_THEME } from "@/lib/theme";
 import { setAndroidNavigationBar } from "@/lib/utils";
@@ -25,7 +28,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
-import { Appearance, PermissionsAndroid, Platform } from "react-native";
+import { PermissionsAndroid, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export { ErrorBoundary } from "expo-router";
@@ -40,7 +43,7 @@ const useSetWebBackgroundClassName = () => {
 
 function useSetAndroidNavigationBar() {
   useLayoutEffect(() => {
-    setAndroidNavigationBar(Appearance.getColorScheme() ?? "light");
+    setAndroidNavigationBar(getPersistedColorScheme());
   }, []);
 }
 

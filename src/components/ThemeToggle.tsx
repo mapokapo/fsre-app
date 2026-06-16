@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import { setAndroidNavigationBar } from "@/lib/utils";
 import { MoonStar, Sun } from "lucide-react-native";
 import { View } from "react-native";
 
@@ -9,9 +8,7 @@ export default function ThemeToggle() {
   const { isDarkColorScheme, setColorScheme } = useColorScheme();
 
   function toggleColorScheme() {
-    const newTheme = isDarkColorScheme ? "light" : "dark";
-    setColorScheme(newTheme);
-    setAndroidNavigationBar(newTheme);
+    setColorScheme(isDarkColorScheme ? "light" : "dark");
   }
 
   return (
