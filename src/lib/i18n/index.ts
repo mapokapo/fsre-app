@@ -5,10 +5,10 @@ import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
 import { defaultLanguage, fallbackLng, resources } from "./resources";
 
-export type { SupportedLanguage } from "./resources";
 export { defaultLanguage, fallbackLng, supportedLanguages } from "./resources";
+export type { SupportedLanguage } from "./resources";
 
-const RTL_LANGUAGES: string[] = [];
+const RTL_LANGUAGES: Set<string> = new Set();
 
 export const LANGUAGE_KEY = "@app_language";
 
@@ -40,7 +40,7 @@ const initI18n = async () => {
     }
 
     // Handle RTL layout
-    const isRTL = RTL_LANGUAGES.includes(selectedLanguage);
+    const isRTL = RTL_LANGUAGES.has(selectedLanguage);
 
     if (I18nManager.isRTL !== isRTL) {
       I18nManager.allowRTL(isRTL);

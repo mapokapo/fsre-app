@@ -1,11 +1,11 @@
-import TimetableEventCard from "@/components/partials/TimetableEventCard";
+import TimetableDaySection from "@/components/partials/TimetableDaySection";
+import { Accordion } from "@/components/ui/accordion";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { Timetable } from "@/lib/api/client";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import { getTimetableEvents } from "@/lib/utils";
-import { compareAsc } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
 import { useMemo } from "react";
@@ -32,6 +32,11 @@ export default function TimetableView({
     () =>
       getTimetableEvents(timetable).filter(({ events }) => events.length > 0),
     [timetable]
+  );
+
+  const defaultExpandedDays = useMemo(
+    () => timetableDays.map(({ day }) => String(day)),
+    [timetableDays]
   );
 
   const getWeekDayFromIndex = (index: number) => {
@@ -80,41 +85,21 @@ export default function TimetableView({
           </Text>
         </View>
       ) : (
-        timetableDays.map(({ events, day }) => (
-          <View
-            key={day}
-            className="mb-8">
-            <View className="mb-4">
-              <LinearGradient
-                colors={[
-                  THEME[colorScheme].fsreGradient1,
-                  THEME[colorScheme].fsreGradient2,
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                className="flex-row items-center justify-between overflow-hidden rounded-2xl px-4 py-3">
-                <Text className="text-lg text-fsre-gradient-foreground">
-                  {getWeekDayFromIndex(day)}
-                </Text>
-                <Text className="rounded-full bg-primary/80 px-4 py-2 font-semibold text-primary-foreground">
-                  {events.length}
-                </Text>
-              </LinearGradient>
-            </View>
-
-            {[...events]
-              .sort((a, b) => compareAsc(a.startDateTime, b.startDateTime))
-              .map(event => {
-                return (
-                  <TimetableEventCard
-                    key={`${event.id}-${event.startDateTime}-${event.endDateTime}`}
-                    event={event}
-                    gradients={gradients}
-                  />
-                );
-              })}
-          </View>
-        ))
+        <Accordion
+          collapsible
+          defaultValue={defaultExpandedDays}
+          type="multiple">
+          {timetableDays.map(({ events, day }) => (
+            <TimetableDaySection
+              key={day}
+              colorScheme={colorScheme}
+              dayLabel={getWeekDayFromIndex(day)}
+              dayValue={String(day)}
+              events={events}
+              gradients={gradients}
+            />
+          ))}
+        </Accordion>
       )}
     </ScrollView>
   );
