@@ -10,8 +10,15 @@ import {
   type ConversationMessage,
 } from "@/lib/services/googleGenAI";
 import Message from "@/lib/types/Message";
+import { toConversationHistory } from "@/lib/utils/chatbot";
 import { useNavigation } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutChangeEvent, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -57,57 +64,96 @@ export default function ChatbotScreen() {
     );
   }, [t]);
 
+  const fetchBotResponse = useCallback(
+    async (
+      userText: string,
+      history: ConversationMessage[],
+      userMessageId: string
+    ) => {
+      setIsLoading(true);
+      setMessages(prev =>
+        prev.map(message =>
+          message.id === userMessageId
+            ? { ...message, error: undefined }
+            : message
+        )
+      );
+
+      const botResponse = await generateGoogleGenAIResponse(userText, history);
+      if (botResponse.isSuccess) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            text: botResponse.response,
+            isUser: false,
+            timestamp: new Date(),
+          },
+        ]);
+      } else {
+        const errorText =
+          botResponse.errorType === "busy"
+            ? t("chatbot.error.busy")
+            : t("chatbot.error.generic");
+        setMessages(prev =>
+          prev.map(message =>
+            message.id === userMessageId
+              ? { ...message, error: errorText }
+              : message
+          )
+        );
+      }
+      setIsLoading(false);
+    },
+    [t]
+  );
+
   const handleSend = async () => {
     if (inputText.trim() === "" || isLoading) return;
 
-    setIsLoading(true);
+    const userText = inputText.trim();
     setInputText("");
 
-    const userText = inputText.trim();
+    const history = toConversationHistory(messages, { dropTrailingUser: true });
+    const userMessageId = `user-${Date.now()}`;
 
-    const history: ConversationMessage[] = messages
-      .filter(message => message.id !== "initial-message")
-      .map(message => ({
-        text: message.text,
-        role: message.isUser ? "user" : "model",
-      }));
-
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      text: userText,
-      isUser: true,
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, userMessage]);
-
-    const botResponse = await generateGoogleGenAIResponse(userText, history);
-
-    if (!botResponse.isSuccess) {
-      const errorMessage: Message = {
-        id: `bot-${Date.now()}`,
-        text:
-          botResponse.errorType === "busy"
-            ? t("chatbot.error.busy")
-            : t("chatbot.error.generic"),
-        isUser: false,
+    setMessages(prev => [
+      ...prev,
+      {
+        id: userMessageId,
+        text: userText,
+        isUser: true,
         timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
-      setIsLoading(false);
-      return;
-    }
+      },
+    ]);
 
-    const botText = botResponse.response;
-    const botMessage: Message = {
-      id: `bot-${Date.now()}`,
-      text: botText,
-      isUser: false,
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, botMessage]);
-
-    setIsLoading(false);
+    await fetchBotResponse(userText, history, userMessageId);
   };
+
+  const lastUserMessageId = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i]!.isUser) return messages[i]!.id;
+    }
+    return null;
+  }, [messages]);
+
+  const handleRetry = useCallback(
+    async (userMessageId: string) => {
+      if (isLoading) return;
+
+      const userIndex = messages.findIndex(
+        message => message.id === userMessageId
+      );
+      if (userIndex === -1) return;
+
+      const userMessage = messages[userIndex]!;
+      const history = toConversationHistory(messages.slice(0, userIndex));
+
+      setMessages(prev => prev.slice(0, userIndex + 1));
+      await fetchBotResponse(userMessage.text, history, userMessageId);
+    },
+    [fetchBotResponse, isLoading, messages]
+  );
 
   const handleQuickQuestion = useCallback((question: string) => {
     setInputText(question);
@@ -122,6 +168,8 @@ export default function ChatbotScreen() {
       <ChatbotMessageList
         messages={messages}
         isLoading={isLoading}
+        retryMessageId={lastUserMessageId}
+        onRetry={handleRetry}
         introAnimatedOpacityStyle={introAnimatedOpacityStyle}
         scrollViewRef={scrollViewRef}
         bottomContainerHeight={bottomContainerHeight}

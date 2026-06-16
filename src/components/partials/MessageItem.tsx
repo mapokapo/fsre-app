@@ -8,15 +8,24 @@ import Message from "@/lib/types/Message";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
-import { Bot, User } from "lucide-react-native";
-import { View, ViewProps } from "react-native";
+import { Bot, RotateCcw, User } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { Pressable, View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 
 export type MessageItemProps = AnimatedProps<ViewProps> & {
   message: Message;
+  showRetry?: boolean;
+  onRetry?: () => void;
 };
 
-export default function MessageItem({ message, ...props }: MessageItemProps) {
+export default function MessageItem({
+  message,
+  showRetry = false,
+  onRetry,
+  ...props
+}: MessageItemProps) {
+  const { t } = useTranslation();
   const { colorScheme } = useColorScheme();
 
   return (
@@ -43,39 +52,61 @@ export default function MessageItem({ message, ...props }: MessageItemProps) {
         </View>
       )}
 
-      <View
-        className={cn(
-          "max-w-[75%] rounded-2xl p-4",
-          message.isUser
-            ? "rounded-br-md bg-fsre-gradient-1"
-            : "rounded-bl-md bg-secondary shadow-md"
-        )}>
-        {message.typing ? (
-          <Dots
-            color="#4ECDC4"
-            isAnimating={message.typing}
+      {message.isUser && showRetry && onRetry && (
+        <Pressable
+          onPress={onRetry}
+          accessibilityLabel={t("chatbot.retry")}
+          hitSlop={8}
+          className="mb-2 mr-2 p-1">
+          <Icon
+            as={RotateCcw}
+            className="text-muted-foreground"
+            size={16}
+            strokeWidth={2}
           />
-        ) : (
-          <>
-            {message.isUser ? (
+        </Pressable>
+      )}
+
+      <View className={cn("max-w-[75%]", message.isUser && "items-end")}>
+        <View
+          className={cn(
+            "rounded-2xl p-4",
+            message.isUser
+              ? "rounded-br-md bg-fsre-gradient-1"
+              : "rounded-bl-md bg-secondary shadow-md"
+          )}>
+          {message.typing ? (
+            <Dots
+              color="#4ECDC4"
+              isAnimating={message.typing}
+            />
+          ) : (
+            <>
+              {message.isUser ? (
+                <Text
+                  selectable
+                  className="mb-2 text-fsre-gradient-foreground">
+                  {message.text}
+                </Text>
+              ) : (
+                <MessageMarkdown>{message.text}</MessageMarkdown>
+              )}
               <Text
-                selectable
-                className="mb-2 text-fsre-gradient-foreground">
-                {message.text}
+                className={cn(
+                  "self-end text-xs",
+                  message.isUser
+                    ? "text-fsre-gradient-foreground/60"
+                    : "text-muted-foreground"
+                )}>
+                {format(message.timestamp, "HH:mm")}
               </Text>
-            ) : (
-              <MessageMarkdown>{message.text}</MessageMarkdown>
-            )}
-            <Text
-              className={cn(
-                "self-end text-xs",
-                message.isUser
-                  ? "text-fsre-gradient-foreground/60"
-                  : "text-muted-foreground"
-              )}>
-              {format(message.timestamp, "HH:mm")}
-            </Text>
-          </>
+            </>
+          )}
+        </View>
+        {message.error && (
+          <Text className="mt-1 max-w-full text-right text-xs text-destructive">
+            {message.error}
+          </Text>
         )}
       </View>
 

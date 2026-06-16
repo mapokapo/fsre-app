@@ -100,6 +100,7 @@
   },
   "chatbot": {
     "intro": "Pozdrav! 👋 Ja sam FSRE AI asistent. Kako vam mogu pomoći danas? Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama ili bilo čemu drugom vezanom za fakultet.",
+    "retry": "Pokušaj ponovo",
     "input": {
       "placeholder": "Unesite vaše pitanje..."
     },

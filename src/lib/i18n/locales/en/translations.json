@@ -8,6 +8,7 @@
       "placeholder": "Enter your question..."
     },
     "intro": "Hello! 👋 I am the FSRE AI assistant. How can I help you today? You can ask me about the timetable, exams, labs, scholarships, or anything else related to the faculty.",
+    "retry": "Retry",
     "quickQuestions": {
       "contact": {
         "description": "Faculty address, phone, and email",

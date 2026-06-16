@@ -26,6 +26,8 @@ function getDisplayedMessages(
 export type ChatbotMessageListProps = {
   messages: Message[];
   isLoading: boolean;
+  retryMessageId: string | null;
+  onRetry: (userMessageId: string) => void;
   introAnimatedOpacityStyle: ViewStyle;
   scrollViewRef: RefObject<Animated.ScrollView | null>;
   bottomContainerHeight: number;
@@ -35,6 +37,8 @@ export type ChatbotMessageListProps = {
 export default function ChatbotMessageList({
   messages,
   isLoading,
+  retryMessageId,
+  onRetry,
   introAnimatedOpacityStyle,
   scrollViewRef,
   bottomContainerHeight,
@@ -53,6 +57,8 @@ export default function ChatbotMessageList({
         <MessageItem
           key={message.id}
           message={message}
+          showRetry={!isLoading && message.id === retryMessageId}
+          onRetry={() => onRetry(message.id)}
           style={introAnimatedOpacityStyle}
         />
       ))}

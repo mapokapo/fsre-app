@@ -4,4 +4,5 @@ export default interface Message {
   isUser: boolean;
   timestamp: Date;
   typing?: boolean;
+  error?: string;
 }
