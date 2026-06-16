@@ -7,7 +7,7 @@ import NewsArticle from "@/lib/types/NewsArticle";
 import { getDistanceTo } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
-import { htmlToText } from "html-to-text";
+import { parse } from "node-html-parser";
 import { useTranslation } from "react-i18next";
 import { Image, View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
@@ -50,7 +50,7 @@ export default function NewsArticleItem({
 
   const gradientIndex = getIndexByCategory(article) % gradients.length;
   const categoryGradient = gradients[gradientIndex]!;
-  const preview = htmlToText(article.content).replace(/\n{2,}/g, "");
+  const preview = parse(article.content).text.replace(/\n{2,}/g, "");
   const excerpt =
     preview.length > 100 ? `${preview.slice(0, 100)}...` : preview;
   const category = article.categories[0];

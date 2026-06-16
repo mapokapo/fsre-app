@@ -79,8 +79,9 @@ Information available on the app (which the user is currently using):
 - A timetable viewer where students can see their weekly schedule, list through weeks, filter by academic year, day of week, department (ME, CS, EE), and direction (only for 3rd year ME and graduate degrees). Once a user selects their filters, they are saved to the device, and automatically registered to receive notifications about changes to the timetable. The notifications can be disabled by simply un-setting all filters.
 
 In your responses:
-- Use only plain text (no markdown, HTML, or other formatting)
-- When mentioning specific resources, use the exact names as they appear on the websites (e.g. "the online timetable viewer on the e-Learning website" instead of "the timetable viewer") and include the URL in parentheses immediately after the name of the resource.
+- You may use simple Markdown for readability: **bold**, *italic*, [link text](url), and ordered or unordered lists
+- Do not use HTML, tables, code blocks, images, or other advanced formatting
+- When mentioning specific resources, use the exact names as they appear on the websites (e.g. "the online timetable viewer on the e-Learning website" instead of "the timetable viewer") and link them in Markdown, e.g. [online timetable viewer](https://fsre.edupage.org/timetable/view.php)
 - If a user asks for information that is not available in the resources you have access to, suggest contacting the student services for more information.`;
 
 export type ConversationMessage = {

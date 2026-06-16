@@ -107,12 +107,12 @@
       "schedule": {
         "text": "Gdje mogu vidjeti raspored?",
         "description": "Pronađite raspored predavanja i vježbi",
-        "response": "Raspored možete pregledati u kartici Raspored u ovoj aplikaciji, gdje možete filtrirati po godini studija, danu, smjeru i primati obavijesti o promjenama rasporeda. Dostupan je i online preglednik rasporeda (https://fsre.edupage.org/timetable/view.php) na FSRE Edupage stranici. Rasporedi po smjerovima i datumi ispita također su dostupni na web stranici FSRE (https://fsre.sum.ba)."
+        "response": "Raspored možete pregledati u kartici Raspored u ovoj aplikaciji, gdje možete filtrirati po godini studija, danu, smjeru i primati obavijesti o promjenama rasporeda. Dostupan je i [online preglednik rasporeda](https://fsre.edupage.org/timetable/view.php) na FSRE Edupage stranici. Rasporedi po smjerovima i datumi ispita također su dostupni na [FSRE web stranici](https://fsre.sum.ba)."
       },
       "exams": {
         "text": "Kako se registrirati za ispite?",
         "description": "Informacije o prijavi ispita",
-        "response": "Za ispite se možete prijaviti putem Studomata (https://studomat.sum.ba/), gdje možete vidjeti i ocjene te osobne podatke. Ista funkcionalnost dostupna je i u mobilnoj aplikaciji e-Indeks. Za pitanja o ispitnim rokovima ili rokovima prijave, provjerite novosti na web stranici FSRE ili kontaktirajte studentsku službu na referada@fsre.sum.ba ili +387 36 337-003."
+        "response": "Za ispite se možete prijaviti putem [Studomata](https://studomat.sum.ba/), gdje možete vidjeti i ocjene te osobne podatke. Ista funkcionalnost dostupna je i u mobilnoj aplikaciji e-Indeks. Za pitanja o ispitnim rokovima ili rokovima prijave, provjerite novosti na web stranici FSRE ili kontaktirajte studentsku službu na referada@fsre.sum.ba ili +387 36 337-003."
       },
       "contact": {
         "text": "Kontakt informacije",
@@ -122,12 +122,12 @@
       "labs": {
         "text": "O laboratorijima",
         "description": "Informacije o laboratorijskim vježbama",
-        "response": "Laboratorijske vježbe su dio vašeg tjednog rasporeda i prikazuju se u kartici Raspored u ovoj aplikaciji. Bit ćete automatski obaviješteni o promjenama rasporeda u aplikaciji. Materijali i zadaci za laboratorijske vježbe obično su dostupni na e-Učenju (https://eucenje.sum.ba/moodle/). Za specifična pitanja o laboratoriju, obratite se profesoru ili studentskoj službi."
+        "response": "Laboratorijske vježbe su dio vašeg tjednog rasporeda i prikazuju se u kartici Raspored u ovoj aplikaciji. Bit ćete automatski obaviješteni o promjenama rasporeda u aplikaciji. Materijali i zadaci za laboratorijske vježbe obično su dostupni na [e-Učenju](https://eucenje.sum.ba/moodle/). Za specifična pitanja o laboratoriju, obratite se profesoru ili studentskoj službi."
       },
       "privacy": {
         "text": "Kako se postupa s mojim podacima?",
         "description": "Privatnost AI-a i zadržavanje podataka",
-        "response": "Ovaj chatbot pokreće Google AI Studio (https://aistudio.google.com/). Kada pošaljete poruku, ona ide s vašeg uređaja izravno na Google Gemini API koristeći model Gemini 3.1 Flash Lite. Razvojni tim FSRE aplikacije ne vodi vlastite AI poslužitelje i ne pohranjuje vaše chat poruke niti povijest razgovora na FSRE/SUM poslužiteljima. Vaš razgovor postoji samo u ovoj sesiji aplikacije na vašem uređaju. Aplikacija može lokalno na uređaju spremiti postavke koje nisu chat, poput teme, jezika i filtera rasporeda. Google obrađuje API zahtjeve prema svojim Pravilima privatnosti (https://policies.google.com/privacy) i Gemini API uvjetima (https://ai.google.dev/gemini-api/terms). Za detalje o tome kako Google postupa s API podacima, pogledajte te Google resurse."
+        "response": "Ovaj chatbot pokreće [Google AI Studio](https://aistudio.google.com/). Kada pošaljete poruku, ona ide s vašeg uređaja izravno na Google Gemini API koristeći model Gemini 3.1 Flash Lite. Razvojni tim FSRE aplikacije ne vodi vlastite AI poslužitelje i ne pohranjuje vaše chat poruke niti povijest razgovora na FSRE/SUM poslužiteljima. Vaš razgovor postoji samo u ovoj sesiji aplikacije na vašem uređaju. Aplikacija može lokalno na uređaju spremiti postavke koje nisu chat, poput teme, jezika i filtera rasporeda. Google obrađuje API zahtjeve prema svojim [Pravilima privatnosti](https://policies.google.com/privacy) i [Gemini API uvjetima](https://ai.google.dev/gemini-api/terms). Za detalje o tome kako Google postupa s API podacima, pogledajte te Google resurse."
       }
     },
     "error": {

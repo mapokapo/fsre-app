@@ -1,4 +1,5 @@
 import Dots from "@/components/Dots";
+import MessageMarkdown from "@/components/partials/MessageMarkdown";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
@@ -56,15 +57,15 @@ export default function MessageItem({ message, ...props }: MessageItemProps) {
           />
         ) : (
           <>
-            <Text
-              className={cn(
-                "mb-2",
-                message.isUser
-                  ? "text-fsre-gradient-foreground"
-                  : "text-secondary-foreground"
-              )}>
-              {message.text}
-            </Text>
+            {message.isUser ? (
+              <Text
+                selectable
+                className="mb-2 text-fsre-gradient-foreground">
+                {message.text}
+              </Text>
+            ) : (
+              <MessageMarkdown>{message.text}</MessageMarkdown>
+            )}
             <Text
               className={cn(
                 "self-end text-xs",
