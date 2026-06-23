@@ -2,6 +2,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import TimetableFilterButtonList from "@/components/partials/TimetableFilterButtonList";
 import TimetableFilterHeaderButton from "@/components/partials/TimetableFilterHeaderButton";
 import TimetableNotificationsDialog from "@/components/partials/TimetableNotificationsDialog";
+import TimetableSubscriptionStatusBanner from "@/components/partials/TimetableSubscriptionStatusBanner";
 import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -112,7 +113,7 @@ export default function TimetableScreen() {
     onPress: toggleFilters,
   });
 
-  useTimetableSubscription({
+  const { subscriptionStatus, retrySubscription } = useTimetableSubscription({
     selectedYear: selectedYear.value,
     selectedDepartment: selectedDepartment.value,
     selectedDirection,
@@ -335,6 +336,10 @@ export default function TimetableScreen() {
           />
         </Button>
       </View>
+      <TimetableSubscriptionStatusBanner
+        status={subscriptionStatus}
+        onRetry={retrySubscription}
+      />
       <TimetableView
         timetable={filteredTimetable}
         isRefreshing={isRefreshing}

@@ -163,6 +163,13 @@
       "description": "Za primanje obavijesti o promjenama rasporeda odaberite studij, godinu i smjer (ako je potrebno) pomoću filtera iznad. Bez odabira nećete primati obavijesti.",
       "title": "Obavijesti o rasporedu"
     },
+    "subscription": {
+      "incomplete": "Odaberite godinu i studij za primanje obavijesti o rasporedu.",
+      "subscribing": "Ažuriranje pretplate na obavijesti...",
+      "subscribed": "Obavijesti su uključene za odabrani studij.",
+      "failed": "Nije moguće ažurirati pretplatu na obavijesti.",
+      "retry": "Pokušaj ponovo"
+    },
     "startsSoon": "Počinje uskoro"
   }
 }

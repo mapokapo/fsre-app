@@ -163,6 +163,13 @@
       "description": "To receive notifications about schedule changes, select your study program, year, and direction (if required) using the filters above. Without selecting these, you will not receive notifications.",
       "title": "Timetable notifications"
     },
+    "subscription": {
+      "incomplete": "Select year and program to receive schedule notifications.",
+      "subscribing": "Updating notification subscription...",
+      "subscribed": "Notifications enabled for the selected program.",
+      "failed": "Could not update notification subscription.",
+      "retry": "Retry"
+    },
     "startsSoon": "Starts soon"
   }
 }
