@@ -33,6 +33,7 @@ Library/
 
 # local env files
 .env*.local
+google-play-service-account.json
 
 # typescript
 *.tsbuildinfo

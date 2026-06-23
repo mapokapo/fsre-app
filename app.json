@@ -14,10 +14,7 @@
         "foregroundImage": "./src/assets/images/icon_foreground.png",
         "backgroundImage": "./src/assets/images/icon_background.png"
       },
-      "permissions": [
-        "android.permission.INTERNET",
-        "android.permission.INTERNET"
-      ],
+      "permissions": ["android.permission.INTERNET"],
       "googleServicesFile": "./google-services.json"
     },
     "web": {
