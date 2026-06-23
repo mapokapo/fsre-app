@@ -54,6 +54,22 @@
     "chatbot": "Chatbot",
     "timetable": "Raspored"
   },
+  "notifications": {
+    "permission": {
+      "title": "Obavijesti",
+      "status": {
+        "granted": "Dopušteno",
+        "denied": "Blokirano",
+        "not_determined": "Nije postavljeno",
+        "unsupported": "Nije dostupno"
+      },
+      "openSettings": "Otvori postavke sustava"
+    },
+    "foreground": {
+      "dismiss": "Odbaci",
+      "view": "Pogledaj"
+    }
+  },
   "header": {
     "home": {
       "title": "FSRE",

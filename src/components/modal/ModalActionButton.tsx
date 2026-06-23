@@ -57,7 +57,7 @@ export default function ModalActionButton({
           {text}
         </Text>
       )}
-      {children === undefined && (
+      {isButton && children === undefined && (
         <Icon
           as={ChevronRight}
           className={cn(destructive && "text-fsre-gradient-foreground")}

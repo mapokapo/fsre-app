@@ -10,16 +10,23 @@ import {
 } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
+import {
+  getNotificationPermissionStatus,
+  openNotificationSettings,
+  type NotificationPermissionStatus,
+} from "@/lib/services/notificationPermission";
 import { THEME } from "@/lib/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import {
+  Bell,
   Copyright,
   HelpCircle,
   Languages,
   Paintbrush,
 } from "lucide-react-native";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export type SettingsMenuItem = "help" | "credits";
 
@@ -36,6 +43,19 @@ export default function SettingsModal({
 }: Readonly<SettingsModalProps>) {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const { t } = useTranslation();
+  const [permissionStatus, setPermissionStatus] =
+    useState<NotificationPermissionStatus>("unsupported");
+
+  useEffect(() => {
+    if (!isVisible || Platform.OS === "web") {
+      return;
+    }
+
+    void getNotificationPermissionStatus().then(setPermissionStatus);
+  }, [isVisible]);
+
+  const canOpenNotificationSettings =
+    permissionStatus === "denied" || permissionStatus === "not_determined";
 
   return (
     <Dialog
@@ -88,6 +108,23 @@ export default function SettingsModal({
                 <LanguagePicker />
               </View>
             </ModalActionButton>
+            {Platform.OS !== "web" && (
+              <ModalActionButton
+                isButton={canOpenNotificationSettings}
+                onPress={() => {
+                  void openNotificationSettings();
+                }}
+                icon={
+                  <Icon
+                    as={Bell}
+                    color={THEME[colorScheme].fsreGradient3}
+                    size={20}
+                    strokeWidth={2.5}
+                  />
+                }
+                text={`${t("notifications.permission.title")}: ${t(`notifications.permission.status.${permissionStatus}`)}`}
+              />
+            )}
             <ModalActionButton
               onPress={() => onItemPress("help")}
               icon={

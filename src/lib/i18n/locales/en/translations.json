@@ -119,6 +119,22 @@
     "home": "Home",
     "timetable": "Timetable"
   },
+  "notifications": {
+    "permission": {
+      "title": "Notifications",
+      "status": {
+        "granted": "Allowed",
+        "denied": "Blocked",
+        "not_determined": "Not set",
+        "unsupported": "Unavailable"
+      },
+      "openSettings": "Open system settings"
+    },
+    "foreground": {
+      "dismiss": "Dismiss",
+      "view": "View"
+    }
+  },
   "news": {
     "categories": {
       "computerScience": "Computer Science",

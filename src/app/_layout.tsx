@@ -6,6 +6,7 @@ import {
 } from "@/lib/hooks/useColorScheme";
 import "@/lib/i18n";
 import { NAV_THEME } from "@/lib/theme";
+import { registerNotificationHandlers } from "@/lib/services/notifications";
 import { setAndroidNavigationBar } from "@/lib/utils";
 import {
   Inter_400Regular,
@@ -74,6 +75,14 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
+
+  useEffect(() => {
+    if (!fontsLoaded || fontError || Platform.OS === "web") {
+      return;
+    }
+
+    return registerNotificationHandlers();
+  }, [fontError, fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
