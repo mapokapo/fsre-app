@@ -1,6 +1,7 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import TimetableFilterButtonList from "@/components/partials/TimetableFilterButtonList";
 import TimetableFilterHeaderButton from "@/components/partials/TimetableFilterHeaderButton";
+import TimetableNotificationsDialog from "@/components/partials/TimetableNotificationsDialog";
 import TimetableView from "@/components/partials/TimetableView";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -21,6 +22,7 @@ import {
   years,
 } from "@/lib/const/timetableFilters";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
+import { useNotificationOnboarding } from "@/lib/hooks/useNotificationOnboarding";
 import { useTimetableSubscription } from "@/lib/hooks/useTimetableSubscription";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import { filterTimetable } from "@/lib/utils";
@@ -55,6 +57,11 @@ export default function TimetableScreen() {
   const [showFilters, setShowFilters] = useState(false);
 
   const { t } = useTranslation();
+  const {
+    showDialog: showNotificationsDialog,
+    isComplete: isNotificationOnboardingComplete,
+    completeOnboarding,
+  } = useNotificationOnboarding();
   const { mutateAsync: subscribeToTimetable } = $api.useMutation(
     "post",
     "/messaging/subscribe"
@@ -112,6 +119,7 @@ export default function TimetableScreen() {
     studyPrograms: timetableDatabase?.studyPrograms,
     subscribeToTimetable,
     unsubscribeFromTimetable,
+    enabled: isNotificationOnboardingComplete,
   });
 
   const filteredTimetable = useMemo(
@@ -180,13 +188,19 @@ export default function TimetableScreen() {
 
   if (timetableError || timetableDatabaseError) {
     return (
-      <ErrorMessage
-        error={timetableError ?? timetableDatabaseError}
-        onRetry={() => {
-          refetchTimetableDatabase();
-          refetchTimetable();
-        }}
-      />
+      <>
+        <TimetableNotificationsDialog
+          isVisible={showNotificationsDialog}
+          onContinue={completeOnboarding}
+        />
+        <ErrorMessage
+          error={timetableError ?? timetableDatabaseError}
+          onRetry={() => {
+            refetchTimetableDatabase();
+            refetchTimetable();
+          }}
+        />
+      </>
     );
   }
 
@@ -197,17 +211,27 @@ export default function TimetableScreen() {
     !timetableDatabase
   ) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator
-          size={64}
-          className="text-fsre-gradient-3"
+      <>
+        <TimetableNotificationsDialog
+          isVisible={showNotificationsDialog}
+          onContinue={completeOnboarding}
         />
-      </View>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator
+            size={64}
+            className="text-fsre-gradient-3"
+          />
+        </View>
+      </>
     );
   }
 
   return (
     <View className="flex-1 bg-background">
+      <TimetableNotificationsDialog
+        isVisible={showNotificationsDialog}
+        onContinue={completeOnboarding}
+      />
       {showFilters && (
         <View className="gap-4 p-5">
           <TimetableFilterButtonList

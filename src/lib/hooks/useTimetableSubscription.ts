@@ -27,6 +27,7 @@ export function useTimetableSubscription({
   studyPrograms,
   subscribeToTimetable,
   unsubscribeFromTimetable,
+  enabled = true,
 }: {
   selectedYear: StudyYear | null;
   selectedDepartment: Department | null;
@@ -34,12 +35,13 @@ export function useTimetableSubscription({
   studyPrograms: StudyProgram[] | undefined;
   subscribeToTimetable: SubscriptionMutation;
   unsubscribeFromTimetable: SubscriptionMutation;
+  enabled?: boolean;
 }) {
   const { subscriptionKey, setSubscriptionKey } =
     useTimetableSubscriptionStore();
 
   useEffect(() => {
-    if (Platform.OS === "web" || !messaging) return;
+    if (Platform.OS === "web" || !messaging || !enabled) return;
 
     let cancelled = false;
 
@@ -69,6 +71,7 @@ export function useTimetableSubscription({
       cancelled = true;
     };
   }, [
+    enabled,
     selectedDepartment,
     selectedDirection,
     selectedYear,

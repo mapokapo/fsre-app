@@ -184,6 +184,11 @@
       "title": "Nema predavanja",
       "description": "Nema rasporeda za odabrane filtere"
     },
+    "notifications": {
+      "continue": "Nastavi",
+      "description": "Za primanje obavijesti o promjenama rasporeda odaberite studij, godinu i smjer (ako je potrebno) pomoću filtera iznad. Bez odabira nećete primati obavijesti.",
+      "title": "Obavijesti o rasporedu"
+    },
     "startsSoon": "Počinje uskoro"
   },
   "stats": {

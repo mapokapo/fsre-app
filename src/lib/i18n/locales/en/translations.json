@@ -195,6 +195,11 @@
       "description": "No timetable for the selected filters",
       "title": "No classes"
     },
+    "notifications": {
+      "continue": "Continue",
+      "description": "To receive notifications about schedule changes, select your study program, year, and direction (if required) using the filters above. Without selecting these, you will not receive notifications.",
+      "title": "Timetable notifications"
+    },
     "startsSoon": "Starts soon"
   }
 }

@@ -1,6 +1,5 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import "@/global.css";
-import { messaging } from "@/lib/firebase";
 import {
   getPersistedColorScheme,
   useColorScheme,
@@ -16,10 +15,6 @@ import {
   Inter_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/inter";
-import {
-  AuthorizationStatus,
-  requestPermission,
-} from "@react-native-firebase/messaging";
 import { ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -28,7 +23,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
-import { PermissionsAndroid, Platform } from "react-native";
+import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export { ErrorBoundary } from "expo-router";
@@ -78,33 +73,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
-
-  useEffect(() => {
-    const requestNotificationPermission = async () => {
-      if (!messaging) return;
-
-      if (Platform.OS === "ios") {
-        const status = await requestPermission(messaging);
-        if (status !== AuthorizationStatus.AUTHORIZED) {
-          console.warn("User denied notifications");
-        }
-        return;
-      }
-
-      if (Platform.OS === "android") {
-        const status = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-        );
-        if (status !== PermissionsAndroid.RESULTS.GRANTED) {
-          console.warn("User denied notifications");
-        }
-      }
-    };
-
-    if (fontsLoaded && !fontError && Platform.OS !== "web") {
-      requestNotificationPermission();
-    }
-  }, [fontError, fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
