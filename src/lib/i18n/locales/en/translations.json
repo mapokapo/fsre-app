@@ -184,7 +184,11 @@
       "subscribing": "Updating notification subscription...",
       "subscribed": "Notifications enabled for the selected program.",
       "failed": "Could not update notification subscription.",
-      "retry": "Retry"
+      "retry": "Retry",
+      "permissionDenied": "Notifications are blocked on this device.",
+      "permissionNotSet": "Notifications are not enabled on this device.",
+      "permissionUnavailable": "Notifications are not available on this device.",
+      "permissionSettingsHint": "Open Settings from the Home screen (gear icon) to manage notifications."
     },
     "startsSoon": "Starts soon"
   }

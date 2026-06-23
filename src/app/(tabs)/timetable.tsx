@@ -24,6 +24,7 @@ import {
 } from "@/lib/const/timetableFilters";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import { useNotificationOnboarding } from "@/lib/hooks/useNotificationOnboarding";
+import { useNotificationPermissionStatus } from "@/lib/hooks/useNotificationPermissionStatus";
 import { useTimetableSubscription } from "@/lib/hooks/useTimetableSubscription";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import { filterTimetable } from "@/lib/utils";
@@ -122,6 +123,9 @@ export default function TimetableScreen() {
     unsubscribeFromTimetable,
     enabled: isNotificationOnboardingComplete,
   });
+  const { permissionStatus } = useNotificationPermissionStatus(
+    isNotificationOnboardingComplete
+  );
 
   const filteredTimetable = useMemo(
     () =>
@@ -337,7 +341,8 @@ export default function TimetableScreen() {
         </Button>
       </View>
       <TimetableSubscriptionStatusBanner
-        status={subscriptionStatus}
+        subscriptionStatus={subscriptionStatus}
+        permissionStatus={permissionStatus}
         onRetry={retrySubscription}
       />
       <TimetableView

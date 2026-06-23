@@ -184,7 +184,11 @@
       "subscribing": "Ažuriranje pretplate na obavijesti...",
       "subscribed": "Obavijesti su uključene za odabrani studij.",
       "failed": "Nije moguće ažurirati pretplatu na obavijesti.",
-      "retry": "Pokušaj ponovo"
+      "retry": "Pokušaj ponovo",
+      "permissionDenied": "Obavijesti su blokirane na ovom uređaju.",
+      "permissionNotSet": "Obavijesti nisu uključene na ovom uređaju.",
+      "permissionUnavailable": "Obavijesti nisu dostupne na ovom uređaju.",
+      "permissionSettingsHint": "Otvorite Postavke s početnog zaslona (ikona zupčanika) za upravljanje obavijestima."
     },
     "startsSoon": "Počinje uskoro"
   }
