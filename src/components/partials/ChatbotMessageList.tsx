@@ -1,8 +1,11 @@
 import MessageItem from "@/components/partials/MessageItem";
 import Message from "@/lib/types/Message";
 import { RefObject } from "react";
-import { ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
+import { Platform, ViewStyle } from "react-native";
+import { KeyboardChatScrollView } from "react-native-keyboard-controller";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const BOTTOM_MARGIN = -64;
 
 const typingIndicator: Message = {
   id: "typing-indicator",
@@ -29,9 +32,9 @@ export type ChatbotMessageListProps = {
   retryMessageId: string | null;
   onRetry: (userMessageId: string) => void;
   introAnimatedOpacityStyle: ViewStyle;
-  scrollViewRef: RefObject<Animated.ScrollView | null>;
-  bottomContainerHeight: number;
-  keyboardHeight: number;
+  scrollViewRef: RefObject<React.ComponentRef<
+    typeof KeyboardChatScrollView
+  > | null>;
 };
 
 export default function ChatbotMessageList({
@@ -41,18 +44,19 @@ export default function ChatbotMessageList({
   onRetry,
   introAnimatedOpacityStyle,
   scrollViewRef,
-  bottomContainerHeight,
-  keyboardHeight,
 }: Readonly<ChatbotMessageListProps>) {
+  const { bottom } = useSafeAreaInsets();
   const displayedMessages = getDisplayedMessages(messages, isLoading);
-  const paddingBottom =
-    bottomContainerHeight + Math.max(keyboardHeight - 80, 0);
 
   return (
-    <Animated.ScrollView
+    <KeyboardChatScrollView
       ref={scrollViewRef}
+      style={{ flex: 1 }}
       contentContainerClassName="p-4 gap-4"
-      contentContainerStyle={{ paddingBottom }}>
+      keyboardDismissMode="interactive"
+      automaticallyAdjustContentInsets={false}
+      applyWorkaroundForContentInsetHitTestBug={Platform.OS === "ios"}
+      offset={Math.max(bottom - BOTTOM_MARGIN, 0)}>
       {displayedMessages.map(message => (
         <MessageItem
           key={message.id}
@@ -62,6 +66,6 @@ export default function ChatbotMessageList({
           style={introAnimatedOpacityStyle}
         />
       ))}
-    </Animated.ScrollView>
+    </KeyboardChatScrollView>
   );
 }

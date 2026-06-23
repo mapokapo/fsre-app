@@ -5,13 +5,12 @@ import { Input } from "@/components/ui/input";
 import QuickQuestion from "@/lib/types/QuickQuestion";
 import { TFunction } from "i18next";
 import { Send } from "lucide-react-native";
-import {
-  KeyboardAvoidingView,
-  LayoutChangeEvent,
-  ScrollView,
-  View,
-  ViewStyle,
-} from "react-native";
+import { ScrollView, View, ViewStyle } from "react-native";
+import { KeyboardStickyView } from "react-native-keyboard-controller";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+export const CHAT_INPUT_NATIVE_ID = "chat-input";
+const BOTTOM_MARGIN = -64;
 
 export type ChatbotComposerProps = {
   t: TFunction;
@@ -23,7 +22,6 @@ export type ChatbotComposerProps = {
   onInputChange: (text: string) => void;
   onSend: () => void;
   onQuickQuestion: (question: string) => void;
-  onLayout: (event: LayoutChangeEvent) => void;
 };
 
 export default function ChatbotComposer({
@@ -36,16 +34,14 @@ export default function ChatbotComposer({
   onInputChange,
   onSend,
   onQuickQuestion,
-  onLayout,
 }: Readonly<ChatbotComposerProps>) {
+  const { bottom } = useSafeAreaInsets();
   const isSendDisabled = inputText.trim() === "" || isLoading;
 
   return (
-    <KeyboardAvoidingView
-      behavior="position"
-      className="absolute bottom-8 left-0 right-0"
-      keyboardVerticalOffset={175}
-      onLayout={onLayout}>
+    <KeyboardStickyView
+      className="pb-8"
+      offset={{ opened: Math.max(bottom - BOTTOM_MARGIN, 0) }}>
       {showQuickQuestions && (
         <ScrollView
           horizontal
@@ -66,6 +62,7 @@ export default function ChatbotComposer({
       )}
       <View className="mx-4 flex-row items-center rounded-full bg-secondary shadow-md shadow-black/35">
         <Input
+          nativeID={CHAT_INPUT_NATIVE_ID}
           className="h-auto flex-1 rounded-full border-transparent bg-transparent px-4 py-5"
           placeholder={t("chatbot.input.placeholder")}
           value={inputText}
@@ -86,6 +83,6 @@ export default function ChatbotComposer({
           />
         </Button>
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardStickyView>
   );
 }

@@ -1,9 +1,10 @@
-import ChatbotComposer from "@/components/partials/ChatbotComposer";
+import ChatbotComposer, {
+  CHAT_INPUT_NATIVE_ID,
+} from "@/components/partials/ChatbotComposer";
 import ChatbotHeaderRight from "@/components/partials/ChatbotHeaderRight";
 import ChatbotMessageList from "@/components/partials/ChatbotMessageList";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
-import { useKeyboard } from "@/lib/hooks/useKeyboardHeight";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import {
   generateGoogleGenAIResponse,
@@ -20,8 +21,11 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { LayoutChangeEvent, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { View } from "react-native";
+import {
+  KeyboardChatScrollView,
+  KeyboardGestureArea,
+} from "react-native-keyboard-controller";
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
@@ -35,12 +39,12 @@ export default function ChatbotScreen() {
   ]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [bottomContainerHeight, setBottomContainerHeight] = useState(0);
-  const scrollViewRef = useRef<Animated.ScrollView>(null);
+  const scrollViewRef = useRef<React.ComponentRef<
+    typeof KeyboardChatScrollView
+  > | null>(null);
 
   const navigation = useNavigation();
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
-  const { keyboardHeight } = useKeyboard();
 
   useNavigationHeaderRight(navigation, ChatbotHeaderRight, {
     isAnimating: isLoading,
@@ -159,34 +163,33 @@ export default function ChatbotScreen() {
     setInputText(question);
   }, []);
 
-  const handleComposerLayout = useCallback((event: LayoutChangeEvent) => {
-    setBottomContainerHeight(event.nativeEvent.layout.height + 80);
-  }, []);
-
   return (
     <View className="flex-1 bg-background">
-      <ChatbotMessageList
-        messages={messages}
-        isLoading={isLoading}
-        retryMessageId={lastUserMessageId}
-        onRetry={handleRetry}
-        introAnimatedOpacityStyle={introAnimatedOpacityStyle}
-        scrollViewRef={scrollViewRef}
-        bottomContainerHeight={bottomContainerHeight}
-        keyboardHeight={keyboardHeight}
-      />
-      <ChatbotComposer
-        t={t}
-        inputText={inputText}
-        isLoading={isLoading}
-        showQuickQuestions={messages.length === 1}
-        quickQuestions={quickQuestions}
-        introAnimatedStyle={introAnimatedStyle}
-        onInputChange={setInputText}
-        onSend={handleSend}
-        onQuickQuestion={handleQuickQuestion}
-        onLayout={handleComposerLayout}
-      />
+      <KeyboardGestureArea
+        interpolator="ios"
+        enableSwipeToDismiss={false}
+        style={{ flex: 1 }}
+        textInputNativeID={CHAT_INPUT_NATIVE_ID}>
+        <ChatbotMessageList
+          messages={messages}
+          isLoading={isLoading}
+          retryMessageId={lastUserMessageId}
+          onRetry={handleRetry}
+          introAnimatedOpacityStyle={introAnimatedOpacityStyle}
+          scrollViewRef={scrollViewRef}
+        />
+        <ChatbotComposer
+          t={t}
+          inputText={inputText}
+          isLoading={isLoading}
+          showQuickQuestions={messages.length === 1}
+          quickQuestions={quickQuestions}
+          introAnimatedStyle={introAnimatedStyle}
+          onInputChange={setInputText}
+          onSend={handleSend}
+          onQuickQuestion={handleQuickQuestion}
+        />
+      </KeyboardGestureArea>
     </View>
   );
 }
