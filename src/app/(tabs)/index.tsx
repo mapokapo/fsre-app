@@ -172,10 +172,10 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="Matice hrvatske bb, 88000, Mostar"
+                  title={t("home.contact.address")}
                   action={{
                     type: "address",
-                    value: "Matice hrvatske bb, 88000, Mostar",
+                    value: t("home.contact.address"),
                   }}
                 />
                 <ContactItem
@@ -187,8 +187,11 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="+387 36 337-001"
-                  action={{ type: "phone", value: "+38736337001" }}
+                  title={t("home.contact.generalPhone")}
+                  action={{
+                    type: "phone",
+                    value: t("home.contact.generalPhone").replace(/[\s-]/g, ""),
+                  }}
                 />
                 <ContactItem
                   icon={
@@ -199,8 +202,11 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="fsre@sum.ba"
-                  action={{ type: "email", value: "fsre@sum.ba" }}
+                  title={t("home.contact.generalEmail")}
+                  action={{
+                    type: "email",
+                    value: t("home.contact.generalEmail"),
+                  }}
                 />
                 <Text className="ml-3 text-sm text-card-gradient-foreground/85">
                   {t("home.contact.studentInquiries")}:
@@ -214,8 +220,11 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title="+387 36 337-003"
-                  action={{ type: "phone", value: "+38736337003" }}
+                  title={t("home.contact.studentPhone")}
+                  action={{
+                    type: "phone",
+                    value: t("home.contact.studentPhone").replace(/[\s-]/g, ""),
+                  }}
                 />
                 <ContactItem
                   icon={
@@ -226,8 +235,11 @@ export default function HomeScreen() {
                       strokeWidth={2.5}
                     />
                   }
-                  title={"referada@fsre.sum.ba"}
-                  action={{ type: "email", value: "referada@fsre.sum.ba" }}
+                  title={t("home.contact.studentEmail")}
+                  action={{
+                    type: "email",
+                    value: t("home.contact.studentEmail"),
+                  }}
                 />
               </LinearGradient>
             </View>

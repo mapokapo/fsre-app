@@ -68,9 +68,6 @@
     }
   },
   "home": {
-    "notifications": {
-      "title": "Obavijesti"
-    },
     "news": {
       "title": "Novosti"
     },
@@ -80,7 +77,12 @@
     "contact": {
       "title": "Kontakt",
       "generalInquiries": "Za opće upite",
-      "studentInquiries": "Za studentska pitanja"
+      "studentInquiries": "Za studentska pitanja",
+      "address": "Matice hrvatske bb, 88000, Mostar",
+      "generalPhone": "+387 36 337-001",
+      "generalEmail": "fsre@sum.ba",
+      "studentPhone": "+387 36 337-003",
+      "studentEmail": "referada@fsre.sum.ba"
     }
   },
   "news": {
@@ -141,35 +143,6 @@
     "darkMode": "Tamni način",
     "lightMode": "Svijetli način"
   },
-  "notifications": {
-    "settings": {
-      "title": "Postavke obavijesti",
-      "description": "Odaberite za koje aktivnosti želite primati obavijesti. Obavijesti će vam stići 15 minuta prije početka.",
-      "save": "Spremi postavke"
-    },
-    "categories": {
-      "lectures": {
-        "title": "Predavanja",
-        "description": "Obavijesti prije početka predavanja"
-      },
-      "exercises": {
-        "title": "Vježbe",
-        "description": "Obavijesti prije početka vježbi"
-      },
-      "labs": {
-        "title": "Laboratorijske vježbe",
-        "description": "Obavijesti prije početka laboratorijskih vježbi"
-      },
-      "exams": {
-        "title": "Ispiti",
-        "description": "Obavijesti o ispitnim rokovima"
-      },
-      "news": {
-        "title": "Novosti",
-        "description": "Obavijesti o novostima fakulteta"
-      }
-    }
-  },
   "timetable": {
     "filters": {
       "day": "Dan",
@@ -190,16 +163,5 @@
       "title": "Obavijesti o rasporedu"
     },
     "startsSoon": "Počinje uskoro"
-  },
-  "stats": {
-    "activeStudents": {
-      "label": "Aktivnih studenata"
-    },
-    "completedProjects": {
-      "label": "Završenih projekata"
-    },
-    "successRate": {
-      "label": "Uspješnost"
-    }
   }
 }

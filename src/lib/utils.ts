@@ -1,9 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { Day, formatDistance } from "date-fns";
-import { hr } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
 import { Timetable, TimetableEvent } from "@/lib/api/client";
+import { getAppDateFnsLocale } from "@/lib/i18n";
 import StudyYear from "@/lib/types/StudyYear";
 import * as NavigationBar from "expo-navigation-bar";
 import { Platform } from "react-native";
@@ -15,13 +15,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getDistanceTo(date: Date, now = new Date()): string {
   return formatDistance(date, now, {
     addSuffix: true,
-    locale: {
-      ...hr,
-      formatDistance: (token, count, options) => {
-        const result = hr.formatDistance(token, count, options);
-        return result.replace("oko ", "").trim();
-      },
-    },
+    locale: getAppDateFnsLocale(),
   });
 }
 

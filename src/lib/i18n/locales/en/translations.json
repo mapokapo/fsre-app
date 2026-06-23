@@ -99,13 +99,15 @@
     "contact": {
       "title": "Contact",
       "generalInquiries": "General inquiries",
-      "studentInquiries": "Student inquiries"
+      "studentInquiries": "Student inquiries",
+      "address": "Matice hrvatske bb, 88000, Mostar",
+      "generalPhone": "+387 36 337-001",
+      "generalEmail": "fsre@sum.ba",
+      "studentPhone": "+387 36 337-003",
+      "studentEmail": "referada@fsre.sum.ba"
     },
     "news": {
       "title": "News"
-    },
-    "notifications": {
-      "title": "Notifications"
     },
     "quickAccess": {
       "title": "Quick access"
@@ -130,35 +132,6 @@
     "message": "This page does not exist.",
     "title": "Not found"
   },
-  "notifications": {
-    "categories": {
-      "exams": {
-        "description": "Notifications about exam periods",
-        "title": "Exams"
-      },
-      "exercises": {
-        "description": "Notifications before exercises start",
-        "title": "Exercises"
-      },
-      "labs": {
-        "description": "Notifications before lab exercises start",
-        "title": "Laboratory exercises"
-      },
-      "lectures": {
-        "description": "Notifications before lectures start",
-        "title": "Lectures"
-      },
-      "news": {
-        "description": "Notifications about faculty news",
-        "title": "News"
-      }
-    },
-    "settings": {
-      "description": "Choose which activities you want to receive notifications for. You will receive notifications 15 minutes before the start.",
-      "save": "Save settings",
-      "title": "Notification settings"
-    }
-  },
   "quickLinks": {
     "eLearning": "eLearning",
     "news": "News",
@@ -169,17 +142,6 @@
     "title": "Settings",
     "darkMode": "Dark mode",
     "lightMode": "Light mode"
-  },
-  "stats": {
-    "activeStudents": {
-      "label": "Active students"
-    },
-    "completedProjects": {
-      "label": "Completed projects"
-    },
-    "successRate": {
-      "label": "Success rate"
-    }
   },
   "timetable": {
     "filters": {

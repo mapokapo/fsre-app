@@ -1,6 +1,6 @@
 import { storage } from "@/lib/const/storage";
 import * as Localization from "expo-localization";
-import * as i18n from "i18next";
+import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
 import { defaultLanguage, fallbackLng, resources } from "./resources";
@@ -82,5 +82,8 @@ const initI18n = async () => {
 };
 
 initI18n();
+
+export { getAppLanguageCode } from "./appLanguage";
+export { getAppDateFnsLocale } from "./dateLocales";
 
 export default i18n;
