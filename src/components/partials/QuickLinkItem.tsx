@@ -6,30 +6,36 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Linking } from "react-native";
+import { Alert, Linking } from "react-native";
 
 export type QuickLinkItemProps = {
   link: QuickLink;
 };
 
-export default function QuickLinkItem({ link }: QuickLinkItemProps) {
+export default function QuickLinkItem({ link }: Readonly<QuickLinkItemProps>) {
   const router = useRouter();
   const { t } = useTranslation();
 
   const handleQuickLinkPress = async (link: QuickLink) => {
     if ("action" in link && link.action === "navigate") {
       router.push(link.to);
-    } else if ("url" in link) {
-      try {
-        const supported = await Linking.canOpenURL(link.url);
-        if (supported) {
-          await Linking.openURL(link.url);
-        } else {
-          console.warn("Don't know how to open URI: " + link.url);
-        }
-      } catch (error) {
-        console.error("Error opening URL:", error);
+      return;
+    }
+
+    if (!("url" in link)) {
+      return;
+    }
+
+    try {
+      const supported = await Linking.canOpenURL(link.url);
+      if (!supported) {
+        Alert.alert(t("common.error"), t("common.linkOpenFailed"));
+        return;
       }
+
+      await Linking.openURL(link.url);
+    } catch {
+      Alert.alert(t("common.error"), t("common.linkOpenFailed"));
     }
   };
 

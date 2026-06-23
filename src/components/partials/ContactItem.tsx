@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import * as Linking from "expo-linking";
-import { View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { Alert, Linking, View } from "react-native";
 
 export type ContactItemAction =
   | { type: "phone"; value: string }
@@ -30,12 +30,30 @@ export default function ContactItem({
   icon,
   action,
 }: Readonly<ContactItemProps>) {
+  const { t } = useTranslation();
+
+  const handlePress = async () => {
+    const url = getActionUrl(action);
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        Alert.alert(t("common.error"), t("common.linkOpenFailed"));
+        return;
+      }
+
+      await Linking.openURL(url);
+    } catch {
+      Alert.alert(t("common.error"), t("common.linkOpenFailed"));
+    }
+  };
+
   return (
     <Button
       variant="ghost"
       className="h-auto flex-row items-center justify-start p-0"
       onPress={() => {
-        Linking.openURL(getActionUrl(action));
+        void handlePress();
       }}>
       <View className="mr-4 h-12 w-12 items-center justify-center overflow-hidden rounded-full">
         {icon}

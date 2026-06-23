@@ -52,6 +52,7 @@
     },
     "error": "Error",
     "help": "Help",
+    "linkOpenFailed": "Could not open the link. Please try again later.",
     "credits": "Credits",
     "language": "Language",
     "languages": {

@@ -8,6 +8,7 @@
     "credits": "Zasluge",
     "logout": "Odjavi se",
     "error": "Greška",
+    "linkOpenFailed": "Nije moguće otvoriti vezu. Pokušajte ponovo kasnije.",
     "refresh": "Osvježi",
     "weekDays": {
       "monday": "Ponedjeljak",
