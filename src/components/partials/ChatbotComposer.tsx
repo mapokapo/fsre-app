@@ -67,6 +67,7 @@ export default function ChatbotComposer({
         <Input
           nativeID={CHAT_INPUT_NATIVE_ID}
           className="h-auto flex-1 rounded-full border-transparent bg-transparent px-4 py-5"
+          accessibilityLabel={t("chatbot.input.placeholder")}
           placeholder={
             isUnavailable
               ? t("chatbot.unavailable.inputPlaceholder")
@@ -81,6 +82,7 @@ export default function ChatbotComposer({
         <Button
           size="icon"
           className="mr-2 h-12 w-12 overflow-hidden rounded-full"
+          accessibilityLabel={t("accessibility.sendMessage")}
           onPress={onSend}
           disabled={isSendDisabled}>
           <Icon

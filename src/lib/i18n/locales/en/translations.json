@@ -1,4 +1,14 @@
 {
+  "accessibility": {
+    "nextWeek": "Next week",
+    "previousWeek": "Previous week",
+    "resetWeek": "Current week",
+    "sendMessage": "Send",
+    "settings": "Settings",
+    "switchToDarkMode": "Switch to dark mode",
+    "switchToLightMode": "Switch to light mode",
+    "timetableFilters": "Timetable filters"
+  },
   "chatbot": {
     "error": {
       "busy": "Sorry, the AI assistant is busy right now. Please try again in a moment.",

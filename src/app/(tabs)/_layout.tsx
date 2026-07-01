@@ -124,6 +124,7 @@ export default function TabLayout() {
             name="index"
             options={{
               title: t("navigation.home"),
+              tabBarAccessibilityLabel: t("navigation.home"),
               tabBarIcon: props => (
                 <Icon
                   as={Home}
@@ -136,6 +137,7 @@ export default function TabLayout() {
             name="chatbot"
             options={{
               title: t("navigation.chatbot"),
+              tabBarAccessibilityLabel: t("navigation.chatbot"),
               tabBarIcon: props => (
                 <Icon
                   as={Sparkles}
@@ -187,6 +189,7 @@ export default function TabLayout() {
             name="timetable"
             options={{
               title: t("navigation.timetable"),
+              tabBarAccessibilityLabel: t("navigation.timetable"),
               tabBarIcon: props => (
                 <Icon
                   as={Calendar}

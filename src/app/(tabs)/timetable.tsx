@@ -354,6 +354,7 @@ export default function TimetableScreen() {
         <Button
           className="rounded-xl p-4"
           variant="outline"
+          accessibilityLabel={t("accessibility.previousWeek")}
           onPress={() => {
             const current = parse(currentIsoWeek, "RRRR-'W'II", new Date());
             setCurrentIsoWeek(format(subWeeks(current, 1), "RRRR-'W'II"));
@@ -375,6 +376,7 @@ export default function TimetableScreen() {
             <Button
               size="icon"
               variant="ghost"
+              accessibilityLabel={t("accessibility.resetWeek")}
               onPress={() => {
                 setCurrentIsoWeek(format(new Date(), "RRRR-'W'II"));
               }}>
@@ -388,6 +390,7 @@ export default function TimetableScreen() {
         <Button
           className="rounded-xl p-4"
           variant="outline"
+          accessibilityLabel={t("accessibility.nextWeek")}
           onPress={() => {
             const current = parse(currentIsoWeek, "RRRR-'W'II", new Date());
             setCurrentIsoWeek(format(addWeeks(current, 1), "RRRR-'W'II"));

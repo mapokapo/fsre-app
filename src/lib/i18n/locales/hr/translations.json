@@ -1,4 +1,14 @@
 {
+  "accessibility": {
+    "nextWeek": "Sljedeći tjedan",
+    "previousWeek": "Prethodni tjedan",
+    "resetWeek": "Trenutni tjedan",
+    "sendMessage": "Pošalji",
+    "settings": "Postavke",
+    "switchToDarkMode": "Prebaci na tamni način",
+    "switchToLightMode": "Prebaci na svijetli način",
+    "timetableFilters": "Filteri rasporeda"
+  },
   "common": {
     "welcomeTo": "Dobrodošli na",
     "all": "Sve",

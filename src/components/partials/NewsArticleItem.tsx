@@ -81,6 +81,7 @@ export default function NewsArticleItem({
             source={{
               uri: `https://web-admin.sum.ba/api/storage/${article.imageUrl}`,
             }}
+            accessibilityLabel={article.title}
             className="aspect-video h-auto w-full"
           />
           <LinearGradient

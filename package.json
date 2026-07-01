@@ -28,7 +28,7 @@
   "lint-staged": {
     "**/*.{js,ts,tsx}": "prettier --write --ignore-path .gitignore",
     "**/*.{ts,tsx}": "eslint --fix",
-    "**/!(*.test).{ts,tsx}": "tsc-files --noEmit"
+    "**/!(*.test).{ts,tsx}": "tsc-files --noEmit nativewind-env.d.ts expo-env.d.ts"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.1",

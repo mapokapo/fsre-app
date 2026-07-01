@@ -58,6 +58,7 @@ const selectableMarkdownRules: RenderRules = {
     <Text
       key={node.key}
       selectable
+      accessibilityRole="link"
       style={styles.link}
       onPress={() => {
         const href = node.attributes.href as string;

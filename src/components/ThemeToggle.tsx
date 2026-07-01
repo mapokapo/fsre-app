@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { MoonStar, Sun } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export default function ThemeToggle() {
+  const { t } = useTranslation();
   const { isDarkColorScheme, setColorScheme } = useColorScheme();
 
   function toggleColorScheme() {
@@ -15,6 +17,11 @@ export default function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
+      accessibilityLabel={
+        isDarkColorScheme
+          ? t("accessibility.switchToLightMode")
+          : t("accessibility.switchToDarkMode")
+      }
       onPress={toggleColorScheme}
       className="active:opacity-70 web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2">
       <View className="aspect-square flex-1 items-center justify-center pt-0.5 web:px-5">
