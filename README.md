@@ -8,19 +8,41 @@ jeziku.
 
 ## Get started
 
-### Pre-commit
+### Git hooks
 
-Install the following for pre-commit hooks to be activated:
-
-- [pre-commit](https://pre-commit.com/#install)
-- [talisman](https://thoughtworks.github.io/talisman/docs)
-
-Verify the installation succeeded:
+Git hooks are managed with [pre-commit](https://pre-commit.com/) via
+[`.pre-commit-config.yaml`](.pre-commit-config.yaml). Install once after
+cloning:
 
 ```bash
-pre-commit install
+pip install pre-commit   # or brew install pre-commit
+bun run hooks:install
+```
+
+On each commit, pre-commit runs (in order):
+
+1. **lint-staged** — Prettier, incremental TypeScript (`tsc-files`), and ESLint
+   `--fix` on staged `*.{js,ts,tsx}` files
+2. **Tests** — `bun test`
+3. **Talisman** — secret scanning when
+   [Talisman](https://thoughtworks.github.io/talisman/docs) is installed and
+   `TALISMAN_HOME` points at `talisman_hook_script`
+
+Commit messages are validated by the `commit-msg` hook (conventional commit
+format: `type(scope): description`).
+
+After `git pull` merges dependency changes, the `post-merge` hook runs
+`bun install`.
+
+Run all hooks manually:
+
+```bash
 pre-commit run --all-files --verbose --color always
 ```
+
+Install [Talisman](https://thoughtworks.github.io/talisman/docs) locally for
+secret scanning, then set `TALISMAN_HOME` (for example
+`export TALISMAN_HOME="${HOME}/.talisman/bin"`).
 
 ### Development
 
@@ -56,6 +78,8 @@ bun run typecheck
 bun run format:check
 bun test
 ```
+
+These also run automatically on commit via pre-commit (see **Git hooks** above).
 
 ### API types
 

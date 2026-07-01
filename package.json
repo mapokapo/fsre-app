@@ -21,7 +21,14 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "format:check": "prettier --check .",
-    "test": "bun test"
+    "format": "prettier --write .",
+    "test": "bun test",
+    "hooks:install": "git config --unset-all core.hooksPath 2>/dev/null || true; pre-commit install -t pre-commit -t commit-msg -t post-merge"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": "prettier --write --ignore-path .gitignore",
+    "**/*.{ts,tsx}": "eslint --fix",
+    "**/!(*.test).{ts,tsx}": "tsc-files --noEmit"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.1",
@@ -97,10 +104,12 @@
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "lint-staged": "^17.0.8",
     "openapi-typescript": "^7.9.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.17",
+    "tsc-files": "^1.1.4",
     "typescript": "~5.9.2"
   },
   "private": true,

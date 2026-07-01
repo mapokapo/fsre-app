@@ -1,18 +1,17 @@
 repos:
   - repo: local
     hooks:
-      - id: commit-msg
-        name: validate commit message format
-        language: pygrep
-        entry:
-          '^(?:(?:feat|fix|docs|style|refactor|test|chore)(?:\([a-zA-Z0-9-\/]+\))?(?:,(?:feat|fix|docs|style|refactor|test|chore)(?:\([a-zA-Z0-9-\/]+\))?)*)\:
-          .+$'
-        args:
-          - --multiline
-          - --negate
-        stages:
-          - commit-msg
-      - id: talisman-precommit
+      - id: lint-staged
+        name: lint-staged
+        entry: bunx lint-staged
+        language: system
+        pass_filenames: false
+      - id: test
+        name: test
+        entry: bun run test
+        language: system
+        pass_filenames: false
+      - id: talisman
         name: talisman
         entry:
           bash -c 'if [ -n "${TALISMAN_HOME:-}" ]; then
@@ -26,3 +25,21 @@ repos:
         pass_filenames: false
         types: [text]
         verbose: true
+      - id: commit-msg
+        name: validate commit message format
+        language: pygrep
+        entry:
+          '^(?:(?:feat|fix|docs|style|refactor|test|chore|ci|ai)(?:\([a-zA-Z0-9-\/]+\))?(?:,(?:feat|fix|docs|style|refactor|test|chore|ci|ai)(?:\([a-zA-Z0-9-\/]+\))?)*)\:
+          .+$'
+        args:
+          - --multiline
+          - --negate
+        stages:
+          - commit-msg
+      - id: post-merge-install
+        name: bun install after merge
+        entry: bun install
+        language: system
+        pass_filenames: false
+        stages:
+          - post-merge

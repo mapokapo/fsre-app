@@ -1,0 +1,6 @@
+fileignoreconfig:
+- filename: README.md
+  checksum: e8c09d88a5f9511933e72b3b551f5f2868777143146d61eb6ebae8daa53e379c
+- filename: bun.lock
+  checksum: fe7199986968b300e3cc7859c889ff6387bc61e86b43b3269196127ef68d78de
+version: "1.0"
