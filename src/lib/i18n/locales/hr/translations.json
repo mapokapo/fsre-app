@@ -163,7 +163,12 @@
     },
     "error": {
       "busy": "Izvinjavam se, AI asistent je trenutno zauzet. Molimo pokušajte ponovo za nekoliko trenutaka.",
-      "generic": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu."
+      "generic": "Izvinjavam se, došlo je do pogreške. Molimo pokušajte ponovo ili kontaktirajte studentsku službu.",
+      "unavailable": "AI asistent trenutno nije dostupan. Molimo pokušajte ponovo kasnije."
+    },
+    "unavailable": {
+      "banner": "AI asistent nije konfiguriran u ovoj verziji aplikacije. I dalje možete koristiti predložena pitanja ispod.",
+      "inputPlaceholder": "AI asistent nije dostupan"
     }
   },
   "settings": {

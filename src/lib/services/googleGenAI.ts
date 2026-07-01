@@ -3,11 +3,15 @@ import { ApiError, Content, GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.EXPO_PUBLIC_GOOGLE_GENAI_API_KEY ?? "";
 
+export function isGoogleGenAIApiKeyMissing(): boolean {
+  return API_KEY.trim() === "";
+}
+
 const MODEL = "gemini-3.1-flash-lite";
 const MAX_HISTORY_TURNS = 10;
 const CACHED_RESPONSE_DELAY_MS = 1000;
 
-if (!API_KEY) {
+if (isGoogleGenAIApiKeyMissing()) {
   console.warn(
     "Google AI Studio API key is not set. Chatbot will not function properly."
   );
@@ -112,13 +116,17 @@ export async function generateGoogleGenAIResponse(
     }
   | {
       isSuccess: false;
-      errorType: "busy" | "unknown";
+      errorType: "busy" | "unavailable" | "unknown";
     }
 > {
   const cachedResponse = getCachedQuickQuestionResponse(userMessage);
   if (cachedResponse) {
     await delay(CACHED_RESPONSE_DELAY_MS);
     return { isSuccess: true, response: cachedResponse };
+  }
+
+  if (isGoogleGenAIApiKeyMissing()) {
+    return { isSuccess: false, errorType: "unavailable" };
   }
 
   try {

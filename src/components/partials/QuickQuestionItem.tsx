@@ -14,11 +14,13 @@ import Animated, { AnimatedProps } from "react-native-reanimated";
 export type QuickQuestionItemProps = AnimatedProps<ViewProps> & {
   question: QuickQuestion;
   onPress: () => void;
+  disabled?: boolean;
 };
 
 export default function QuickQuestionItem({
   question,
   onPress,
+  disabled = false,
   ...props
 }: QuickQuestionItemProps) {
   const { colorScheme } = useColorScheme();
@@ -31,7 +33,8 @@ export default function QuickQuestionItem({
       <Button
         variant="ghost"
         className="h-auto overflow-hidden rounded-2xl p-0 web:!h-auto"
-        onPress={onPress}>
+        onPress={onPress}
+        disabled={disabled}>
         <LinearGradient
           colors={[
             THEME[colorScheme].cardGradient1,

@@ -73,7 +73,9 @@ export default function MessageItem({
             "rounded-2xl p-4",
             message.isUser
               ? "rounded-br-md bg-fsre-gradient-1"
-              : "rounded-bl-md bg-secondary shadow-md"
+              : message.isError
+                ? "rounded-bl-md bg-destructive/15"
+                : "rounded-bl-md bg-secondary shadow-md"
           )}>
           {message.typing ? (
             <Dots
@@ -88,6 +90,10 @@ export default function MessageItem({
                   className="mb-2 text-fsre-gradient-foreground">
                   {message.text}
                 </Text>
+              ) : message.isError ? (
+                <Text className="mb-2 text-sm text-destructive">
+                  {message.text}
+                </Text>
               ) : (
                 <MessageMarkdown>{message.text}</MessageMarkdown>
               )}
@@ -96,18 +102,15 @@ export default function MessageItem({
                   "self-end text-xs",
                   message.isUser
                     ? "text-fsre-gradient-foreground/60"
-                    : "text-muted-foreground"
+                    : message.isError
+                      ? "text-destructive/70"
+                      : "text-muted-foreground"
                 )}>
                 {format(message.timestamp, "HH:mm")}
               </Text>
             </>
           )}
         </View>
-        {message.error && (
-          <Text className="mt-1 max-w-full text-right text-xs text-destructive">
-            {message.error}
-          </Text>
-        )}
       </View>
 
       {message.isUser && (

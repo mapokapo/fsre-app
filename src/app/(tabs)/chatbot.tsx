@@ -3,16 +3,20 @@ import ChatbotComposer, {
 } from "@/components/partials/ChatbotComposer";
 import ChatbotHeaderRight from "@/components/partials/ChatbotHeaderRight";
 import ChatbotMessageList from "@/components/partials/ChatbotMessageList";
+import { Icon } from "@/components/ui/icon";
+import { Text } from "@/components/ui/text";
 import { quickQuestions } from "@/lib/const/quickQuestions";
 import useIntroAnimation from "@/lib/hooks/useIntroAnimation";
 import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import {
   generateGoogleGenAIResponse,
+  isGoogleGenAIApiKeyMissing,
   type ConversationMessage,
 } from "@/lib/services/googleGenAI";
 import Message from "@/lib/types/Message";
 import { toConversationHistory } from "@/lib/utils/chatbot";
 import { useNavigation } from "expo-router";
+import { BotOff } from "lucide-react-native";
 import React, {
   useCallback,
   useEffect,
@@ -29,6 +33,7 @@ import {
 
 export default function ChatbotScreen() {
   const { t } = useTranslation();
+  const isApiKeyMissing = isGoogleGenAIApiKeyMissing();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "initial-message",
@@ -100,19 +105,8 @@ export default function ChatbotScreen() {
   }, [t]);
 
   const fetchBotResponse = useCallback(
-    async (
-      userText: string,
-      history: ConversationMessage[],
-      userMessageId: string
-    ) => {
+    async (userText: string, history: ConversationMessage[]) => {
       setIsLoading(true);
-      setMessages(prev =>
-        prev.map(message =>
-          message.id === userMessageId
-            ? { ...message, error: undefined }
-            : message
-        )
-      );
 
       const botResponse = await generateGoogleGenAIResponse(userText, history);
       if (botResponse.isSuccess) {
@@ -129,41 +123,59 @@ export default function ChatbotScreen() {
         const errorText =
           botResponse.errorType === "busy"
             ? t("chatbot.error.busy")
-            : t("chatbot.error.generic");
-        setMessages(prev =>
-          prev.map(message =>
-            message.id === userMessageId
-              ? { ...message, error: errorText }
-              : message
-          )
-        );
+            : botResponse.errorType === "unavailable"
+              ? t("chatbot.error.unavailable")
+              : t("chatbot.error.generic");
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-error-${Date.now()}`,
+            text: errorText,
+            isUser: false,
+            isError: true,
+            timestamp: new Date(),
+          },
+        ]);
       }
       setIsLoading(false);
     },
     [t]
   );
 
-  const handleSend = async () => {
-    if (inputText.trim() === "" || isLoading) return;
+  const sendMessage = useCallback(
+    async (userText: string) => {
+      const trimmedText = userText.trim();
+      if (trimmedText === "" || isLoading) return;
+
+      const history = toConversationHistory(messages, {
+        dropTrailingUser: true,
+      });
+      const userMessageId = `user-${Date.now()}`;
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: userMessageId,
+          text: trimmedText,
+          isUser: true,
+          timestamp: new Date(),
+        },
+      ]);
+
+      await fetchBotResponse(trimmedText, history);
+    },
+    [fetchBotResponse, isLoading, messages]
+  );
+
+  const handleSend = useCallback(() => {
+    if (isApiKeyMissing) return;
 
     const userText = inputText.trim();
+    if (userText === "") return;
+
     setInputText("");
-
-    const history = toConversationHistory(messages, { dropTrailingUser: true });
-    const userMessageId = `user-${Date.now()}`;
-
-    setMessages(prev => [
-      ...prev,
-      {
-        id: userMessageId,
-        text: userText,
-        isUser: true,
-        timestamp: new Date(),
-      },
-    ]);
-
-    await fetchBotResponse(userText, history, userMessageId);
-  };
+    void sendMessage(userText);
+  }, [inputText, isApiKeyMissing, sendMessage]);
 
   const lastUserMessageId = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -185,17 +197,32 @@ export default function ChatbotScreen() {
       const history = toConversationHistory(messages.slice(0, userIndex));
 
       setMessages(prev => prev.slice(0, userIndex + 1));
-      await fetchBotResponse(userMessage.text, history, userMessageId);
+      await fetchBotResponse(userMessage.text, history);
     },
     [fetchBotResponse, isLoading, messages]
   );
 
-  const handleQuickQuestion = useCallback((question: string) => {
-    setInputText(question);
-  }, []);
+  const handleQuickQuestion = useCallback(
+    (question: string) => {
+      void sendMessage(question);
+    },
+    [sendMessage]
+  );
 
   return (
     <View className="flex-1 bg-background">
+      {isApiKeyMissing && (
+        <View className="mx-4 mt-2 flex-row items-start gap-3 rounded-xl bg-destructive/15 px-4 py-3">
+          <Icon
+            as={BotOff}
+            size={18}
+            className="mt-0.5 text-destructive"
+          />
+          <Text className="flex-1 text-sm text-destructive">
+            {t("chatbot.unavailable.banner")}
+          </Text>
+        </View>
+      )}
       <KeyboardGestureArea
         interpolator="ios"
         enableSwipeToDismiss={false}
@@ -213,6 +240,7 @@ export default function ChatbotScreen() {
           t={t}
           inputText={inputText}
           isLoading={isLoading}
+          isUnavailable={isApiKeyMissing}
           showQuickQuestions={messages.length === 1}
           quickQuestions={quickQuestions}
           introAnimatedStyle={introAnimatedStyle}

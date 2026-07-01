@@ -2,7 +2,12 @@
   "chatbot": {
     "error": {
       "busy": "Sorry, the AI assistant is busy right now. Please try again in a moment.",
-      "generic": "Sorry, an error occurred. Please try again or contact the student services."
+      "generic": "Sorry, an error occurred. Please try again or contact the student services.",
+      "unavailable": "The AI assistant is not available right now. Please try again later."
+    },
+    "unavailable": {
+      "banner": "The AI assistant is not configured in this build. You can still use the suggested questions below.",
+      "inputPlaceholder": "AI assistant unavailable"
     },
     "input": {
       "placeholder": "Enter your question..."
