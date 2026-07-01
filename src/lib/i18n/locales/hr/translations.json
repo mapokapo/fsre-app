@@ -2,6 +2,7 @@
   "common": {
     "welcomeTo": "Dobrodošli na",
     "all": "Sve",
+    "cancel": "Odustani",
     "save": "Spremi",
     "saveSettings": "Spremi postavke",
     "help": "Pomoć",
@@ -119,6 +120,16 @@
   },
   "chatbot": {
     "intro": "Pozdrav! 👋 Ja sam FSRE AI asistent. Kako vam mogu pomoći danas? Možete me pitati o rasporedu, ispitima, laboratorijima, stipendijama ili bilo čemu drugom vezanom za fakultet.",
+    "clear": {
+      "a11y": "Obriši povijest chata",
+      "confirm": "Obriši",
+      "message": "Ovo će ukloniti sve poruke iz ove sesije.",
+      "title": "Obrisati razgovor?"
+    },
+    "menu": {
+      "a11y": "Opcije chata",
+      "clearChat": "Obriši chat"
+    },
     "retry": "Pokušaj ponovo",
     "input": {
       "placeholder": "Unesite vaše pitanje..."
@@ -167,6 +178,7 @@
       "department": "Studij",
       "direction": "Smjer",
       "chooseDirection": "Odaberite smjer",
+      "directionRequired": "Odaberite smjer za prikaz rasporeda",
       "currentWeek": "Trenutni tjedan",
       "week": "Tjedan {{week}}"
     },

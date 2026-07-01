@@ -35,6 +35,7 @@
     "@react-navigation/native": "^7.1.6",
     "@rn-primitives/accordion": "^1.4.0",
     "@rn-primitives/dialog": "^1.4.0",
+    "@rn-primitives/dropdown-menu": "^1.4.0",
     "@rn-primitives/portal": "^1.3.0",
     "@rn-primitives/select": "^1.4.0",
     "@rn-primitives/slot": "^1.4.0",

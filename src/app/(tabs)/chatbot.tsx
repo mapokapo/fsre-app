@@ -21,7 +21,7 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import {
   KeyboardChatScrollView,
   KeyboardGestureArea,
@@ -46,9 +46,40 @@ export default function ChatbotScreen() {
   const navigation = useNavigation();
   const { introAnimatedStyle, introAnimatedOpacityStyle } = useIntroAnimation();
 
-  useNavigationHeaderRight(navigation, ChatbotHeaderRight, {
-    isAnimating: isLoading,
-  });
+  const handleClearChat = useCallback(() => {
+    if (isLoading) return;
+
+    Alert.alert(t("chatbot.clear.title"), t("chatbot.clear.message"), [
+      { text: t("common.cancel"), style: "cancel" },
+      {
+        text: t("chatbot.clear.confirm"),
+        style: "destructive",
+        onPress: () => {
+          setMessages([
+            {
+              id: "initial-message",
+              text: t("chatbot.intro"),
+              isUser: false,
+              timestamp: new Date(),
+            },
+          ]);
+          setInputText("");
+          setIsLoading(false);
+        },
+      },
+    ]);
+  }, [isLoading, t]);
+
+  const headerRightProps = useMemo(
+    () => ({
+      isAnimating: isLoading,
+      onClearChat: handleClearChat,
+      disabled: isLoading,
+    }),
+    [handleClearChat, isLoading]
+  );
+
+  useNavigationHeaderRight(navigation, ChatbotHeaderRight, headerRightProps);
 
   useEffect(() => {
     const timer = setTimeout(() => {

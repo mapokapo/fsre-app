@@ -8,6 +8,16 @@
       "placeholder": "Enter your question..."
     },
     "intro": "Hello! 👋 I am the FSRE AI assistant. How can I help you today? You can ask me about the timetable, exams, labs, scholarships, or anything else related to the faculty.",
+    "clear": {
+      "a11y": "Clear chat history",
+      "confirm": "Clear",
+      "message": "This will remove all messages from this session.",
+      "title": "Clear conversation?"
+    },
+    "menu": {
+      "a11y": "Chat options",
+      "clearChat": "Clear chat"
+    },
     "retry": "Retry",
     "quickQuestions": {
       "contact": {
@@ -39,6 +49,7 @@
   },
   "common": {
     "all": "All",
+    "cancel": "Cancel",
     "chooseLanguage": "Choose language",
     "departmentEnum": {
       "COMPUTER_SCIENCE": "Computer Science",
@@ -163,6 +174,7 @@
   "timetable": {
     "filters": {
       "chooseDirection": "Choose direction",
+      "directionRequired": "Choose a direction to view the timetable",
       "currentWeek": "Current week",
       "day": "Day",
       "department": "Program",
