@@ -3,6 +3,7 @@ import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { TimetableEvent } from "@/lib/api/client";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { THEME } from "@/lib/theme";
 import * as AccordionPrimitive from "@rn-primitives/accordion";
 import { compareAsc } from "date-fns";
@@ -21,7 +22,6 @@ export type TimetableDaySectionProps = {
   events: TimetableEvent[];
   dayLabel: string;
   gradients: [ColorValue, ColorValue][];
-  colorScheme: "light" | "dark";
 };
 
 function TimetableDayHeader({
@@ -88,8 +88,8 @@ export default function TimetableDaySection({
   events,
   dayLabel,
   gradients,
-  colorScheme,
 }: Readonly<TimetableDaySectionProps>) {
+  const { colorScheme } = useColorScheme();
   const sortedEvents = useMemo(
     () =>
       [...events].sort((a, b) => compareAsc(a.startDateTime, b.startDateTime)),

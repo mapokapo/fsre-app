@@ -3,10 +3,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { Timetable } from "@/lib/api/client";
-import { useColorScheme } from "@/lib/hooks/useColorScheme";
-import { THEME } from "@/lib/theme";
 import { getTimetableEvents } from "@/lib/utils";
-import { LinearGradient } from "expo-linear-gradient";
 import { Calendar } from "lucide-react-native";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,7 +22,6 @@ export default function TimetableView({
   onRefresh,
   gradients,
 }: Readonly<TimetableViewProps>) {
-  const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
 
   const timetableDays = useMemo(
@@ -64,19 +60,11 @@ export default function TimetableView({
       }>
       {timetableDays.length === 0 ? (
         <View className="flex-1 items-center justify-center">
-          <LinearGradient
-            colors={[
-              THEME[colorScheme].cardGradient1,
-              THEME[colorScheme].cardGradient2,
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}>
-            <Icon
-              as={Calendar}
-              className="text-muted-foreground"
-              size={48}
-            />
-          </LinearGradient>
+          <Icon
+            as={Calendar}
+            className="text-muted-foreground"
+            size={48}
+          />
           <Text className="mt-4 text-xl font-bold text-muted-foreground">
             {t("timetable.noClasses.title")}
           </Text>
@@ -92,7 +80,6 @@ export default function TimetableView({
           {timetableDays.map(({ events, day }) => (
             <TimetableDaySection
               key={day}
-              colorScheme={colorScheme}
               dayLabel={getWeekDayFromIndex(day)}
               dayValue={String(day)}
               events={events}

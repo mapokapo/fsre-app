@@ -26,12 +26,16 @@ import { useNavigationHeaderRight } from "@/lib/hooks/useNavigationHeaderRight";
 import { useNotificationOnboarding } from "@/lib/hooks/useNotificationOnboarding";
 import { useNotificationPermissionStatus } from "@/lib/hooks/useNotificationPermissionStatus";
 import { useTimetableSubscription } from "@/lib/hooks/useTimetableSubscription";
+import { resolveStudyProgramId } from "@/lib/services/timetableSubscription";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
+import TimetableFilter from "@/lib/types/TimetableFilter";
+import Department from "@/lib/types/Department";
+import StudyYear from "@/lib/types/StudyYear";
 import { filterTimetable } from "@/lib/utils";
 import { addWeeks, format, parse, subWeeks } from "date-fns";
 import { useNavigation } from "expo-router";
-import { ChevronLeft, ChevronRight, X } from "lucide-react-native";
-import React, { useCallback, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Calendar, X } from "lucide-react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
 
@@ -64,6 +68,13 @@ export default function TimetableScreen() {
     isComplete: isNotificationOnboardingComplete,
     completeOnboarding,
   } = useNotificationOnboarding();
+  const { permissionStatus, refreshPermissionStatus } =
+    useNotificationPermissionStatus(isNotificationOnboardingComplete);
+
+  const handleCompleteOnboarding = useCallback(async () => {
+    await completeOnboarding();
+    await refreshPermissionStatus();
+  }, [completeOnboarding, refreshPermissionStatus]);
   const { mutateAsync: subscribeToTimetable } = $api.useMutation(
     "post",
     "/messaging/subscribe"
@@ -79,6 +90,71 @@ export default function TimetableScreen() {
     isLoading: isTimetableDatabaseLoading,
     refetch: refetchTimetableDatabase,
   } = $api.useQuery("get", "/timetable-database");
+
+  const directions = useMemo(
+    () =>
+      timetableDatabase === undefined
+        ? []
+        : [
+            ...new Set(
+              timetableDatabase.studyPrograms
+                .filter(
+                  sp =>
+                    sp.department === selectedDepartment.value &&
+                    sp.studyYear === selectedYear.value
+                )
+                .map(sp => sp.direction)
+                .filter(d => d !== null)
+            ),
+          ],
+    [selectedDepartment.value, selectedYear.value, timetableDatabase]
+  );
+
+  const studyProgramId = useMemo(
+    () =>
+      resolveStudyProgramId(
+        selectedYear.value,
+        selectedDepartment.value,
+        selectedDirection,
+        timetableDatabase?.studyPrograms
+      ),
+    [
+      selectedYear.value,
+      selectedDepartment.value,
+      selectedDirection,
+      timetableDatabase?.studyPrograms,
+    ]
+  );
+
+  useEffect(() => {
+    if (
+      selectedDirection !== null &&
+      (directions.length === 0 || !directions.includes(selectedDirection))
+    ) {
+      setSelectedDirection(null);
+    }
+  }, [directions, selectedDirection]);
+
+  const handleYearSelect = useCallback(
+    (year: TimetableFilter<StudyYear>) => {
+      setSelectedYear(year);
+      if (year.value !== selectedYear.value) {
+        setSelectedDirection(null);
+      }
+    },
+    [selectedYear.value]
+  );
+
+  const handleDepartmentSelect = useCallback(
+    (department: TimetableFilter<Department>) => {
+      setSelectedDepartment(department);
+      if (department.value !== selectedDepartment.value) {
+        setSelectedDirection(null);
+      }
+    },
+    [selectedDepartment.value]
+  );
+
   const {
     data: timetable,
     error: timetableError,
@@ -91,16 +167,12 @@ export default function TimetableScreen() {
       params: {
         query: {
           isoWeek: currentIsoWeek,
-          studyProgram: timetableDatabase?.studyPrograms.find(
-            program =>
-              program.studyYear === selectedYear.value &&
-              program.department === selectedDepartment.value
-          )?.id,
+          studyProgram: studyProgramId ?? undefined,
         },
       },
     },
     {
-      enabled: !!timetableDatabase,
+      enabled: !!timetableDatabase && studyProgramId !== null,
     }
   );
 
@@ -122,14 +194,14 @@ export default function TimetableScreen() {
     subscribeToTimetable,
     unsubscribeFromTimetable,
     enabled: isNotificationOnboardingComplete,
+    notificationsEnabled: permissionStatus === "granted",
   });
-  const { permissionStatus } = useNotificationPermissionStatus(
-    isNotificationOnboardingComplete
-  );
+
+  const effectiveTimetable = studyProgramId === null ? undefined : timetable;
 
   const filteredTimetable = useMemo(
     () =>
-      timetable === undefined
+      effectiveTimetable === undefined
         ? {
             monday: [],
             tuesday: [],
@@ -139,7 +211,7 @@ export default function TimetableScreen() {
             saturday: [],
             sunday: [],
           }
-        : filterTimetable(timetable, ({ event, day }) => {
+        : filterTimetable(effectiveTimetable, ({ event, day }) => {
             const dayMatch =
               selectedDay.value === null ||
               day === Number.parseInt(selectedDay.value, 10);
@@ -159,28 +231,15 @@ export default function TimetableScreen() {
       selectedYear,
       selectedDepartment,
       selectedDirection,
-      timetable,
+      effectiveTimetable,
     ]
   );
 
-  const directions = useMemo(
-    () =>
-      timetableDatabase === undefined
-        ? []
-        : [
-            ...new Set(
-              timetableDatabase.studyPrograms
-                .filter(
-                  sp =>
-                    sp.department === selectedDepartment.value &&
-                    sp.studyYear === selectedYear.value
-                )
-                .map(sp => sp.direction)
-                .filter(d => d !== null)
-            ),
-          ],
-    [selectedDepartment.value, selectedYear.value, timetableDatabase]
-  );
+  const isWaitingForDirection =
+    directions.length > 0 && selectedDirection === null;
+  const isWaitingForTimetable =
+    studyProgramId !== null &&
+    (isTimetableLoading || effectiveTimetable === undefined);
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -196,7 +255,7 @@ export default function TimetableScreen() {
       <>
         <TimetableNotificationsDialog
           isVisible={showNotificationsDialog}
-          onContinue={completeOnboarding}
+          onContinue={handleCompleteOnboarding}
         />
         <ErrorMessage
           error={timetableError ?? timetableDatabaseError}
@@ -210,8 +269,7 @@ export default function TimetableScreen() {
   }
 
   if (
-    isTimetableLoading ||
-    !timetable ||
+    isWaitingForTimetable ||
     isTimetableDatabaseLoading ||
     !timetableDatabase
   ) {
@@ -219,7 +277,7 @@ export default function TimetableScreen() {
       <>
         <TimetableNotificationsDialog
           isVisible={showNotificationsDialog}
-          onContinue={completeOnboarding}
+          onContinue={handleCompleteOnboarding}
         />
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator
@@ -235,7 +293,7 @@ export default function TimetableScreen() {
     <View className="flex-1 bg-background">
       <TimetableNotificationsDialog
         isVisible={showNotificationsDialog}
-        onContinue={completeOnboarding}
+        onContinue={handleCompleteOnboarding}
       />
       {showFilters && (
         <View className="gap-4 p-5">
@@ -250,14 +308,14 @@ export default function TimetableScreen() {
             label={t("timetable.filters.studyYear")}
             filters={years}
             selectedFilter={selectedYear}
-            onSelect={setSelectedYear}
+            onSelect={handleYearSelect}
           />
 
           <TimetableFilterButtonList
             label={t("timetable.filters.department")}
             filters={departments}
             selectedFilter={selectedDepartment}
-            onSelect={setSelectedDepartment}
+            onSelect={handleDepartmentSelect}
           />
 
           {directions.length > 0 && (
@@ -345,12 +403,25 @@ export default function TimetableScreen() {
         permissionStatus={permissionStatus}
         onRetry={retrySubscription}
       />
-      <TimetableView
-        timetable={filteredTimetable}
-        isRefreshing={isRefreshing}
-        onRefresh={handleRefresh}
-        gradients={gradients}
-      />
+      {isWaitingForDirection ? (
+        <View className="flex-1 items-center justify-center p-4">
+          <Icon
+            as={Calendar}
+            className="text-muted-foreground"
+            size={48}
+          />
+          <Text className="mt-4 text-center text-xl font-bold text-muted-foreground">
+            {t("timetable.filters.directionRequired")}
+          </Text>
+        </View>
+      ) : (
+        <TimetableView
+          timetable={filteredTimetable}
+          isRefreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          gradients={gradients}
+        />
+      )}
     </View>
   );
 }

@@ -12,10 +12,10 @@ export function useNotificationPermissionStatus(enabled = true) {
   const refreshPermissionStatus = useCallback(() => {
     if (!enabled) {
       setPermissionStatus("unsupported");
-      return;
+      return Promise.resolve();
     }
 
-    getNotificationPermissionStatus().then(setPermissionStatus);
+    return getNotificationPermissionStatus().then(setPermissionStatus);
   }, [enabled]);
 
   useFocusEffect(

@@ -1,8 +1,8 @@
-import { getToken } from "@react-native-firebase/messaging";
-import type { FirebaseMessagingTypes } from "@react-native-firebase/messaging";
 import Department from "@/lib/types/Department";
 import StudyYear from "@/lib/types/StudyYear";
 import SubscriptionKey from "@/lib/types/SubscriptionKey";
+import type { FirebaseMessagingTypes } from "@react-native-firebase/messaging";
+import { getToken } from "@react-native-firebase/messaging";
 
 type StudyProgram = {
   studyYear: StudyYear;
@@ -14,6 +14,52 @@ type StudyProgram = {
 type SubscriptionMutation = (variables: {
   body: { studyProgramId: number; fcmToken: string };
 }) => Promise<unknown>;
+
+export function isMessagingConflictError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+
+  const record = error as Record<string, unknown>;
+
+  if (record.status === 409 || record.status === "CONFLICT") {
+    return true;
+  }
+
+  const response = record.response;
+  if (
+    typeof response === "object" &&
+    response !== null &&
+    (response as { status?: number }).status === 409
+  ) {
+    return true;
+  }
+
+  const nestedError = record.error;
+  if (
+    typeof nestedError === "object" &&
+    nestedError !== null &&
+    (nestedError as { status?: string }).status === "409 CONFLICT"
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+async function runMessagingMutation(
+  mutation: SubscriptionMutation,
+  body: { studyProgramId: number; fcmToken: string }
+): Promise<void> {
+  try {
+    await mutation({ body });
+  } catch (error) {
+    if (isMessagingConflictError(error)) {
+      return;
+    }
+    throw error;
+  }
+}
 
 export function resolveStudyProgramId(
   selectedYear: StudyYear | null,
@@ -65,33 +111,26 @@ export async function syncTimetableSubscription({
   if (studyProgramId === null) {
     if (subscriptionKey === null) return;
 
-    await unsubscribeFromTimetable({
-      body: {
-        studyProgramId: subscriptionKey.studyProgramId,
-        fcmToken,
-      },
+    await runMessagingMutation(unsubscribeFromTimetable, {
+      studyProgramId: subscriptionKey.studyProgramId,
+      fcmToken,
     });
     if (!isCancelled()) setSubscriptionKey(null);
     return;
   }
-
   if (
     subscriptionKey !== null &&
     subscriptionKey.studyProgramId !== studyProgramId
   ) {
-    await unsubscribeFromTimetable({
-      body: {
-        studyProgramId: subscriptionKey.studyProgramId,
-        fcmToken,
-      },
+    await runMessagingMutation(unsubscribeFromTimetable, {
+      studyProgramId: subscriptionKey.studyProgramId,
+      fcmToken,
     });
   }
 
-  await subscribeToTimetable({
-    body: {
-      studyProgramId,
-      fcmToken,
-    },
+  await runMessagingMutation(subscribeToTimetable, {
+    studyProgramId,
+    fcmToken,
   });
 
   if (!isCancelled() && selectedDepartment !== null && selectedYear !== null) {

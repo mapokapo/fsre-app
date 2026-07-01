@@ -6,7 +6,7 @@ import {
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import Department from "@/lib/types/Department";
 import StudyYear from "@/lib/types/StudyYear";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 
 type StudyProgram = {
@@ -35,6 +35,7 @@ export function useTimetableSubscription({
   subscribeToTimetable,
   unsubscribeFromTimetable,
   enabled = true,
+  notificationsEnabled = true,
 }: {
   selectedYear: StudyYear | null;
   selectedDepartment: Department | null;
@@ -43,12 +44,19 @@ export function useTimetableSubscription({
   subscribeToTimetable: SubscriptionMutation;
   unsubscribeFromTimetable: SubscriptionMutation;
   enabled?: boolean;
+  notificationsEnabled?: boolean;
 }) {
-  const { subscriptionKey, setSubscriptionKey } =
-    useTimetableSubscriptionStore();
+  const setSubscriptionKey = useTimetableSubscriptionStore(
+    state => state.setSubscriptionKey
+  );
   const [subscriptionStatus, setSubscriptionStatus] =
     useState<TimetableSubscriptionStatus>("idle");
   const [retryCount, setRetryCount] = useState(0);
+
+  const subscribeRef = useRef(subscribeToTimetable);
+  const unsubscribeRef = useRef(unsubscribeFromTimetable);
+  subscribeRef.current = subscribeToTimetable;
+  unsubscribeRef.current = unsubscribeFromTimetable;
 
   const retrySubscription = useCallback(() => {
     setRetryCount(current => current + 1);
@@ -59,6 +67,9 @@ export function useTimetableSubscription({
       setSubscriptionStatus("idle");
       return;
     }
+
+    const subscriptionKey =
+      useTimetableSubscriptionStore.getState().subscriptionKey;
 
     const studyProgramId = resolveStudyProgramId(
       selectedYear,
@@ -80,6 +91,11 @@ export function useTimetableSubscription({
       return;
     }
 
+    if (!notificationsEnabled) {
+      setSubscriptionStatus(studyProgramId === null ? "incomplete" : "idle");
+      return;
+    }
+
     let cancelled = false;
     setSubscriptionStatus("subscribing");
 
@@ -90,8 +106,8 @@ export function useTimetableSubscription({
       selectedDirection,
       selectedDepartment,
       selectedYear,
-      subscribeToTimetable,
-      unsubscribeFromTimetable,
+      subscribeToTimetable: variables => subscribeRef.current(variables),
+      unsubscribeFromTimetable: variables => unsubscribeRef.current(variables),
       setSubscriptionKey,
       isCancelled: () => cancelled,
     })
@@ -113,15 +129,13 @@ export function useTimetableSubscription({
     };
   }, [
     enabled,
+    notificationsEnabled,
     retryCount,
     selectedDepartment,
     selectedDirection,
     selectedYear,
     setSubscriptionKey,
     studyPrograms,
-    subscribeToTimetable,
-    subscriptionKey,
-    unsubscribeFromTimetable,
   ]);
 
   return { subscriptionStatus, retrySubscription };
