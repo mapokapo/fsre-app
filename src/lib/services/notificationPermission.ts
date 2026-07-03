@@ -7,10 +7,7 @@ import {
 import { Linking, PermissionsAndroid, Platform } from "react-native";
 
 export type NotificationPermissionStatus =
-  | "granted"
-  | "denied"
-  | "not_determined"
-  | "unsupported";
+  "granted" | "denied" | "not_determined" | "unsupported";
 
 export async function getNotificationPermissionStatus(): Promise<NotificationPermissionStatus> {
   if (!messaging || Platform.OS === "web") {

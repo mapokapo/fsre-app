@@ -1,6 +1,6 @@
 import { storage } from "@/lib/const/storage";
 import * as Localization from "expo-localization";
-import i18n from "i18next";
+import i18n, { use as i18nUse } from "i18next";
 import { initReactI18next } from "react-i18next";
 import { I18nManager } from "react-native";
 import { defaultLanguage, fallbackLng, resources } from "./resources";
@@ -47,7 +47,7 @@ const initI18n = async () => {
       I18nManager.forceRTL(isRTL);
     }
 
-    await i18n.use(initReactI18next).init({
+    await i18nUse(initReactI18next).init({
       resources,
       lng: selectedLanguage,
       fallbackLng,
@@ -67,7 +67,7 @@ const initI18n = async () => {
     console.error("Error initializing i18n:", error);
 
     // Initialize with defaults if there's an error
-    await i18n.use(initReactI18next).init({
+    await i18nUse(initReactI18next).init({
       resources,
       lng: defaultLanguage,
       fallbackLng,

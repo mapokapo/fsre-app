@@ -21,11 +21,7 @@ type SubscriptionMutation = (variables: {
 }) => Promise<unknown>;
 
 export type TimetableSubscriptionStatus =
-  | "idle"
-  | "incomplete"
-  | "subscribing"
-  | "subscribed"
-  | "failed";
+  "idle" | "incomplete" | "subscribing" | "subscribed" | "failed";
 
 export function useTimetableSubscription({
   selectedYear,
