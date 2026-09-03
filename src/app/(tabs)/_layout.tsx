@@ -113,12 +113,15 @@ export default function TabLayout() {
             tabBarActiveTintColor: THEME[colorScheme].fsreGradient3,
             tabBarInactiveTintColor: THEME[colorScheme].mutedForeground,
             tabBarShowLabel: false,
-            tabBarItemStyle: {
-              paddingVertical: 5,
-            },
             tabBarIconStyle: {
               marginTop: 5,
             },
+            tabBarButton: ({ ...props }) => (
+              <PlatformPressable
+                {...props}
+                hitSlop={10}
+              />
+            ),
           }}>
           <Tabs.Screen
             name="index"
