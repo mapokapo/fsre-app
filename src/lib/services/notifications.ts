@@ -1,4 +1,6 @@
 import appI18n from "@/lib/i18n";
+import { useTimetableChangeStore } from "@/lib/state/timetableChangeStore";
+import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
 import type { FirebaseMessagingTypes } from "@react-native-firebase/messaging";
 import {
   getInitialNotification,
@@ -43,9 +45,36 @@ export function resolveNotificationRoute(
   }
 }
 
+/** Keeps the text of timetable notifications available to the chatbot. */
+function rememberChange(remoteMessage: FirebaseMessagingTypes.RemoteMessage) {
+  const data = getNotificationData(remoteMessage);
+  const { subscriptionKey } = useTimetableSubscriptionStore.getState();
+  const text = [
+    remoteMessage.notification?.title,
+    remoteMessage.notification?.body,
+  ]
+    .filter(Boolean)
+    .join(" - ");
+
+  if (
+    subscriptionKey === null ||
+    text === "" ||
+    resolveNotificationRoute(data) !== "/timetable"
+  ) {
+    return;
+  }
+
+  useTimetableChangeStore.getState().recordChange({
+    receivedAt: Date.now(),
+    text,
+    studyProgramId: subscriptionKey.studyProgramId,
+  });
+}
+
 export function handleNotificationOpen(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage
 ) {
+  rememberChange(remoteMessage);
   router.push(resolveNotificationRoute(getNotificationData(remoteMessage)));
 }
 
@@ -58,6 +87,8 @@ function handleForegroundMessage(
   if (!title && !body) {
     return;
   }
+
+  rememberChange(remoteMessage);
 
   Alert.alert(
     title ?? appI18n.t("notifications.permission.title"),
@@ -80,6 +111,7 @@ function handleForegroundMessage(
 export async function backgroundNotificationHandler(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage
 ) {
+  rememberChange(remoteMessage);
   console.log(
     "Background notification received:",
     remoteMessage.messageId ?? "unknown"
