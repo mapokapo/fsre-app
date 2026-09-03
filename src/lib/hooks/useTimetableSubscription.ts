@@ -64,6 +64,13 @@ export function useTimetableSubscription({
       return;
     }
 
+    // Study programs must be loaded before we can resolve or clear a selection.
+    // Otherwise a restored direction looks unresolved and we unsubscribe.
+    if (studyPrograms === undefined) {
+      setSubscriptionStatus("idle");
+      return;
+    }
+
     const subscriptionKey =
       useTimetableSubscriptionStore.getState().subscriptionKey;
 

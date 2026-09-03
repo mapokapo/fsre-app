@@ -127,13 +127,17 @@ export default function TimetableScreen() {
   );
 
   useEffect(() => {
+    // Wait until study programs have loaded. While loading, `directions` is
+    // empty and would incorrectly wipe a direction restored from storage.
+    if (timetableDatabase === undefined) return;
+
     if (
       selectedDirection !== null &&
       (directions.length === 0 || !directions.includes(selectedDirection))
     ) {
       setSelectedDirection(null);
     }
-  }, [directions, selectedDirection]);
+  }, [directions, selectedDirection, timetableDatabase]);
 
   const handleYearSelect = useCallback(
     (year: TimetableFilter<StudyYear>) => {
