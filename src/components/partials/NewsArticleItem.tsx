@@ -8,6 +8,7 @@ import { getDistanceTo } from "@/lib/utils";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import { parse } from "node-html-parser";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, View, ViewProps } from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
@@ -47,6 +48,7 @@ export default function NewsArticleItem({
 }: NewsArticleItemProps) {
   const { colorScheme } = useColorScheme();
   const { t } = useTranslation();
+  const [imageFailed, setImageFailed] = useState(false);
 
   const gradientIndex = getIndexByCategory(article) % gradients.length;
   const categoryGradient = gradients[gradientIndex]!;
@@ -60,6 +62,23 @@ export default function NewsArticleItem({
       : category in categoryKeys
         ? t(categoryKeys[category])
         : t("news.categories.default");
+  const showImage = !imageFailed;
+
+  const categoryBadge = (
+    <LinearGradient
+      colors={[categoryGradient[0], categoryGradient[1]]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      className={
+        showImage
+          ? "absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2"
+          : "mb-4 self-start overflow-hidden rounded-full px-4 py-2"
+      }>
+      <Text className="text-sm uppercase !text-primary-foreground">
+        {categoryLabel}
+      </Text>
+    </LinearGradient>
+  );
 
   return (
     <Animated.View {...props}>
@@ -77,23 +96,23 @@ export default function NewsArticleItem({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           className="h-full w-full">
-          <Image
-            source={{
-              uri: `https://web-admin.sum.ba/api/storage/${article.imageUrl}`,
-            }}
-            accessibilityLabel={article.title}
-            className="aspect-video h-auto w-full"
-          />
-          <LinearGradient
-            colors={[categoryGradient[0], categoryGradient[1]]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            className="absolute left-4 top-4 overflow-hidden rounded-full px-4 py-2">
-            <Text className="text-sm uppercase !text-primary-foreground">
-              {categoryLabel}
-            </Text>
-          </LinearGradient>
+          {showImage ? (
+            <>
+              <Image
+                source={{
+                  uri: `https://web-admin.sum.ba/api/storage/${article.imageUrl}`,
+                }}
+                accessibilityLabel={article.title}
+                className="aspect-video h-auto w-full"
+                onError={() => {
+                  setImageFailed(true);
+                }}
+              />
+              {categoryBadge}
+            </>
+          ) : null}
           <View className="p-5">
+            {showImage ? null : categoryBadge}
             <Text className="mb-6 line-clamp-3 text-lg font-semibold">
               {article.title}
             </Text>
