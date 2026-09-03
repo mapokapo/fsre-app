@@ -1,6 +1,7 @@
 import { fetchClient, type Timetable } from "@/lib/api/client";
 import { getCachedQuickQuestionResponse } from "@/lib/const/quickQuestionCache";
 import { departments, years } from "@/lib/const/timetableFilters";
+import { getAppLanguageCode } from "@/lib/i18n";
 import { resolveStudyProgramId } from "@/lib/services/timetableSubscription";
 import {
   CHANGE_RETENTION_MS,
@@ -66,7 +67,7 @@ const SYSTEM_PROMPT = `You are FSRE AI Assistant, a helpful chatbot for students
 Keep your responses:
 - Friendly and helpful
 - Concise but informative (2-4 sentences)
-- In the same language as the user's question (Croatian or English)
+- In the language the user configured in the app, which is stated below, no matter which language the user writes in
 - Honest - if you don't know something specific, suggest contacting the student services
 - Informative - include links to relevant resources when applicable
 
@@ -124,6 +125,7 @@ Information available on the app (which the user is currently using):
 
 About the timetable:
 - Never guess timetable events; read them with the get_timetable tool instead, and say so if the tool reports an error.
+- Quote the names of subjects, teachers, classrooms and study programs exactly as the tool returns them, even when you answer in another language: a subject named "Korisnicka sucelja" stays "Korisnicka sucelja".
 - The listed timetable changes come from notifications this device received, so they only cover the study program the user follows and only the last ${RETENTION_DAYS} days. For anything outside that, point the user to the timetable screen in the app.
 
 In your responses:
@@ -149,6 +151,7 @@ function buildSystemInstruction(): string {
 
   return [
     SYSTEM_PROMPT,
+    `Respond in language: ${getAppLanguageCode()}. Keep answering in it even when the user writes in another language, but leave names coming from the timetable verbatim.`,
     `Today is ${format(now, "EEEE, d MMMM yyyy")}, which is ISO week ${format(now, "RRRR-'W'II")}.`,
     subscriptionKey === null
       ? "The user has not picked a study program in the app yet, so ask which one they mean before reading the timetable."
