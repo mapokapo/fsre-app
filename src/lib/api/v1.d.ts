@@ -4,34 +4,17 @@
  */
 
 export interface paths {
-  "/messaging/unsubscribe": {
+  "/timetable-database": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** Get the timetable definitions database for the current study year */
+    get: operations["getTimetableDatabase"];
     put?: never;
-    /** Unsubscribe from a study program for a specific email and/or FCM token */
-    post: operations["unsubscribe"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/messaging/subscribe": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** Subscribe to a study program using an email and/or FCM token */
-    post: operations["subscribe"];
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -55,17 +38,37 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/timetable-database": {
+  "/messaging/subscribe": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    /** Get the timetable definitions database for the current study year */
-    get: operations["getTimetableDatabase"];
+    get?: never;
     put?: never;
-    post?: never;
+    /**
+     * Subscribe an FCM token and/or an email address to timetable changes of a study program
+     * @description Idempotent: subscribing again updates the time zone and keeps the subscription from being pruned. Clients should resubscribe when their FCM token or time zone changes.
+     */
+    post: operations["subscribe"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/messaging/unsubscribe": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Unsubscribe an FCM token and/or an email address from a study program */
+    post: operations["unsubscribe"];
     delete?: never;
     options?: never;
     head?: never;
@@ -76,251 +79,112 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
-    /** @description An error thrown by the FSRE API */
+    TimetableDatabase: {
+      studyPrograms: components["schemas"]["StudyProgram"][];
+      classRooms: components["schemas"]["IdNamePairLong"][];
+      eventTypes: components["schemas"]["IdNamePairString"][];
+      subjects: components["schemas"]["IdNamePairLong"][];
+      teachers: components["schemas"]["IdNamePairLong"][];
+    };
+    StudyProgram: {
+      /** @example -54 */
+      id: number;
+      /** @example Preddiplomski studij računarstva- 1. godina */
+      name: string;
+      studyYear: components["schemas"]["StudyYear"];
+      department: components["schemas"]["Department"];
+      direction: string | null;
+    };
+    /** @enum {string} */
+    StudyYear: "FIRST" | "SECOND" | "THIRD" | "FOURTH" | "FIFTH";
+    /** @enum {string} */
+    Department:
+      "COMPUTER_SCIENCE" | "ELECTRICAL_ENGINEERING" | "MECHANICAL_ENGINEERING";
+    IdNamePairLong: {
+      id: number;
+      name: string;
+    };
+    IdNamePairString: {
+      id: string;
+      name: string;
+    };
     FsreError: {
-      /**
-       * @description HTTP status code of the error
-       * @example 500
-       * @enum {string}
-       */
-      status:
-        | "100 CONTINUE"
-        | "101 SWITCHING_PROTOCOLS"
-        | "102 PROCESSING"
-        | "103 EARLY_HINTS"
-        | "103 CHECKPOINT"
-        | "200 OK"
-        | "201 CREATED"
-        | "202 ACCEPTED"
-        | "203 NON_AUTHORITATIVE_INFORMATION"
-        | "204 NO_CONTENT"
-        | "205 RESET_CONTENT"
-        | "206 PARTIAL_CONTENT"
-        | "207 MULTI_STATUS"
-        | "208 ALREADY_REPORTED"
-        | "226 IM_USED"
-        | "300 MULTIPLE_CHOICES"
-        | "301 MOVED_PERMANENTLY"
-        | "302 FOUND"
-        | "302 MOVED_TEMPORARILY"
-        | "303 SEE_OTHER"
-        | "304 NOT_MODIFIED"
-        | "305 USE_PROXY"
-        | "307 TEMPORARY_REDIRECT"
-        | "308 PERMANENT_REDIRECT"
-        | "400 BAD_REQUEST"
-        | "401 UNAUTHORIZED"
-        | "402 PAYMENT_REQUIRED"
-        | "403 FORBIDDEN"
-        | "404 NOT_FOUND"
-        | "405 METHOD_NOT_ALLOWED"
-        | "406 NOT_ACCEPTABLE"
-        | "407 PROXY_AUTHENTICATION_REQUIRED"
-        | "408 REQUEST_TIMEOUT"
-        | "409 CONFLICT"
-        | "410 GONE"
-        | "411 LENGTH_REQUIRED"
-        | "412 PRECONDITION_FAILED"
-        | "413 PAYLOAD_TOO_LARGE"
-        | "413 REQUEST_ENTITY_TOO_LARGE"
-        | "414 URI_TOO_LONG"
-        | "414 REQUEST_URI_TOO_LONG"
-        | "415 UNSUPPORTED_MEDIA_TYPE"
-        | "416 REQUESTED_RANGE_NOT_SATISFIABLE"
-        | "417 EXPECTATION_FAILED"
-        | "418 I_AM_A_TEAPOT"
-        | "419 INSUFFICIENT_SPACE_ON_RESOURCE"
-        | "420 METHOD_FAILURE"
-        | "421 DESTINATION_LOCKED"
-        | "422 UNPROCESSABLE_ENTITY"
-        | "423 LOCKED"
-        | "424 FAILED_DEPENDENCY"
-        | "425 TOO_EARLY"
-        | "426 UPGRADE_REQUIRED"
-        | "428 PRECONDITION_REQUIRED"
-        | "429 TOO_MANY_REQUESTS"
-        | "431 REQUEST_HEADER_FIELDS_TOO_LARGE"
-        | "451 UNAVAILABLE_FOR_LEGAL_REASONS"
-        | "500 INTERNAL_SERVER_ERROR"
-        | "501 NOT_IMPLEMENTED"
-        | "502 BAD_GATEWAY"
-        | "503 SERVICE_UNAVAILABLE"
-        | "504 GATEWAY_TIMEOUT"
-        | "505 HTTP_VERSION_NOT_SUPPORTED"
-        | "506 VARIANT_ALSO_NEGOTIATES"
-        | "507 INSUFFICIENT_STORAGE"
-        | "508 LOOP_DETECTED"
-        | "509 BANDWIDTH_LIMIT_EXCEEDED"
-        | "510 NOT_EXTENDED"
-        | "511 NETWORK_AUTHENTICATION_REQUIRED";
-      /**
-       * @description Error code of the error
-       * @example Internal Server Error
-       */
+      /** @example 502 */
+      status: number;
+      /** @example Bad Gateway */
       error: string;
-      /**
-       * @description An message which describes the error
-       * @example An error occurred while processing the request
-       */
       message: string;
-      /**
-       * @description Optional details of the error
-       * @example The request failed because the network is unreachable
-       */
       details?: string;
     };
-    /** @description DTO to subscribe an email to a specific study program */
-    MessagingSubscribeDto: {
-      /** @description The email of the subscriber */
-      email?: string;
-      /** @description The FCM token of the subscriber */
-      fcmToken?: string;
-      /**
-       * Format: int64
-       * @description The ID of the study program to subscribe to
-       */
-      studyProgramId: number;
-    };
-    /** @description A subscription to receive messages */
-    MessagingSubscription: {
-      /**
-       * Format: uuid
-       * @description The ID of the subscription
-       */
-      id: string;
-      /** @description The FCM token of the subscription */
-      fcmToken?: string;
-      /** @description The email of the subscription */
-      email?: string;
-      /**
-       * Format: int64
-       * @description The ID of the study program to subscribe to
-       */
-      studyProgramId: number;
-    };
-    /** @description The timetable for a week */
     Timetable: {
-      /** @description The event list for Monday */
       monday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Tuesday */
       tuesday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Wednesday */
       wednesday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Thursday */
       thursday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Friday */
       friday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Saturday */
       saturday: components["schemas"]["TimetableEvent"][];
-      /** @description The event list for Sunday */
       sunday: components["schemas"]["TimetableEvent"][];
     };
-    /** @description A single event in the timetable */
     TimetableEvent: {
-      /**
-       * Format: int64
-       * @description The ID of the event
-       */
+      /** @description Edupage subject ID */
       id: number;
-      /**
-       * @description The department which the timetable event belongs to
-       * @enum {string}
-       */
-      department:
-        | "COMPUTER_SCIENCE"
-        | "ELECTRICAL_ENGINEERING"
-        | "MECHANICAL_ENGINEERING";
-      /**
-       * @description The type of the timetable event
-       * @enum {string}
-       */
-      type: "LECTURE" | "EXERCISE" | "LECTURE_AND_EXERCISE" | "LABS";
-      /**
-       * @description The year of study the timetable event is intended for
-       * @enum {string}
-       */
-      year: "FIRST" | "SECOND" | "THIRD" | "FOURTH" | "FIFTH";
-      /** @description The directions/specializations which the event is intended for */
-      directions: (string | null)[] | null;
-      /** @description Name of the event */
+      department: components["schemas"]["Department"] | null;
+      type: components["schemas"]["EventType"];
+      year: components["schemas"]["StudyYear"] | null;
+      directions: string[] | null;
       name: string;
       /**
        * Format: date-time
-       * @description Start date and time of the event
+       * @example 2026-03-09T07:30:00Z
        */
       startDateTime: string;
       /**
        * Format: date-time
-       * @description End date and time of the event
+       * @example 2026-03-09T09:00:00Z
        */
       endDateTime: string;
-      /** @description The IDs of the study programs this event is intended for */
       studyProgramIds: number[];
-      /** @description The IDs of the classrooms the event will take place in */
       classRoomIds: number[];
-      /** @description The IDs of the teachers that will teach this event */
       teacherIds: number[];
-      /** @description The readable names of the study programs this event is intended for */
-      studyProgramNames: string[];
-      /** @description The readable names of the classrooms the event will take place in */
-      classRoomNames: string[];
-      /** @description The readable names of the teachers that will teach this event */
-      teacherNames: string[];
+      studyProgramNames: (string | null)[];
+      classRoomNames: (string | null)[];
+      teacherNames: (string | null)[];
     };
-    /** @description A pair of an ID and a name, used in the timetable database */
-    IdNamePairLong: {
-      /**
-       * Format: int64
-       * @description The ID of the item
-       */
-      id: number;
-      /** @description The name of the item */
-      name: string;
-    };
-    /** @description A pair of an ID and a name, used in the timetable database */
-    IdNamePairString: {
-      /** @description The ID of the item */
+    /** @enum {string} */
+    EventType: "LECTURE" | "EXERCISE" | "LECTURE_AND_EXERCISE" | "LABS";
+    MessagingSubscription: {
+      /** Format: uuid */
       id: string;
-      /** @description The name of the item */
-      name: string;
+      /** @enum {string} */
+      channel: "fcm" | "email";
+      address: string;
+      studyProgramId: number;
+      timeZone: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      lastNotifiedAt: string | null;
     };
-    /** @description A study program characterized by study year and department */
-    StudyProgram: {
+    MessagingSubscribeDto: {
+      /** @description Firebase Cloud Messaging registration token */
+      fcmToken?: string;
+      /** Format: email */
+      email?: string;
+      /** @example -54 */
+      studyProgramId: number;
       /**
-       * Format: int64
-       * @description The ID of the study program
+       * @description IANA time zone that times in notifications are shown in (default Europe/Sarajevo)
+       * @example Europe/Berlin
        */
-      id: number;
-      /** @description The full name of the study program */
-      name: string;
-      /**
-       * @description The year of study the timetable event is intended for
-       * @enum {string}
-       */
-      studyYear: "FIRST" | "SECOND" | "THIRD" | "FOURTH" | "FIFTH";
-      /**
-       * @description The department which the timetable event belongs to
-       * @enum {string}
-       */
-      department:
-        | "COMPUTER_SCIENCE"
-        | "ELECTRICAL_ENGINEERING"
-        | "MECHANICAL_ENGINEERING";
-      /** @description The direction/specialization which the study program belongs to */
-      direction: string | null;
+      timeZone?: string;
     };
-    /** @description The database of timetable definitions (names of subjects, teachers, etc.) */
-    TimetableDatabase: {
-      /** @description List of study programs */
-      studyPrograms: components["schemas"]["StudyProgram"][];
-      /** @description List of classrooms (id of the classroom and readable name) */
-      classRooms: components["schemas"]["IdNamePairLong"][];
-      /** @description List of event types (id of the event type and readable name) */
-      eventTypes: components["schemas"]["IdNamePairString"][];
-      /** @description List of subjects (id of the subject and readable name) */
-      subjects: components["schemas"]["IdNamePairLong"][];
-      /** @description List of teachers (id of the teacher and readable name) */
-      teachers: components["schemas"]["IdNamePairLong"][];
+    MessagingUnsubscribeDto: {
+      /** @description Firebase Cloud Messaging registration token */
+      fcmToken?: string;
+      /** Format: email */
+      email?: string;
+      /** @example -54 */
+      studyProgramId: number;
     };
   };
   responses: never;
@@ -331,28 +195,87 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  unsubscribe: {
+  getTimetableDatabase: {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MessagingSubscribeDto"];
-      };
-    };
+    requestBody?: never;
     responses: {
-      /** @description Successfully unsubscribed from a topic */
+      /** @description Timetable database retrieved successfully */
       200: {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["TimetableDatabase"];
+        };
       };
-      /** @description Messaging Subscription Already Registered */
-      409: {
+      /** @description The timetable database has not been loaded from Edupage yet */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FsreError"];
+        };
+      };
+    };
+  };
+  getTimetable: {
+    parameters: {
+      query: {
+        /** @description Study program ID; omit to merge all study programs */
+        studyProgram?: number | null;
+        /** @description ISO week */
+        isoWeek: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Timetable data retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Timetable"];
+        };
+      };
+      /** @description Invalid study program or ISO week */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FsreError"];
+        };
+      };
+      /** @description Unknown study program */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FsreError"];
+        };
+      };
+      /** @description Edupage request failed */
+      502: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FsreError"];
+        };
+      };
+      /** @description The timetable database has not been loaded from Edupage yet */
+      503: {
         headers: {
           [name: string]: unknown;
         };
@@ -375,56 +298,16 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Successfully subscribed to a topic */
+      /** @description Subscribed; one subscription per destination */
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["MessagingSubscription"];
+          "application/json": components["schemas"]["MessagingSubscription"][];
         };
       };
-      /** @description Messaging Subscription Already Registered */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["FsreError"];
-        };
-      };
-    };
-  };
-  getTimetable: {
-    parameters: {
-      query: {
-        /**
-         * @description Study program
-         * @example -54
-         */
-        studyProgram?: number;
-        /**
-         * @description ISO week
-         * @example 2024-W09
-         */
-        isoWeek: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Timetable data retrieved successfully */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Timetable"];
-        };
-      };
-      /** @description Failed to parse ISO week */
+      /** @description Invalid request, unknown study program or an address that cannot receive notifications */
       400: {
         headers: {
           [name: string]: unknown;
@@ -433,8 +316,8 @@ export interface operations {
           "application/json": components["schemas"]["FsreError"];
         };
       };
-      /** @description Bad Gateway */
-      502: {
+      /** @description Timetable database not loaded yet, channel disabled or subscription limit reached */
+      503: {
         headers: {
           [name: string]: unknown;
         };
@@ -444,22 +327,33 @@ export interface operations {
       };
     };
   };
-  getTimetableDatabase: {
+  unsubscribe: {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MessagingUnsubscribeDto"];
+      };
+    };
     responses: {
-      /** @description Timetable database retrieved successfully */
+      /** @description Successfully unsubscribed (also if there was no such subscription) */
       200: {
         headers: {
           [name: string]: unknown;
         };
+        content?: never;
+      };
+      /** @description Invalid request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": components["schemas"]["TimetableDatabase"];
+          "application/json": components["schemas"]["FsreError"];
         };
       };
     };

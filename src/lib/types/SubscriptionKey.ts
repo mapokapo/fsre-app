@@ -6,4 +6,7 @@ export default interface SubscriptionKey {
   department: Department;
   year: StudyYear;
   studyProgramId: number;
+  /** FCM token and time zone the backend subscription was made with (absent in older app versions). */
+  fcmToken?: string;
+  timeZone?: string;
 }

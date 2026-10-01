@@ -17,7 +17,7 @@ type StudyProgram = {
 };
 
 type SubscriptionMutation = (variables: {
-  body: { studyProgramId: number; fcmToken: string };
+  body: { studyProgramId: number; fcmToken: string; timeZone?: string };
 }) => Promise<unknown>;
 
 export type TimetableSubscriptionStatus =

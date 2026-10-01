@@ -78,7 +78,8 @@
     },
     "foreground": {
       "dismiss": "Odbaci",
-      "view": "Pogledaj"
+      "view": "Pogledaj",
+      "multipleTitle": "Promjene rasporeda ({{count}})"
     }
   },
   "header": {

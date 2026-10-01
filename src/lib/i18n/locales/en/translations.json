@@ -158,7 +158,8 @@
     },
     "foreground": {
       "dismiss": "Dismiss",
-      "view": "View"
+      "view": "View",
+      "multipleTitle": "Timetable changes ({{count}})"
     }
   },
   "news": {

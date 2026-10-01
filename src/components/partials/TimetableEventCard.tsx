@@ -112,15 +112,21 @@ export default function TimetableEventCard({
           <View className="flex-1">
             <Text>{event.name}</Text>
             <View className="flex-row flex-wrap items-center gap-1">
-              <Text className="text-sm text-muted-foreground">
-                {t("common.studyYear", {
-                  count: studyYearToInt(event.year),
-                })}
-              </Text>
-              <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
-              <Text className="text-sm text-muted-foreground">
-                {t(`common.departmentEnum.${event.department}`)}
-              </Text>
+              {event.year !== null && (
+                <Text className="text-sm text-muted-foreground">
+                  {t("common.studyYear", {
+                    count: studyYearToInt(event.year),
+                  })}
+                </Text>
+              )}
+              {event.year !== null && event.department !== null && (
+                <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
+              )}
+              {event.department !== null && (
+                <Text className="text-sm text-muted-foreground">
+                  {t(`common.departmentEnum.${event.department}`)}
+                </Text>
+              )}
             </View>
           </View>
         </View>
