@@ -36,15 +36,29 @@ function mapNewsArticle(article: NewsArticleApiResponse): NewsArticle {
 }
 
 export async function fetchNewsArticles(): Promise<NewsArticle[]> {
+  return fetchNewsArticlesWithOptions();
+}
+
+export async function fetchNewsArticlesWithOptions({
+  page = 1,
+  postsPerPage = 5,
+  searchPhrase = "",
+  searchContent = true,
+}: {
+  page?: number;
+  postsPerPage?: number;
+  searchPhrase?: string;
+  searchContent?: boolean;
+} = {}): Promise<NewsArticle[]> {
   try {
     const res = await fetch("https://web-admin.sum.ba/api/web/objave", {
       method: "POST",
       body: JSON.stringify({
-        page: 1,
-        postsPerPage: 5,
+        page,
+        postsPerPage,
         categories: NEWS_CATEGORIES,
-        searchPhrase: "",
-        searchContent: true,
+        searchPhrase,
+        searchContent,
       }),
       headers: {
         "Content-Type": "application/json",
