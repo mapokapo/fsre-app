@@ -1,29 +1,5 @@
 import type NewsArticle from "@/lib/types/NewsArticle";
 
-const TIMETABLE_KEYWORDS = [
-  "raspored",
-  "satnica",
-  "predavanje",
-  "predavanja",
-  "vjezbe",
-  "vježbe",
-  "termin",
-  "ucionica",
-  "učionica",
-  "timetable",
-  "schedule",
-  "class",
-  "classes",
-  "lecture",
-  "lectures",
-  "when",
-  "kada",
-  "datum",
-  "date",
-  "week",
-  "tjedan",
-];
-
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
@@ -35,11 +11,6 @@ function tokenize(text: string): string[] {
   return normalizeText(text)
     .split(/[^a-z0-9]+/g)
     .filter(token => token.length >= 2);
-}
-
-export function isTimetableQuestion(text: string): boolean {
-  const normalized = normalizeText(text);
-  return TIMETABLE_KEYWORDS.some(keyword => normalized.includes(keyword));
 }
 
 function stripHtml(text: string): string {

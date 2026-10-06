@@ -9,10 +9,7 @@ import {
   useTimetableChangeStore,
 } from "@/lib/state/timetableChangeStore";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
-import {
-  fuzzySearchNewsArticles,
-  isTimetableQuestion,
-} from "@/lib/utils/chatbotTools";
+import { fuzzySearchNewsArticles } from "@/lib/utils/chatbotTools";
 import {
   ApiError,
   Content,
@@ -243,7 +240,9 @@ function clampNewsLimit(value: unknown, fallback: number): number {
   return Math.max(1, Math.min(MAX_NEWS_RESULTS, Math.round(value)));
 }
 
-function mapNewsArticlesForTool(articles: Awaited<ReturnType<typeof fetchNewsArticlesWithOptions>>) {
+function mapNewsArticlesForTool(
+  articles: Awaited<ReturnType<typeof fetchNewsArticlesWithOptions>>
+) {
   return articles.map(article => ({
     title: article.title,
     subtitle: article.subtitle,
@@ -373,27 +372,20 @@ export async function generateGoogleGenAIResponse(
       config: {
         systemInstruction: buildSystemInstruction(),
         maxOutputTokens: 800,
-        tools: [{ functionDeclarations: [timetableTool, recentNewsTool, searchNewsTool] }],
+        tools: [
+          {
+            functionDeclarations: [
+              timetableTool,
+              recentNewsTool,
+              searchNewsTool,
+            ],
+          },
+        ],
       },
       history: buildChatHistory(history),
     });
 
-    const shouldEnforceTimetableTool = isTimetableQuestion(userMessage);
-    let result = await chat.sendMessage({
-      message: shouldEnforceTimetableTool
-        ? `Schedule/time question detected. You must call get_timetable before writing the answer. User question: ${userMessage}`
-        : userMessage,
-    });
-
-    if (
-      shouldEnforceTimetableTool &&
-      (result.functionCalls === undefined || result.functionCalls.length === 0)
-    ) {
-      result = await chat.sendMessage({
-        message:
-          "Reminder: call get_timetable first, then answer using exact tool data.",
-      });
-    }
+    let result = await chat.sendMessage({ message: userMessage });
 
     for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
       const toolCalls = result.functionCalls;
@@ -404,7 +396,10 @@ export async function generateGoogleGenAIResponse(
           functionResponse: {
             id,
             name,
-            response: await runTool(name, (args ?? {}) as Record<string, unknown>),
+            response: await runTool(
+              name,
+              (args ?? {}) as Record<string, unknown>
+            ),
           },
         }))
       );

@@ -1,13 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
 import type NewsArticle from "@/lib/types/NewsArticle";
-import {
-  fuzzySearchNewsArticles,
-  isTimetableQuestion,
-} from "@/lib/utils/chatbotTools";
+import { fuzzySearchNewsArticles } from "@/lib/utils/chatbotTools";
 
 function makeArticle(
-  overrides: Partial<NewsArticle> & Pick<NewsArticle, "id" | "title" | "content">
+  overrides: Partial<NewsArticle> &
+    Pick<NewsArticle, "id" | "title" | "content">
 ): NewsArticle {
   return {
     id: overrides.id,
@@ -21,21 +19,6 @@ function makeArticle(
     categories: overrides.categories ?? ["FSRE web - Globalne objave"],
   };
 }
-
-describe("isTimetableQuestion", () => {
-  test("detects schedule and class timing questions", () => {
-    expect(
-      isTimetableQuestion(
-        "When do the first classes of the current semester begin?"
-      )
-    ).toBe(true);
-    expect(isTimetableQuestion("Kada počinju predavanja za PIIS?")).toBe(true);
-  });
-
-  test("does not flag unrelated questions", () => {
-    expect(isTimetableQuestion("Kako se prijaviti na e-Learning?")).toBe(false);
-  });
-});
 
 describe("fuzzySearchNewsArticles", () => {
   test("ranks exact phrase matches first", () => {
