@@ -9,7 +9,6 @@ import {
   useTimetableChangeStore,
 } from "@/lib/state/timetableChangeStore";
 import { useTimetableSubscriptionStore } from "@/lib/state/timetableSubscriptionStore";
-import { fuzzySearchNewsArticles } from "@/lib/utils/chatbotTools";
 import {
   ApiError,
   Content,
@@ -316,14 +315,14 @@ async function searchNews(args: Record<string, unknown>) {
   }
 
   const limit = clampNewsLimit(args.limit, 5);
-  const recentArticles = await fetchNewsArticlesWithOptions({
-    postsPerPage: 30,
+  const articles = await fetchNewsArticlesWithOptions({
+    postsPerPage: limit,
+    searchPhrase: args.query.trim(),
     searchContent: true,
   });
-  const matches = fuzzySearchNewsArticles(recentArticles, args.query, limit);
   return {
-    query: args.query,
-    articles: mapNewsArticlesForTool(matches),
+    query: args.query.trim(),
+    articles: mapNewsArticlesForTool(articles),
   };
 }
 
