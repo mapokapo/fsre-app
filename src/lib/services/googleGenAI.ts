@@ -396,7 +396,7 @@ export async function generateGoogleGenAIResponse(
             id,
             name,
             response: await runTool(
-              name,
+              name ?? "",
               (args ?? {}) as Record<string, unknown>
             ),
           },
