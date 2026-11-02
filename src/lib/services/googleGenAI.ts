@@ -2,6 +2,7 @@ import { fetchClient, type Timetable } from "@/lib/api/client";
 import { getCachedQuickQuestionResponse } from "@/lib/const/quickQuestionCache";
 import { departments, years } from "@/lib/const/timetableFilters";
 import { getAppLanguageCode } from "@/lib/i18n";
+import { fetchNewsArticlesWithOptions } from "@/lib/services/news";
 import { resolveStudyProgramId } from "@/lib/services/timetableSubscription";
 import {
   CHANGE_RETENTION_MS,
@@ -29,6 +30,7 @@ const MAX_HISTORY_TURNS = 10;
 const MAX_TOOL_ROUNDS = 3;
 const CACHED_RESPONSE_DELAY_MS = 1000;
 const RETENTION_DAYS = CHANGE_RETENTION_MS / (24 * 60 * 60 * 1000);
+const MAX_NEWS_RESULTS = 10;
 
 const studyYears = years.flatMap(({ value }) => value ?? []);
 const studyDepartments = departments.flatMap(({ value }) => value ?? []);
@@ -59,6 +61,38 @@ const timetableTool: FunctionDeclaration = {
       isoWeek: { type: Type.STRING, description: "ISO week, e.g. 2026-W12" },
     },
     required: ["year", "department", "isoWeek"],
+  },
+};
+
+const recentNewsTool: FunctionDeclaration = {
+  name: "get_recent_news",
+  description:
+    "Returns the most recent FSRE news articles and announcements. Use for latest updates, deadlines, events, and official notices.",
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      limit: {
+        type: Type.NUMBER,
+        description: "Number of articles to return (1-10)",
+      },
+    },
+  },
+};
+
+const searchNewsTool: FunctionDeclaration = {
+  name: "search_news",
+  description:
+    "Fuzzy-searches FSRE news content by topic/keywords and returns the best matching recent articles. Use for questions about specific announcements, scholarships, deadlines, events, departments, or topics.",
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      query: { type: Type.STRING },
+      limit: {
+        type: Type.NUMBER,
+        description: "Number of matches to return (1-10)",
+      },
+    },
+    required: ["query"],
   },
 };
 
@@ -124,9 +158,14 @@ Information available on the app (which the user is currently using):
 - A timetable viewer where students can see their weekly schedule, list through weeks, filter by academic year, day of week, department (ME, CS, EE), and direction (only for 3rd year ME and graduate degrees). Once a user selects their filters, they are saved to the device, and automatically registered to receive notifications about changes to the timetable. The notifications can be disabled by simply un-setting all filters.
 
 About the timetable:
+- For any schedule/date/class timing question, call get_timetable before answering. Never answer from assumptions.
 - Never guess timetable events; read them with the get_timetable tool instead, and say so if the tool reports an error.
 - Quote the names of subjects, teachers, classrooms and study programs exactly as the tool returns them, even when you answer in another language: a subject named "Korisnicka sucelja" stays "Korisnicka sucelja".
 - The listed timetable changes come from notifications this device received, so they only cover the study program the user follows and only the last ${RETENTION_DAYS} days. For anything outside that, point the user to the timetable screen in the app.
+
+About news:
+- For latest announcements and updates, use get_recent_news.
+- For topic-specific announcements, use search_news before answering.
 
 In your responses:
 - You may use simple Markdown for readability: **bold**, *italic*, [link text](url), and ordered or unordered lists
@@ -195,6 +234,23 @@ function toToolEvents(timetable: Timetable) {
   );
 }
 
+function clampNewsLimit(value: unknown, fallback: number): number {
+  if (typeof value !== "number" || Number.isNaN(value)) return fallback;
+  return Math.max(1, Math.min(MAX_NEWS_RESULTS, Math.round(value)));
+}
+
+function mapNewsArticlesForTool(
+  articles: Awaited<ReturnType<typeof fetchNewsArticlesWithOptions>>
+) {
+  return articles.map(article => ({
+    title: article.title,
+    subtitle: article.subtitle,
+    publishedAt: article.datetime.toISOString(),
+    link: article.link,
+    categories: article.categories,
+  }));
+}
+
 async function readTimetable({
   year,
   department,
@@ -244,6 +300,48 @@ async function readTimetable({
     : { isoWeek, events: toToolEvents(timetable) };
 }
 
+async function readRecentNews(args: Record<string, unknown>) {
+  const limit = clampNewsLimit(args.limit, 5);
+  const articles = await fetchNewsArticlesWithOptions({
+    postsPerPage: limit,
+  });
+
+  return { articles: mapNewsArticlesForTool(articles) };
+}
+
+async function searchNews(args: Record<string, unknown>) {
+  if (typeof args.query !== "string" || args.query.trim() === "") {
+    return { error: "query is required." };
+  }
+
+  const limit = clampNewsLimit(args.limit, 5);
+  const articles = await fetchNewsArticlesWithOptions({
+    postsPerPage: limit,
+    searchPhrase: args.query.trim(),
+    searchContent: true,
+  });
+  return {
+    query: args.query.trim(),
+    articles: mapNewsArticlesForTool(articles),
+  };
+}
+
+async function runTool(
+  name: string,
+  args: Record<string, unknown>
+): Promise<Record<string, unknown>> {
+  switch (name) {
+    case "get_timetable":
+      return readTimetable(args);
+    case "get_recent_news":
+      return readRecentNews(args);
+    case "search_news":
+      return searchNews(args);
+    default:
+      return { error: `Unknown tool: ${name}` };
+  }
+}
+
 export async function generateGoogleGenAIResponse(
   userMessage: string,
   history: ConversationMessage[] = []
@@ -273,7 +371,15 @@ export async function generateGoogleGenAIResponse(
       config: {
         systemInstruction: buildSystemInstruction(),
         maxOutputTokens: 800,
-        tools: [{ functionDeclarations: [timetableTool] }],
+        tools: [
+          {
+            functionDeclarations: [
+              timetableTool,
+              recentNewsTool,
+              searchNewsTool,
+            ],
+          },
+        ],
       },
       history: buildChatHistory(history),
     });
@@ -289,7 +395,10 @@ export async function generateGoogleGenAIResponse(
           functionResponse: {
             id,
             name,
-            response: await readTimetable(args ?? {}),
+            response: await runTool(
+              name ?? "",
+              (args ?? {}) as Record<string, unknown>
+            ),
           },
         }))
       );
